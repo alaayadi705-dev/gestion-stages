@@ -1,23 +1,23 @@
 🎓 Gestion des Stages à l’Étranger
 📌 Description du Projet
 
-Ce projet est une application web développée avec Spring Boot (Backend) et MySQL pour la gestion des stages à l’étranger.
+Ce projet est une application web développée dans le cadre d’un Projet de Fin d’Études (PFE).
 
-Le système permet :
+L’objectif principal est de concevoir un système informatique de gestion des stages à l’étranger, permettant de centraliser, organiser et suivre l’ensemble du processus administratif et académique lié aux stages internationaux.
 
-La gestion des stagiaires
+Le système assure :
 
-La gestion des entreprises
+✅ La gestion des stagiaires
 
-La création et le suivi des stages
+✅ La gestion des entreprises partenaires
 
-La gestion des frais
+✅ La création et le suivi des stages
 
-Le dépôt et la validation des rapports
+✅ La gestion des frais liés au stage
 
-La consultation des statistiques
+✅ Le dépôt et la validation des rapports
 
-Ce projet a été réalisé dans le cadre d’un Projet de Fin d’Études (PFE).
+✅ La consultation des statistiques globales
 
 🏗️ Architecture Technique
 🔹 Backend
@@ -28,31 +28,38 @@ Spring Boot 4
 
 Spring Data JPA
 
-Hibernate
-
-MySQL
+Hibernate ORM
 
 Maven
 
-🔹 Base de données
+🔹 Base de Données
 
 MySQL 8
 
-Gestion automatique via JPA
+Gestion automatique des entités via JPA
+
+Génération automatique des tables
 
 👥 Acteurs du Système
 Acteur	Rôle
-Administrateur	Gère les entreprises, utilisateurs et statistiques
-Utilisateur	Gère les stages et stagiaires
-Validateur	Valide ou rejette les rapports
-📊 Diagramme de Cas d’Utilisation
+👨‍💼 Administrateur	Gère les entreprises, les utilisateurs et les statistiques
+👨‍🎓 Utilisateur	Gère les stagiaires, stages et frais
+🧑‍🏫 Validateur	Valide ou rejette les rapports de stage
+📊 Modélisation UML
+🔹 Diagramme de Cas d’Utilisation
+![Use Case](docs/usecase.png)
 
-🧱 Diagramme de Classes
 
-🔄 Diagramme de Séquence
+🔹 Diagramme de Classes
+![Class Diagram](docs/class-diagram.png)
+
+
+🔹 Diagramme de Séquence
+![Sequence Diagram](docs/sequence-diagram.png)
+
 
 🗃️ Modèle de Données
-Entités principales :
+📌 Entités Principales
 
 Entreprise
 
@@ -66,14 +73,83 @@ Frais
 
 RapportStage
 
-Relations :
+🔗 Relations
 
-Une entreprise possède plusieurs stages
+Une Entreprise possède plusieurs Stages
 
-Un stage contient plusieurs stagiaires
+Un Stage contient plusieurs Stagiaires
 
-Un stage contient plusieurs frais
+Un Stage contient plusieurs Frais
 
-Un stagiaire possède un rapport
+Un Stagiaire possède un RapportStage
 
-Un validateur valide ou rejette le rapport
+Un Validateur valide ou rejette un rapport
+
+🚀 Installation et Exécution
+1️⃣ Cloner le projet
+git clone https://github.com/alaayadi705-dev/gestion-stages.git
+cd gestion-stages
+
+2️⃣ Configurer la base de données
+
+Créer une base MySQL :
+
+CREATE DATABASE gestion_stages;
+
+
+Vérifier les paramètres dans :
+
+src/main/resources/application.properties
+
+3️⃣ Lancer l’application
+mvn clean install
+mvn spring-boot:run
+
+
+Application accessible sur :
+
+http://localhost:8080
+
+📌 Fonctionnalités Implémentées
+
+CRUD complet des stagiaires
+
+CRUD des stages
+
+Affectation stagiaire à un stage
+
+Gestion des frais
+
+Dépôt et validation des rapports
+
+Mise à jour automatique des statuts
+
+🔐 Sécurité et Gestion des Rôles
+
+Le système distingue plusieurs rôles :
+
+ADMIN
+
+UTILISATEUR
+
+VALIDATEUR
+
+Chaque rôle possède des permissions spécifiques adaptées à ses responsabilités.
+
+📈 Perspectives d’Amélioration
+
+Ajout d’un frontend en React
+
+Authentification JWT
+
+Tableau de bord statistique avancé
+
+Upload réel des fichiers PDF
+
+Déploiement cloud
+
+👨‍💻 Auteur
+
+Nom : Alaay
+Projet : PFE – Système de gestion des stages à l’étranger
+Année : 2026
