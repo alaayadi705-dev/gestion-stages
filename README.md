@@ -106,7 +106,7 @@ mvn spring-boot:run
 
 Application accessible sur :
 
-http://localhost:8080
+[http://localhost:8080](http://localhost:8080/api/stagiaires)
 
 📌 Fonctionnalités Implémentées
 
