@@ -46,16 +46,14 @@ Acteur	Rôle
 👨‍🎓 Utilisateur	Gère les stagiaires, stages et frais
 🧑‍🏫 Validateur	Valide ou rejette les rapports de stage
 📊 Modélisation UML
-🔹 Diagramme de Cas d’Utilisation
-![Use Case](docs/usecase.png)
+## 📊 Diagramme de Cas d’Utilisation
+![Use Case](docs/usecase.jpg)
 
+## 🧱 Diagramme de Classes
+![Class Diagram](docs/class-diagram.jpg)
 
-🔹 Diagramme de Classes
-![Class Diagram](docs/class-diagram.png)
-
-
-🔹 Diagramme de Séquence
-![Sequence Diagram](docs/sequence-diagram.png)
+## 🔄 Diagramme de Séquence
+![Sequence Diagram](docs/sequence-diagram.jpg)
 
 
 🗃️ Modèle de Données
@@ -108,7 +106,7 @@ mvn spring-boot:run
 
 Application accessible sur :
 
-http://localhost:8080
+[http://localhost:8080](http://localhost:8080/api/stagiaires)
 
 📌 Fonctionnalités Implémentées
 
