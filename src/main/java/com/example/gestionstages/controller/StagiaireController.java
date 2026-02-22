@@ -11,48 +11,41 @@ import java.util.List;
 @CrossOrigin("*")
 public class StagiaireController {
 
-    private final StagiaireService stagiaireService;
+    private final StagiaireService service;
 
-    public StagiaireController(StagiaireService stagiaireService) {
-        this.stagiaireService = stagiaireService;
+    public StagiaireController(StagiaireService service) {
+        this.service = service;
     }
 
-    // GET ALL
     @GetMapping
     public List<Stagiaire> getAll() {
-        return stagiaireService.getAll();
+        return service.getAll();
     }
 
-    // GET BY ID
     @GetMapping("/{id}")
     public Stagiaire getById(@PathVariable Long id) {
-        return stagiaireService.getById(id)
-                .orElseThrow(() -> new RuntimeException("Stagiaire not found"));
+        return service.getById(id).orElseThrow();
     }
 
-    // CREATE
     @PostMapping
     public Stagiaire create(@RequestBody Stagiaire stagiaire) {
-        return stagiaireService.save(stagiaire);
+        return service.save(stagiaire);
     }
 
-    // UPDATE
     @PutMapping("/{id}")
     public Stagiaire update(@PathVariable Long id, @RequestBody Stagiaire stagiaire) {
-        Stagiaire existing = stagiaireService.getById(id)
-                .orElseThrow(() -> new RuntimeException("Stagiaire not found"));
-
+        Stagiaire existing = service.getById(id).orElseThrow();
         existing.setNom(stagiaire.getNom());
         existing.setPrenom(stagiaire.getPrenom());
         existing.setEmail(stagiaire.getEmail());
-
-        return stagiaireService.save(existing);
+        existing.setTelephone(stagiaire.getTelephone());
+        return service.save(existing);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        stagiaireService.delete(id);
-        return "Stagiaire deleted successfully";
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }
+
+

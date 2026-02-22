@@ -10,25 +10,25 @@ import java.util.Optional;
 @Service
 public class StagiaireService {
 
-    private final StagiaireRepository stagiaireRepository;
+    private final StagiaireRepository repository;
 
-    public StagiaireService(StagiaireRepository stagiaireRepository) {
-        this.stagiaireRepository = stagiaireRepository;
+    public StagiaireService(StagiaireRepository repository) {
+        this.repository = repository;
     }
 
     public List<Stagiaire> getAll() {
-        return stagiaireRepository.findAll();
+        return repository.findAll();
     }
 
     public Optional<Stagiaire> getById(Long id) {
-        return stagiaireRepository.findById(id);
+        return repository.findById(id);
     }
 
     public Stagiaire save(Stagiaire stagiaire) {
-        return stagiaireRepository.save(stagiaire);
+        return repository.save(stagiaire);
     }
 
     public void delete(Long id) {
-        stagiaireRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.gestionstages.entity;
 
+
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,18 +15,7 @@ public class Stagiaire {
     private String nom;
     private String prenom;
     private String email;
-
-    // Constructeur vide obligatoire
-    public Stagiaire() {
-    }
-
-    public Stagiaire(String nom, String prenom, String email) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-    }
-
-    // Getters & Setters
+    private String telephone;
 
     public Long getId() {
         return id;
@@ -52,5 +43,13 @@ public class Stagiaire {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 }
