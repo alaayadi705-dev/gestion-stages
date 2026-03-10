@@ -1,7 +1,9 @@
 package com.example.gestionstages.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "entreprise")
@@ -19,11 +21,17 @@ public class Entreprise {
 
     private String telephone;
 
-    // Constructor vide
-    public Entreprise() {
-    }
+    // relation avec stages
+    @OneToMany(
+            mappedBy = "entreprise",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonIgnore
+    private List<Stage> stages;
 
-    // Constructor avec paramètres
+    public Entreprise() {}
+
     public Entreprise(String nom, String adresse, String email, String telephone) {
         this.nom = nom;
         this.adresse = adresse;
@@ -31,11 +39,13 @@ public class Entreprise {
         this.telephone = telephone;
     }
 
-    // Getters et Setters
+   public Long getId() {
+    return id;
+}
 
-    public Long getId() {
-        return id;
-    }
+public void setId(Long id) {
+    this.id = id;
+}
 
     public String getNom() {
         return nom;
@@ -68,5 +78,12 @@ public class Entreprise {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-}
 
+    public List<Stage> getStages() {
+        return stages;
+    }
+
+    public void setStages(List<Stage> stages) {
+        this.stages = stages;
+    }
+}

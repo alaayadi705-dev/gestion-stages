@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  direction: rtl;
+
+  background-image: url("../assets/tunisia-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* container */
+.layout-container {
+  display: flex;
+  flex-direction: row;
+}
+
+/* sidebar right */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(to bottom, #c40000, #ff0000);
+  padding: 20px;
+  color: white;
+  order: 2;
+}
+
+/* content left */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  order: 1;
+}

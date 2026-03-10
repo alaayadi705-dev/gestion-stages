@@ -1,0 +1,29 @@
+.login-container {
+
+  height: 100vh;
+
+  background-image: url("../assets/tunisia-bg.jpg");
+
+  background-size: cover;
+
+  background-position: center;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+.login-box {
+
+  background: rgba(255,255,255,0.95);
+
+  padding: 30px;
+
+  border-radius: 10px;
+
+  width: 350px;
+
+}

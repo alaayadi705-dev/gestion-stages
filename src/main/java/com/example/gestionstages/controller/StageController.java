@@ -36,7 +36,7 @@ public class StageController {
     @PutMapping("/{id}")
     public Stage update(@PathVariable Long id, @RequestBody Stage stage) {
         Stage existing = service.getById(id).orElseThrow();
-        existing.setSujet(stage.getSujet());
+        existing.setIntitule(stage.getIntitule());
         existing.setDateDebut(stage.getDateDebut());
         existing.setDateFin(stage.getDateFin());
         existing.setStatut(stage.getStatut());

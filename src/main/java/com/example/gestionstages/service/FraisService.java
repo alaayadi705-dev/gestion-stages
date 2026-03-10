@@ -3,9 +3,7 @@ package com.example.gestionstages.service;
 import com.example.gestionstages.entity.Frais;
 import com.example.gestionstages.repository.FraisRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FraisService {
@@ -20,12 +18,8 @@ public class FraisService {
         return repository.findAll();
     }
 
-    public Optional<Frais> getById(Long id) {
-        return repository.findById(id);
-    }
-
-    public Frais save(Frais frais) {
-        return repository.save(frais);
+    public Frais save(Frais f) {
+        return repository.save(f);
     }
 
     public void delete(Long id) {

@@ -1,49 +1,37 @@
 package com.example.gestionstages.controller;
 
 import com.example.gestionstages.entity.Frais;
-import com.example.gestionstages.service.FraisService;
+import com.example.gestionstages.repository.FraisRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/frais")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class FraisController {
 
-    private final FraisService service;
+    @Autowired
+    private FraisRepository fraisRepository;
 
-    public FraisController(FraisService service) {
-        this.service = service;
-    }
-
+    // GET ALL FRAIS
     @GetMapping
-    public List<Frais> getAll() {
-        return service.getAll();
+    public List<Frais> getAllFrais() {
+        return fraisRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Frais getById(@PathVariable Long id) {
-        return service.getById(id).orElseThrow();
-    }
-
+    // ADD FRAIS
     @PostMapping
-    public Frais create(@RequestBody Frais frais) {
-        return service.save(frais);
+    public Frais addFrais(@RequestBody Frais frais) {
+        return fraisRepository.save(frais);
     }
 
-    @PutMapping("/{id}")
-    public Frais update(@PathVariable Long id, @RequestBody Frais frais) {
-        Frais existing = service.getById(id).orElseThrow();
-        existing.setType(frais.getType());
-        existing.setMontant(frais.getMontant());
-        existing.setDescription(frais.getDescription());
-        existing.setStage(frais.getStage());
-        return service.save(existing);
-    }
-
+    // DELETE FRAIS
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public void deleteFrais(@PathVariable Long id) {
+        fraisRepository.deleteById(id);
     }
+
 }

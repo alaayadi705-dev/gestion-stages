@@ -1,10 +1,9 @@
 package com.example.gestionstages.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "utilisateur")
+@Table(name = "utilisateurs")
 public class Utilisateur {
 
     @Id
@@ -15,14 +14,23 @@ public class Utilisateur {
 
     private String prenom;
 
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String role;
 
-    public Utilisateur() {
+    public Utilisateur() {}
+
+    public Utilisateur(String nom, String prenom, String email, String password, String role) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {

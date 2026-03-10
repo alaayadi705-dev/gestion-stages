@@ -1,6 +1,9 @@
 package com.example.gestionstages.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "rapport_stage")
@@ -16,13 +19,28 @@ public class RapportStage {
 
     private String fichier;
 
+    // EN_ATTENTE / VALIDE / REFUSE
     private String statut;
 
-    @OneToOne
+    private LocalDate dateDepot;
+
+    // relation vers stagiaire
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stagiaire_id")
+    @JsonIgnoreProperties({"stage"})
     private Stagiaire stagiaire;
 
+    // relation vers stage
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "stage_id")
+    @JsonIgnoreProperties({"entreprise"})
+    private Stage stage;
+
     public RapportStage() {
+
+        this.statut = "EN_ATTENTE";
+        this.dateDepot = LocalDate.now();
+
     }
 
     public Long getId() {
@@ -61,11 +79,27 @@ public class RapportStage {
         this.statut = statut;
     }
 
+    public LocalDate getDateDepot() {
+        return dateDepot;
+    }
+
+    public void setDateDepot(LocalDate dateDepot) {
+        this.dateDepot = dateDepot;
+    }
+
     public Stagiaire getStagiaire() {
         return stagiaire;
     }
 
     public void setStagiaire(Stagiaire stagiaire) {
         this.stagiaire = stagiaire;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

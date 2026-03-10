@@ -1,0 +1,41 @@
+.register-page{
+
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background-image:url("../assets/register-bg.jpg");
+  background-size:cover;
+
+}
+
+.register-box{
+
+  background:white;
+  padding:40px;
+  width:400px;
+
+  border-radius:10px;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+
+}
+
+.register-box input,
+.register-box select{
+
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+
+}
+
+.register-box button{
+
+  width:100%;
+  padding:12px;
+  background:#c62828;
+  color:white;
+  border:none;
+
+}

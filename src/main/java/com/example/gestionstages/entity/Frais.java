@@ -1,6 +1,6 @@
 package com.example.gestionstages.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,29 +11,32 @@ public class Frais {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+    private String typeFrais;
 
     private double montant;
 
-    private String description;
+    private String devise;
 
-    @ManyToOne
-    @JoinColumn(name = "stage_id")
+    private String support;
+
+    // relation avec Stage
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "stage_id", nullable = false)
+    @JsonIgnoreProperties({"stagiaires", "rapports", "frais"})
     private Stage stage;
 
-    public Frais() {
-    }
+    public Frais() {}
 
     public Long getId() {
         return id;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeFrais() {
+        return typeFrais;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeFrais(String typeFrais) {
+        this.typeFrais = typeFrais;
     }
 
     public double getMontant() {
@@ -44,12 +47,20 @@ public class Frais {
         this.montant = montant;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDevise() {
+        return devise;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDevise(String devise) {
+        this.devise = devise;
+    }
+
+    public String getSupport() {
+        return support;
+    }
+
+    public void setSupport(String support) {
+        this.support = support;
     }
 
     public Stage getStage() {

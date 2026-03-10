@@ -1,0 +1,245 @@
+.main-content {
+  flex: 1;
+  padding: 30px;
+  margin-right: 260px;
+  min-height: 100vh;
+  background: rgba(255,255,255,0.92);
+}
+
+/* Card */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  margin-top: 20px;
+}
+
+/* Header */
+.header h1 {
+  margin-bottom: 15px;
+  color: #c62828;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background: #c62828;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+table tr:hover {
+  background: #f5f5f5;
+}
+
+/* Buttons */
+
+.add-btn {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-btn {
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background: #1565c0;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+/* Dashboard Welcome */
+
+.dashboard-welcome{
+display:flex;
+justify-content:center;
+align-items:center;
+height:70vh;
+}
+
+.welcome-box{
+background:rgba(0,0,0,0.45);
+padding:40px;
+border-radius:12px;
+text-align:center;
+width:650px;
+box-shadow:0 8px 20px rgba(0,0,0,0.3);
+}
+
+.welcome-title{
+font-size:38px;
+color:white;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.welcome-sub{
+font-size:20px;
+color:#f0f0f0;
+}
+/* dashboard container */
+
+.dashboard-container{
+  text-align:center;
+  padding-top:120px;
+}
+
+/* welcome box */
+
+.welcome-box{
+  background:rgba(0,0,0,0.55);
+  color:white;
+  padding:40px;
+  border-radius:12px;
+  width:600px;
+  margin:auto;
+}
+
+.welcome-box h1{
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+.welcome-box p{
+  font-size:18px;
+}
+
+/* stats */
+
+.stats{
+  margin-top:40px;
+  display:flex;
+  justify-content:center;
+  gap:25px;
+}
+
+.stat-card{
+  background:#e8dddd;
+  color:white;
+  width:160px;
+  padding:25px;
+  border-radius:12px;
+  text-decoration:none;
+  box-shadow:0 6px 15px rgba(0,0,0,0.4);
+  transition:0.3s;
+}
+
+.stat-card:hover{
+  transform:translateY(-8px);
+  background:#c62828;
+}
+
+.stat-icon{
+  font-size:30px;
+}
+
+.stat-number{
+  font-size:26px;
+  font-weight:bold;
+  color:#c62828;
+}
+
+.stat-title{
+  font-size:14px;
+}
+/* dashboard */
+
+.dashboard-container{
+  text-align:center;
+  padding-top:40px;
+}
+
+/* logo */
+
+.dashboard-logo{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:90px;
+  opacity:0.95;
+}
+
+/* welcome box */
+
+.welcome-box{
+  background:rgba(0, 0, 0, 0.55);
+  color:white;
+  padding:30px;        /* كان 40px */
+  border-radius:14px;
+  width:1000Px;         /* كان 600px */
+  margin:auto;
+  margin-top:80px;
+}
+
+.welcome-box h1{
+  font-size:38px;
+}
+
+.welcome-box p{
+  font-size:20px;
+  margin-top:10px;
+}
+
+/* stats */
+
+.stats{
+  margin-top:160px;   /* كانت 40px */
+  display:flex;
+  justify-content:center;
+  gap:25px;
+}
+
+.stat-card{
+  background:#111;       /* خلفية سوداء */
+  color:white;
+  width:160px;
+  padding:25px;
+  border-radius:12px;
+  text-decoration:none;
+  box-shadow:0 6px 15px rgba(0,0,0,0.4);
+  transition:0.3s;
+}
+
+.stat-card:hover{
+  transform:translateY(-5px);
+}
+
+.stat-icon{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+.stat-number{
+  font-size:28px;
+  font-weight:bold;
+}
+
+.stat-title{
+  margin-top:5px;
+  font-size:14px;
+}

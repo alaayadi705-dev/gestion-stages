@@ -1,46 +1,74 @@
 package com.example.gestionstages.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Entity
-@Table(name = "stage")
+@Table(name = "stages")
 public class Stage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sujet;
+    private String intitule;
+
+    private String objectifs;
 
     private LocalDate dateDebut;
 
     private LocalDate dateFin;
 
+    private String pays;
+
+    private String typeStage;
+
     private String statut;
 
-    @ManyToOne
+    // relation entreprise
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "entreprise_id")
     private Entreprise entreprise;
 
-    @Transient
-    private String duree;
+    // relation rapports
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<RapportStage> rapports;
 
-    public Stage() {
-    }
+    // relation stagiaires
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Stagiaire> stagiaires;
+
+    // relation frais
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Frais> frais;
+
+    public Stage() {}
 
     public Long getId() {
         return id;
     }
 
-    public String getSujet() {
-        return sujet;
+    public String getIntitule() {
+        return intitule;
     }
 
-    public void setSujet(String sujet) {
-        this.sujet = sujet;
+    public void setIntitule(String intitule) {
+        this.intitule = intitule;
+    }
+
+    public String getObjectifs() {
+        return objectifs;
+    }
+
+    public void setObjectifs(String objectifs) {
+        this.objectifs = objectifs;
     }
 
     public LocalDate getDateDebut() {
@@ -59,6 +87,31 @@ public class Stage {
         this.dateFin = dateFin;
     }
 
+    public long getDuree() {
+
+        if (dateDebut != null && dateFin != null) {
+            return ChronoUnit.DAYS.between(dateDebut, dateFin);
+        }
+
+        return 0;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    public String getTypeStage() {
+        return typeStage;
+    }
+
+    public void setTypeStage(String typeStage) {
+        this.typeStage = typeStage;
+    }
+
     public String getStatut() {
         return statut;
     }
@@ -75,18 +128,27 @@ public class Stage {
         this.entreprise = entreprise;
     }
 
-    public String getDuree() {
-        if (dateDebut != null && dateFin != null) {
-            long days = ChronoUnit.DAYS.between(dateDebut, dateFin);
+    public List<Stagiaire> getStagiaires() {
+        return stagiaires;
+    }
 
-            if (days == 1) {
-                return days + " يوم";
-            } else if (days >= 2 && days <= 10) {
-                return days + " أيام";
-            } else {
-                return days + " يوم";
-            }
-        }
-        return null;
+    public void setStagiaires(List<Stagiaire> stagiaires) {
+        this.stagiaires = stagiaires;
+    }
+
+    public List<Frais> getFrais() {
+        return frais;
+    }
+
+    public void setFrais(List<Frais> frais) {
+        this.frais = frais;
+    }
+
+    public List<RapportStage> getRapports() {
+        return rapports;
+    }
+
+    public void setRapports(List<RapportStage> rapports) {
+        this.rapports = rapports;
     }
 }
