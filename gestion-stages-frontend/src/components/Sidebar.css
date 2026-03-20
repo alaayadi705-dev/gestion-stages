@@ -1,21 +1,15 @@
 .sidebar {
-
   width: 260px;
-
   height: 100vh;
 
-  background: linear-gradient(to bottom, #c40000, #ff0000);
+  background: #0f172a !important;
 
   padding: 20px;
-
   color: white;
 
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
 }
 
 /* logo */
@@ -37,35 +31,28 @@
 /* links */
 
 .sidebar a {
-
   width: 100%;
-
   text-decoration: none;
 
-  background: white;
-
-  color: black;
+  background: rgba(255,255,255,0.1); /* شفاف */
+  color: white;
 
   padding: 12px;
-
   margin: 6px 0;
 
   border-radius: 6px;
-
   text-align: center;
-
   font-weight: bold;
 
   transition: 0.3s;
-
 }
 
 /* hover */
 
 .sidebar a:hover {
-
-  background: #eee;
-
+  background: #c62828; /* أحمر تونسي */
   transform: scale(1.05);
-
+}
+.sidebar {
+  background: black !important;
 }

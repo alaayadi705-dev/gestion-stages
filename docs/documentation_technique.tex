@@ -1,0 +1,1077 @@
+\documentclass[12pt,a4paper]{report}
+
+% ===================== PACKAGES =====================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{amsmath}
+
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!60!black, citecolor=blue}
+
+% ===================== STYLES =====================
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.97}
+\definecolor{springgreen}{RGB}{34,139,34}
+\definecolor{reactblue}{RGB}{97,218,251}
+
+\lstdefinestyle{codestyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{codegray},
+    numbers=left,
+    numbersep=5pt,
+    tabsize=2
+}
+\lstset{style=codestyle}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{Documentation Technique}
+\fancyfoot[C]{\thepage}
+
+% ===================== DOCUMENT =====================
+\begin{document}
+
+% =================== PAGE DE GARDE ===================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries Documentation Technique\par}
+\vspace{0.5cm}
+{\LARGE Système de Gestion des Stages\par}
+\vspace{2cm}
+{\Large\itshape Projet de Fin d'Études\par}
+\vspace{1cm}
+{\large Application Full-Stack : Spring Boot + React.js + MySQL\par}
+\vspace{3cm}
+{\large\bfseries Technologies principales :\par}
+\vspace{0.3cm}
+{\large Spring Boot 4.0.2 \textbullet\ Java 17 \textbullet\ React.js \textbullet\ MySQL \textbullet\ JWT\par}
+\vfill
+{\large Date : 19/03/2026\par}
+\end{titlepage}
+
+% =================== TABLE DES MATIÈRES ===================
+\tableofcontents
+\newpage
+
+% =========================================================
+% CHAPITRE 1 : PRÉSENTATION GÉNÉRALE
+% =========================================================
+\chapter{Présentation Générale}
+
+Le projet \textbf{Gestion des Stages} est une application web full-stack destinée à la gestion complète du cycle de vie des stages en entreprise. Elle permet de :
+
+\begin{itemize}
+    \item \textbf{Gérer les stagiaires} : inscription, suivi, affectation aux stages et aux entreprises
+    \item \textbf{Gérer les entreprises} partenaires : création, modification, suppression
+    \item \textbf{Gérer les stages} : création avec dates, pays, statut, objectifs, et liaison avec une entreprise
+    \item \textbf{Gérer les frais} liés aux stages : type, montant, devise, support
+    \item \textbf{Gérer les rapports de stage} : dépôt, validation, rejet
+    \item \textbf{Gérer les utilisateurs} du système avec authentification sécurisée via JWT
+    \item \textbf{Visualiser des statistiques} : tableaux de bord avec indicateurs par pays, par stage, par statut
+\end{itemize}
+
+% =========================================================
+% CHAPITRE 2 : ARCHITECTURE GLOBALE
+% =========================================================
+\chapter{Architecture Globale}
+
+L'application suit une \textbf{architecture 3-tiers} basée sur le pattern \textbf{MVC (Model-View-Controller)}.
+
+\section{Diagramme d'architecture 3-tiers}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    tier/.style={draw, rounded corners, minimum width=14cm, minimum height=2.2cm, align=center, font=\small},
+    arrow/.style={-{Stealth[length=3mm]}, thick}
+]
+    \node[tier, fill=reactblue!20] (frontend) {
+        \textbf{FRONTEND --- React.js (Port 3000)}\\[3pt]
+        Pages (Login, Dashboard, Stagiaires, Stages, ...) \quad Components (Header, Sidebar, Layout)\\
+        Services API (fetch $\rightarrow$ REST) \quad AuthContext (Gestion du token JWT)
+    };
+
+    \node[tier, fill=springgreen!15, below=of frontend] (backend) {
+        \textbf{BACKEND --- Spring Boot 4.0.2 (Port 8080)}\\[3pt]
+        Security (JWT + CORS) $\rightarrow$ Controllers (REST API) $\rightarrow$ Services (Logique Métier)\\
+        $\rightarrow$ Repositories (JPA/Hibernate) $\rightarrow$ Entities (JPA)
+    };
+
+    \node[tier, fill=orange!15, below=of backend] (database) {
+        \textbf{BASE DE DONNÉES --- MySQL}\\[3pt]
+        Tables : entreprise, stages, stagiaires, frais, rapport\_stage, utilisateurs
+    };
+
+    \draw[arrow] (frontend) -- node[right, font=\footnotesize] {HTTP (JSON)} (backend);
+    \draw[arrow] (backend) -- node[right, font=\footnotesize] {JDBC} (database);
+\end{tikzpicture}
+\caption{Architecture 3-tiers de l'application}
+\end{figure}
+
+\section{Stack Technologique}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Couche} & \textbf{Technologie} & \textbf{Version} \\ \hline
+Backend & Spring Boot & 4.0.2 \\ \hline
+Langage Backend & Java & 17 \\ \hline
+ORM & Spring Data JPA / Hibernate & --- \\ \hline
+Sécurité & Spring Security + JWT (jjwt) & 0.12.5 \\ \hline
+Base de Données & MySQL & --- \\ \hline
+Connecteur BDD & mysql-connector-j & --- \\ \hline
+Chiffrement & BCrypt (PasswordEncoder) & --- \\ \hline
+Frontend & React.js & --- \\ \hline
+Communication & REST API (JSON) & --- \\ \hline
+Build & Maven & --- \\ \hline
+\end{tabular}
+\caption{Stack technologique}
+\end{table}
+
+% =========================================================
+% CHAPITRE 3 : DIAGRAMME DE CLASSES
+% =========================================================
+\chapter{Diagramme de Classes (Modèle de Données)}
+
+\section{Diagramme UML}
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    class/.style={draw, rectangle, rounded corners=3pt, minimum width=5cm, font=\small},
+    attr/.style={font=\ttfamily\scriptsize, align=left},
+    rel/.style={-{Stealth[length=2.5mm]}, thick}
+]
+    % Entreprise
+    \node[class, fill=blue!10] (ent) at (0,0) {
+        \begin{tabular}{c}
+        \textbf{Entreprise} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - nom : String \\
+        - adresse : String \\
+        - email : String \\
+        - telephone : String \\
+        - stages : List<Stage>
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % Stage
+    \node[class, fill=green!10] (stg) at (8,0) {
+        \begin{tabular}{c}
+        \textbf{Stage} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - intitule : String \\
+        - objectifs : String \\
+        - dateDebut : LocalDate \\
+        - dateFin : LocalDate \\
+        - pays : String \\
+        - typeStage : String \\
+        - statut : String \\
+        + getDuree() : long
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % Stagiaire
+    \node[class, fill=yellow!10] (sta) at (0,-6) {
+        \begin{tabular}{c}
+        \textbf{Stagiaire} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - nom, prenom : String \\
+        - dateNaissance : LocalDate \\
+        - nationalite : String \\
+        - paysResidence : String \\
+        - universite : String \\
+        - specialite : String \\
+        - email, telephone : String \\
+        - grade, fonction : String
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % Frais
+    \node[class, fill=red!10] (fr) at (8,-6) {
+        \begin{tabular}{c}
+        \textbf{Frais} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - typeFrais : String \\
+        - montant : double \\
+        - devise : String \\
+        - support : String
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % RapportStage
+    \node[class, fill=purple!10] (rap) at (16,-3) {
+        \begin{tabular}{c}
+        \textbf{RapportStage} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - titre : String \\
+        - description : String \\
+        - fichier : String \\
+        - statut : String \\
+        - dateDepot : LocalDate
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % Utilisateur
+    \node[class, fill=gray!10] (usr) at (16,2) {
+        \begin{tabular}{c}
+        \textbf{Utilisateur} \\ \hline
+        \begin{tabular}{l}
+        - id : Long \\
+        - nom, prenom : String \\
+        - email : String (unique) \\
+        - password : String \\
+        - role : String
+        \end{tabular}
+        \end{tabular}
+    };
+
+    % Relations
+    \draw[rel] (ent) -- node[above, font=\scriptsize] {1..*} (stg);
+    \draw[rel] (stg) -- node[right, font=\scriptsize] {1..*} (fr);
+    \draw[rel] (stg) -- node[left, font=\scriptsize] {1..*} (sta);
+    \draw[rel] (stg) -- node[above, font=\scriptsize] {1..*} (rap);
+    \draw[rel] (sta) -- node[below, font=\scriptsize] {*..1} (rap);
+    \draw[rel, dashed] (sta) -- node[below, font=\scriptsize] {*..1} (ent);
+\end{tikzpicture}
+}
+\caption{Diagramme de classes UML}
+\end{figure}
+
+\section{Relations JPA}
+
+\begin{longtable}{|l|l|p{7cm}|}
+\hline
+\textbf{Relation} & \textbf{Type} & \textbf{Description} \\ \hline \endhead
+Entreprise $\rightarrow$ Stage & @OneToMany & Une entreprise possède plusieurs stages (cascade ALL, orphanRemoval) \\ \hline
+Stage $\rightarrow$ Entreprise & @ManyToOne (EAGER) & Un stage appartient à une entreprise \\ \hline
+Stage $\rightarrow$ Stagiaire & @OneToMany & Un stage peut avoir plusieurs stagiaires \\ \hline
+Stagiaire $\rightarrow$ Stage & @ManyToOne & Un stagiaire est affecté à un stage \\ \hline
+Stagiaire $\rightarrow$ Entreprise & @ManyToOne (EAGER) & Un stagiaire est attaché à une entreprise \\ \hline
+Stage $\rightarrow$ Frais & @OneToMany & Un stage génère des frais \\ \hline
+Frais $\rightarrow$ Stage & @ManyToOne (EAGER, required) & Un frais est obligatoirement lié à un stage \\ \hline
+Stage $\rightarrow$ RapportStage & @OneToMany & Un stage a plusieurs rapports \\ \hline
+RapportStage $\rightarrow$ Stage & @ManyToOne (EAGER) & Un rapport est associé à un stage \\ \hline
+RapportStage $\rightarrow$ Stagiaire & @ManyToOne (EAGER) & Un rapport est rédigé par un stagiaire \\ \hline
+\end{longtable}
+
+\textit{Note : Les annotations \texttt{@JsonIgnore} et \texttt{@JsonIgnoreProperties} sont utilisées pour éviter les boucles de sérialisation JSON infinies.}
+
+% =========================================================
+% CHAPITRE 4 : DESCRIPTION DES ENTITÉS
+% =========================================================
+\chapter{Description des Entités JPA}
+
+\section{Entreprise}
+\textbf{Table :} \texttt{entreprise}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+nom & String & --- & Nom de l'entreprise \\ \hline
+adresse & String & --- & Adresse physique \\ \hline
+email & String & --- & Email de contact \\ \hline
+telephone & String & --- & Numéro de téléphone \\ \hline
+stages & List<Stage> & @OneToMany, cascade ALL & Liste des stages associés \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité Entreprise}
+\end{table}
+
+\section{Stage}
+\textbf{Table :} \texttt{stages}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+intitule & String & --- & Titre du stage \\ \hline
+objectifs & String & --- & Objectifs du stage \\ \hline
+dateDebut & LocalDate & --- & Date de début \\ \hline
+dateFin & LocalDate & --- & Date de fin \\ \hline
+pays & String & --- & Pays du stage \\ \hline
+typeStage & String & --- & Type (PFE, Observation...) \\ \hline
+statut & String & --- & Statut (EN\_COURS, CLOTURE) \\ \hline
+entreprise & Entreprise & @ManyToOne & Entreprise d'accueil \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité Stage}
+\end{table}
+
+\textbf{Méthode calculée :} \texttt{getDuree()} retourne la durée en jours entre \texttt{dateDebut} et \texttt{dateFin} via \texttt{ChronoUnit.DAYS.between()}.
+
+\section{Stagiaire}
+\textbf{Table :} \texttt{stagiaires}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+nom & String & --- & Nom de famille \\ \hline
+prenom & String & --- & Prénom \\ \hline
+dateNaissance & LocalDate & --- & Date de naissance \\ \hline
+nationalite & String & --- & Nationalité \\ \hline
+paysResidence & String & --- & Pays de résidence \\ \hline
+universite & String & --- & Université d'origine \\ \hline
+specialite & String & --- & Spécialité académique \\ \hline
+email & String & --- & Email \\ \hline
+telephone & String & --- & Téléphone \\ \hline
+grade & String & --- & Grade académique \\ \hline
+fonction & String & --- & Fonction occupée \\ \hline
+stage & Stage & @ManyToOne & Stage affecté \\ \hline
+entreprise & Entreprise & @ManyToOne & Entreprise d'accueil \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité Stagiaire}
+\end{table}
+
+\section{Frais}
+\textbf{Table :} \texttt{frais}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+typeFrais & String & --- & Type de frais \\ \hline
+montant & double & --- & Montant du frais \\ \hline
+devise & String & --- & Devise (MAD, EUR, USD) \\ \hline
+support & String & --- & Justificatif \\ \hline
+stage & Stage & @ManyToOne, non null & Stage associé (obligatoire) \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité Frais}
+\end{table}
+
+\section{RapportStage}
+\textbf{Table :} \texttt{rapport\_stage}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+titre & String & --- & Titre du rapport \\ \hline
+description & String & --- & Description du contenu \\ \hline
+fichier & String & --- & Chemin/nom du fichier \\ \hline
+statut & String & Défaut: EN\_ATTENTE & Statut du rapport \\ \hline
+dateDepot & LocalDate & Défaut: date du jour & Date de dépôt \\ \hline
+stagiaire & Stagiaire & @ManyToOne & Stagiaire rédacteur \\ \hline
+stage & Stage & @ManyToOne & Stage concerné \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité RapportStage}
+\end{table}
+
+\section{Utilisateur}
+\textbf{Table :} \texttt{utilisateurs}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|p{5cm}|}
+\hline
+\textbf{Attribut} & \textbf{Type} & \textbf{Contraintes} & \textbf{Description} \\ \hline
+id & Long & PK, Auto-généré & Identifiant unique \\ \hline
+nom & String & --- & Nom \\ \hline
+prenom & String & --- & Prénom \\ \hline
+email & String & UNIQUE, NOT NULL & Email (identifiant) \\ \hline
+password & String & NOT NULL & Mot de passe (BCrypt) \\ \hline
+role & String & NOT NULL & Rôle (ADMIN, USER) \\ \hline
+\end{tabular}
+\caption{Attributs de l'entité Utilisateur}
+\end{table}
+
+% =========================================================
+% CHAPITRE 5 : COUCHE REPOSITORY
+% =========================================================
+\chapter{Couche Repository (Accès aux Données)}
+
+Chaque repository étend \texttt{JpaRepository<T, Long>} et hérite automatiquement des opérations CRUD : \texttt{findAll()}, \texttt{findById()}, \texttt{save()}, \texttt{deleteById()}, \texttt{count()}.
+
+\section{EntrepriseRepository}
+Aucune requête personnalisée --- utilise uniquement les méthodes standards de \texttt{JpaRepository}.
+
+\section{StageRepository}
+
+\begin{lstlisting}[language=Java, caption=StageRepository --- Requêtes personnalisées]
+@Query("SELECT s.pays, COUNT(s) FROM Stage s GROUP BY s.pays")
+List<Object[]> countStagesByPays();
+
+long countByStatut(String statut);
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Méthode} & \textbf{Type} & \textbf{Description} \\ \hline
+countStagesByPays() & JPQL & Nombre de stages groupés par pays \\ \hline
+countByStatut(statut) & Derived Query & Nombre de stages par statut \\ \hline
+\end{tabular}
+\end{table}
+
+\section{StagiaireRepository}
+
+\begin{lstlisting}[language=Java, caption=StagiaireRepository --- Requêtes personnalisées]
+@Query("SELECT s.paysResidence, COUNT(s) FROM Stagiaire s GROUP BY s.paysResidence")
+List<Object[]> countStagiairesByPays();
+\end{lstlisting}
+
+\section{FraisRepository}
+
+\begin{lstlisting}[language=Java, caption=FraisRepository --- Requêtes personnalisées]
+@Query("SELECT f.stage.id, SUM(f.montant) FROM Frais f GROUP BY f.stage.id")
+List<Object[]> sumMontantByStage();
+
+@Query("SELECT f.stage.pays, SUM(f.montant) FROM Frais f GROUP BY f.stage.pays")
+List<Object[]> sumMontantByPays();
+
+@Query("SELECT COALESCE(SUM(f.montant),0) FROM Frais f")
+Double sumMontantTotal();
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Méthode} & \textbf{Type} & \textbf{Description} \\ \hline
+sumMontantByStage() & JPQL & Coût total groupé par stage \\ \hline
+sumMontantByPays() & JPQL & Coût total groupé par pays \\ \hline
+sumMontantTotal() & JPQL & Somme totale (COALESCE pour null) \\ \hline
+\end{tabular}
+\end{table}
+
+\section{RapportStageRepository}
+
+\begin{lstlisting}[language=Java, caption=RapportStageRepository]
+long countByStatut(String statut);
+\end{lstlisting}
+
+\section{UtilisateurRepository}
+
+\begin{lstlisting}[language=Java, caption=UtilisateurRepository]
+Optional<Utilisateur> findByEmail(String email);
+\end{lstlisting}
+
+% =========================================================
+% CHAPITRE 6 : COUCHE SERVICE
+% =========================================================
+\chapter{Couche Service (Logique Métier)}
+
+\section{AuthService --- Service d'Authentification}
+
+\textbf{Dépendances :} \texttt{UtilisateurRepository}, \texttt{JwtService}, \texttt{PasswordEncoder}
+
+\subsection{Méthode register()}
+
+\begin{enumerate}
+    \item Vérifie si l'email existe déjà en base de données
+    \item Si oui $\rightarrow$ lève \texttt{RuntimeException("Email already exists")}
+    \item Chiffre le mot de passe avec \texttt{BCryptPasswordEncoder}
+    \item Sauvegarde l'utilisateur en base
+    \item Génère un token JWT avec email et rôle
+    \item Retourne \texttt{\{"token": "..."\}}
+\end{enumerate}
+
+\subsection{Méthode login()}
+
+\begin{enumerate}
+    \item Recherche l'utilisateur par email
+    \item Si non trouvé $\rightarrow$ \texttt{RuntimeException("User not found")}
+    \item Compare le mot de passe via \texttt{passwordEncoder.matches()}
+    \item Si incorrect $\rightarrow$ \texttt{RuntimeException("Email ou mot de passe incorrect")}
+    \item Génère un token JWT
+    \item Retourne \texttt{\{"token": "..."\}}
+\end{enumerate}
+
+\subsection{Diagramme de flux --- Authentification}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.8cm,
+    block/.style={draw, rectangle, rounded corners, minimum width=4cm, minimum height=0.8cm, align=center, font=\small},
+    decision/.style={draw, diamond, aspect=2, minimum width=2cm, align=center, font=\small},
+    arrow/.style={-{Stealth[length=2mm]}, thick}
+]
+    \node[block, fill=blue!10] (start) {POST /api/auth/login};
+    \node[decision, below=of start, fill=yellow!15] (found) {Utilisateur trouvé ?};
+    \node[block, right=2cm of found, fill=red!15] (err1) {Exception: User not found};
+    \node[decision, below=of found, fill=yellow!15] (pwd) {Password correct ?};
+    \node[block, right=2cm of pwd, fill=red!15] (err2) {Exception: Incorrect};
+    \node[block, below=of pwd, fill=green!15] (jwt) {Génération JWT Token};
+    \node[block, below=of jwt, fill=green!20] (ret) {Retour \{token\}};
+
+    \draw[arrow] (start) -- (found);
+    \draw[arrow] (found) -- node[right, font=\scriptsize] {Non} (err1);
+    \draw[arrow] (found) -- node[left, font=\scriptsize] {Oui} (pwd);
+    \draw[arrow] (pwd) -- node[right, font=\scriptsize] {Non} (err2);
+    \draw[arrow] (pwd) -- node[left, font=\scriptsize] {Oui} (jwt);
+    \draw[arrow] (jwt) -- (ret);
+\end{tikzpicture}
+\caption{Flux d'authentification (Login)}
+\end{figure}
+
+\section{Services CRUD}
+
+Les services suivants implémentent le pattern CRUD standard via \texttt{JpaRepository} :
+
+\begin{longtable}{|l|l|p{6.5cm}|}
+\hline
+\textbf{Service} & \textbf{Méthodes} & \textbf{Particularité} \\ \hline \endhead
+EntrepriseService & getAll, getById, save, delete & CRUD standard \\ \hline
+StageService & getAll, getById, save, delete & CRUD standard \\ \hline
+StagiaireService & getAll, getById, save, delete & CRUD standard \\ \hline
+FraisService & getAll, save, delete & Pas de getById \\ \hline
+RapportStageService & getAll, getById, save, delete & CRUD standard \\ \hline
+UtilisateurService & getAll, getById, save, delete & Chiffrement BCrypt automatique du mot de passe lors du save \\ \hline
+\end{longtable}
+
+\section{StatistiqueService --- Statistiques et Tableaux de Bord}
+
+\textbf{Dépendances :} \texttt{StageRepository}, \texttt{FraisRepository}
+
+\textbf{Méthode :} \texttt{getStatistiquesParPays()} $\rightarrow$ \texttt{List<StatistiqueDTO>}
+
+\textbf{Mécanisme :}
+\begin{enumerate}
+    \item Récupère tous les stages depuis \texttt{StageRepository}
+    \item Groupe par pays avec \texttt{Collectors.groupingBy(s -> s.getPays())}
+    \item Pour chaque pays, calcule :
+    \begin{itemize}
+        \item Nombre de stages
+        \item Coût total des frais associés (stream + filter + mapToDouble + sum)
+    \end{itemize}
+    \item Retourne une liste de \texttt{StatistiqueDTO(pays, nombreStagiaires, nombreStages, coutTotal)}
+\end{enumerate}
+
+% =========================================================
+% CHAPITRE 7 : COUCHE CONTROLLER (API REST)
+% =========================================================
+\chapter{Couche Controller (API REST)}
+
+Tous les contrôleurs sont annotés \texttt{@RestController} et exposent des endpoints REST au format JSON.
+
+\section{AuthController --- /api/auth}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+POST & /api/auth/register & Utilisateur (JSON) & Inscription \\ \hline
+POST & /api/auth/login & AuthRequest (JSON) & Connexion + JWT \\ \hline
+\end{tabular}
+\end{table}
+
+\section{EntrepriseController --- /api/entreprises}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/entreprises & --- & Lister toutes \\ \hline
+GET & /api/entreprises/\{id\} & --- & Détails \\ \hline
+POST & /api/entreprises & Entreprise & Créer \\ \hline
+PUT & /api/entreprises/\{id\} & Entreprise & Modifier \\ \hline
+DELETE & /api/entreprises/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\section{StageController --- /api/stages}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/stages & --- & Lister tous \\ \hline
+GET & /api/stages/\{id\} & --- & Détails \\ \hline
+POST & /api/stages & Stage & Créer \\ \hline
+PUT & /api/stages/\{id\} & Stage & Modifier \\ \hline
+DELETE & /api/stages/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\section{StagiaireController --- /api/stagiaires}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/stagiaires & --- & Lister tous \\ \hline
+GET & /api/stagiaires/\{id\} & --- & Détails \\ \hline
+POST & /api/stagiaires & Stagiaire & Créer \\ \hline
+PUT & /api/stagiaires/\{id\} & Stagiaire & Modifier \\ \hline
+DELETE & /api/stagiaires/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\textit{Particularité du POST : gère automatiquement la référence Entreprise via un objet proxy si l'ID est présent.}
+
+\section{FraisController --- /api/frais}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/frais & --- & Lister tous \\ \hline
+POST & /api/frais & Frais & Ajouter \\ \hline
+DELETE & /api/frais/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\section{RapportStageController --- /api/rapports}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/rapports & --- & Lister tous \\ \hline
+GET & /api/rapports/\{id\} & --- & Détails \\ \hline
+POST & /api/rapports & RapportStage & Créer \\ \hline
+PUT & /api/rapports/\{id\} & RapportStage & Modifier \\ \hline
+DELETE & /api/rapports/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\section{StatistiquesController --- /api/statistiques}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|p{8cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Description} \\ \hline
+GET & /api/statistiques & Retourne toutes les statistiques du dashboard \\ \hline
+\end{tabular}
+\end{table}
+
+\textbf{Données retournées :}
+\begin{lstlisting}[language=Java, caption=Structure JSON de la réponse statistiques]
+{
+  "totalStagiaires": 25,
+  "totalEntreprises": 10,
+  "totalStages": 15,
+  "totalRapports": 12,
+  "totalFrais": 50000.0,
+  "stagesParPays": [["Maroc", 5], ["France", 3]],
+  "stagiairesParPays": [["Maroc", 10], ["Tunisie", 5]],
+  "coutParStage": [[1, 15000.0], [2, 8000.0]],
+  "coutParPays": [["Maroc", 30000.0]],
+  "stagesEnCours": 8,
+  "stagesClotures": 7,
+  "rapportsDeposes": 4,
+  "rapportsValides": 5,
+  "rapportsRejetes": 1,
+  "rapportsEnAttente": 2
+}
+\end{lstlisting}
+
+\section{UtilisateurController --- /api/utilisateurs}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/utilisateurs & --- & Lister \\ \hline
+GET & /api/utilisateurs/\{id\} & --- & Détails \\ \hline
+POST & /api/utilisateurs & Utilisateur & Créer (password chiffré) \\ \hline
+PUT & /api/utilisateurs/\{id\} & Utilisateur & Modifier \\ \hline
+DELETE & /api/utilisateurs/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+\section{UsersController --- /api/users}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|l|p{4cm}|}
+\hline
+\textbf{HTTP} & \textbf{Endpoint} & \textbf{Corps} & \textbf{Description} \\ \hline
+GET & /api/users & --- & Lister \\ \hline
+POST & /api/users & Utilisateur & Ajouter \\ \hline
+DELETE & /api/users/\{id\} & --- & Supprimer \\ \hline
+\end{tabular}
+\end{table}
+
+% =========================================================
+% CHAPITRE 8 : SÉCURITÉ ET AUTHENTIFICATION
+% =========================================================
+\chapter{Sécurité et Authentification}
+
+\section{Architecture de Sécurité}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.7cm,
+    block/.style={draw, rectangle, rounded corners, minimum width=3.5cm, minimum height=0.7cm, align=center, font=\small},
+    decision/.style={draw, diamond, aspect=2.5, minimum width=1.5cm, align=center, font=\scriptsize},
+    arrow/.style={-{Stealth[length=2mm]}, thick}
+]
+    \node[block, fill=blue!15] (req) {Requête HTTP entrante};
+    \node[block, below=of req, fill=orange!15] (filter) {JwtFilter};
+    \node[decision, below=of filter, fill=yellow!10] (isauth) {/api/auth/** ?};
+    \node[block, right=2.5cm of isauth, fill=green!15] (pass) {Passe directement};
+    \node[decision, below=of isauth, fill=yellow!10] (hastoken) {Header Bearer ?};
+    \node[block, right=2.5cm of hastoken, fill=gray!15] (noauth) {Passe sans auth};
+    \node[block, below=of hastoken, fill=blue!10] (extract) {Extraction JWT (email + role)};
+    \node[block, below=of extract, fill=green!15] (setctx) {SecurityContext.setAuthentication()};
+    \node[block, below=of setctx, fill=green!20] (next) {Chaîne de filtres suivante};
+
+    \draw[arrow] (req) -- (filter);
+    \draw[arrow] (filter) -- (isauth);
+    \draw[arrow] (isauth) -- node[above, font=\scriptsize] {Oui} (pass);
+    \draw[arrow] (isauth) -- node[left, font=\scriptsize] {Non} (hastoken);
+    \draw[arrow] (hastoken) -- node[above, font=\scriptsize] {Non} (noauth);
+    \draw[arrow] (hastoken) -- node[left, font=\scriptsize] {Oui} (extract);
+    \draw[arrow] (extract) -- (setctx);
+    \draw[arrow] (setctx) -- (next);
+    \draw[arrow] (pass) |- (next);
+    \draw[arrow] (noauth) |- (next);
+\end{tikzpicture}
+\caption{Flux du filtre de sécurité JWT}
+\end{figure}
+
+\section{JwtService --- Gestion des Tokens JWT}
+
+\begin{itemize}
+    \item \textbf{Algorithme :} HMAC-SHA256
+    \item \textbf{Durée de validité :} 24 heures (86\,400\,000 ms)
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Méthode} & \textbf{Description} \\ \hline
+generateToken(email, role) & Crée un JWT avec subject=email, claim role, dates d'émission et d'expiration \\ \hline
+extractEmail(token) & Extrait l'email (subject) du token \\ \hline
+extractRole(token) & Extrait le rôle depuis les claims \\ \hline
+extractClaim(token, resolver) & Méthode générique d'extraction via Function<Claims, T> \\ \hline
+\end{tabular}
+\caption{Méthodes de JwtService}
+\end{table}
+
+\textbf{Structure du payload JWT :}
+\begin{lstlisting}[caption=Payload JWT]
+{
+  "sub": "user@example.com",
+  "role": "ADMIN",
+  "iat": 1709750400,
+  "exp": 1709836800
+}
+\end{lstlisting}
+
+\section{SecurityConfig}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Configuration} & \textbf{Valeur} & \textbf{Description} \\ \hline
+CSRF & Désactivé & API REST stateless \\ \hline
+/api/auth/** & permitAll & Routes publiques \\ \hline
+/api/** & permitAll & Toutes les routes API accessibles \\ \hline
+Form Login & Désactivé & Pas de formulaire HTML \\ \hline
+HTTP Basic & Désactivé & Pas d'auth HTTP Basic \\ \hline
+\end{tabular}
+\caption{Configuration de sécurité}
+\end{table}
+
+\section{PasswordConfig}
+Utilise \texttt{BCryptPasswordEncoder} comme bean Spring pour le chiffrement unidirectionnel des mots de passe.
+
+\section{CorsConfig}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Paramètre} & \textbf{Valeur} \\ \hline
+Origines autorisées & http://localhost:3000 \\ \hline
+Méthodes autorisées & GET, POST, PUT, DELETE, OPTIONS \\ \hline
+Headers autorisés & * (tous) \\ \hline
+Credentials & Autorisés \\ \hline
+\end{tabular}
+\caption{Configuration CORS}
+\end{table}
+
+% =========================================================
+% CHAPITRE 9 : DIAGRAMMES DE SÉQUENCE
+% =========================================================
+\chapter{Diagrammes de Séquence}
+
+\section{Flux d'Inscription (Register)}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.5cm,
+    actor/.style={draw, rectangle, rounded corners, fill=blue!10, minimum width=2.2cm, minimum height=0.6cm, font=\scriptsize\bfseries, align=center},
+    msg/.style={-{Stealth[length=2mm]}, thick},
+    rmsg/.style={-{Stealth[length=2mm]}, thick, dashed},
+    step/.style={font=\scriptsize, align=left}
+]
+    \node[actor] (client) at (0,0) {Client React};
+    \node[actor] (ctrl) at (3.5,0) {AuthController};
+    \node[actor] (svc) at (7,0) {AuthService};
+    \node[actor] (repo) at (10.5,0) {Repository};
+    \node[actor] (jwt) at (14,0) {JwtService};
+
+    % Lignes de vie
+    \foreach \x in {client, ctrl, svc, repo, jwt} {
+        \draw[dashed, gray] (\x.south) -- ++(0,-8.5);
+    }
+
+    \draw[msg] (0,-1) -- node[above, font=\scriptsize] {POST /register} (3.5,-1);
+    \draw[msg] (3.5,-1.5) -- node[above, font=\scriptsize] {register(user)} (7,-1.5);
+    \draw[msg] (7,-2) -- node[above, font=\scriptsize] {findByEmail()} (10.5,-2);
+    \draw[rmsg] (10.5,-2.5) -- node[above, font=\scriptsize] {empty()} (7,-2.5);
+
+    \node[step, fill=yellow!10, draw, rounded corners] at (7,-3.3) {BCrypt encode};
+
+    \draw[msg] (7,-4) -- node[above, font=\scriptsize] {save(user)} (10.5,-4);
+    \draw[rmsg] (10.5,-4.5) -- node[above, font=\scriptsize] {saved} (7,-4.5);
+
+    \draw[msg] (7,-5.2) -- node[above, font=\scriptsize] {generateToken()} (14,-5.2);
+    \draw[rmsg] (14,-5.7) -- node[above, font=\scriptsize] {JWT token} (7,-5.7);
+
+    \draw[rmsg] (7,-6.5) -- node[above, font=\scriptsize] {\{token\}} (3.5,-6.5);
+    \draw[rmsg] (3.5,-7) -- node[above, font=\scriptsize] {200 OK \{token\}} (0,-7);
+\end{tikzpicture}
+\caption{Diagramme de séquence --- Inscription}
+\end{figure}
+
+\section{Flux de Connexion (Login)}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    actor/.style={draw, rectangle, rounded corners, fill=blue!10, minimum width=2.2cm, minimum height=0.6cm, font=\scriptsize\bfseries, align=center},
+    msg/.style={-{Stealth[length=2mm]}, thick},
+    rmsg/.style={-{Stealth[length=2mm]}, thick, dashed},
+    step/.style={font=\scriptsize, align=left}
+]
+    \node[actor] (client) at (0,0) {Client React};
+    \node[actor] (ctrl) at (3.5,0) {AuthController};
+    \node[actor] (svc) at (7,0) {AuthService};
+    \node[actor] (repo) at (10.5,0) {Repository};
+    \node[actor] (jwt) at (14,0) {JwtService};
+
+    \foreach \x in {client, ctrl, svc, repo, jwt} {
+        \draw[dashed, gray] (\x.south) -- ++(0,-8);
+    }
+
+    \draw[msg] (0,-1) -- node[above, font=\scriptsize] {POST /login} (3.5,-1);
+    \draw[msg] (3.5,-1.5) -- node[above, font=\scriptsize] {login(email, pwd)} (7,-1.5);
+    \draw[msg] (7,-2) -- node[above, font=\scriptsize] {findByEmail()} (10.5,-2);
+    \draw[rmsg] (10.5,-2.5) -- node[above, font=\scriptsize] {utilisateur} (7,-2.5);
+
+    \node[step, fill=yellow!10, draw, rounded corners] at (7,-3.3) {BCrypt matches()};
+
+    \draw[msg] (7,-4.2) -- node[above, font=\scriptsize] {generateToken()} (14,-4.2);
+    \draw[rmsg] (14,-4.7) -- node[above, font=\scriptsize] {JWT token} (7,-4.7);
+
+    \draw[rmsg] (7,-5.5) -- node[above, font=\scriptsize] {\{token\}} (3.5,-5.5);
+    \draw[rmsg] (3.5,-6) -- node[above, font=\scriptsize] {200 OK \{token\}} (0,-6);
+\end{tikzpicture}
+\caption{Diagramme de séquence --- Connexion}
+\end{figure}
+
+\section{Flux CRUD typique (création d'un stagiaire)}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    actor/.style={draw, rectangle, rounded corners, fill=blue!10, minimum width=2cm, minimum height=0.6cm, font=\scriptsize\bfseries, align=center},
+    msg/.style={-{Stealth[length=2mm]}, thick},
+    rmsg/.style={-{Stealth[length=2mm]}, thick, dashed}
+]
+    \node[actor] (client) at (0,0) {Client};
+    \node[actor] (filter) at (2.8,0) {JwtFilter};
+    \node[actor] (ctrl) at (5.6,0) {Controller};
+    \node[actor] (svc) at (8.4,0) {Service};
+    \node[actor] (repo) at (11.2,0) {Repository};
+    \node[actor] (db) at (14,0) {MySQL};
+
+    \foreach \x in {client, filter, ctrl, svc, repo, db} {
+        \draw[dashed, gray] (\x.south) -- ++(0,-7);
+    }
+
+    \draw[msg] (0,-1) -- node[above, font=\scriptsize] {POST + Bearer} (2.8,-1);
+    \draw[msg] (2.8,-1.7) -- node[above, font=\scriptsize] {Vérifié} (5.6,-1.7);
+    \draw[msg] (5.6,-2.4) -- node[above, font=\scriptsize] {save()} (8.4,-2.4);
+    \draw[msg] (8.4,-3.1) -- node[above, font=\scriptsize] {save()} (11.2,-3.1);
+    \draw[msg] (11.2,-3.8) -- node[above, font=\scriptsize] {INSERT} (14,-3.8);
+    \draw[rmsg] (14,-4.3) -- node[above, font=\scriptsize] {OK} (11.2,-4.3);
+    \draw[rmsg] (11.2,-4.8) -- (8.4,-4.8);
+    \draw[rmsg] (8.4,-5.3) -- (5.6,-5.3);
+    \draw[rmsg] (5.6,-5.8) -- node[above, font=\scriptsize] {200 JSON} (0,-5.8);
+\end{tikzpicture}
+\caption{Diagramme de séquence --- Opération CRUD}
+\end{figure}
+
+% =========================================================
+% CHAPITRE 10 : ARCHITECTURE FRONTEND
+% =========================================================
+\chapter{Architecture Frontend (React.js)}
+
+\section{Structure des fichiers}
+
+\begin{lstlisting}[caption=Arborescence du frontend]
+gestion-stages-frontend/src/
+|-- App.jsx              (Composant racine + routage)
+|-- context/
+|   +-- AuthContext.jsx  (Gestion authentification)
+|-- components/
+|   |-- Header.jsx       (Barre de navigation)
+|   |-- Sidebar.jsx      (Menu lateral)
+|   |-- Layout.jsx       (Mise en page)
+|   |-- DataTable.jsx    (Tableau reutilisable)
+|   |-- ProtectedRoute.jsx (Route protegee)
+|   +-- StagiaireCard.jsx
+|-- pages/
+|   |-- Dashboard.jsx    (Tableau de bord)
+|   |-- Login.jsx        (Connexion)
+|   |-- Register.jsx     (Inscription)
+|   |-- entreprises/EntreprisesList.jsx
+|   |-- stages/StagesList.jsx
+|   |-- stagiaires/StagiairesList.jsx
+|   |-- frais/FraisList.jsx
+|   |-- rapports/RapportsList.jsx
+|   +-- users/UsersList.jsx
+|-- services/
+|   +-- api.js           (Fonctions API centralisees)
++-- styles/
+    |-- dashboard.css
+    |-- login.css
+    +-- register.css
+\end{lstlisting}
+
+\section{AuthContext --- Gestion de l'état d'authentification}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{Propriété/Fonction} & \textbf{Description} \\ \hline
+auth & État booléen --- true si un token existe dans le localStorage \\ \hline
+login(email, password) & Appelle loginAPI(), stocke le token dans localStorage \\ \hline
+logout() & Supprime le token du localStorage \\ \hline
+\end{tabular}
+\caption{Interface du AuthContext}
+\end{table}
+
+\section{Service API Frontend (api.js)}
+
+Le fichier centralise toutes les fonctions d'appel API via l'API \texttt{fetch} native avec une fonction helper \texttt{safeJson()} pour parser les réponses.
+
+\begin{longtable}{|l|l|l|}
+\hline
+\textbf{Module} & \textbf{Fonctions} & \textbf{Base URL} \\ \hline \endhead
+Auth & loginAPI, registerAPI & /api/auth \\ \hline
+Stagiaires & get, add, update, delete & /api/stagiaires \\ \hline
+Entreprises & get, add, update, delete & /api/entreprises \\ \hline
+Stages & get, add, update, delete & /api/stages \\ \hline
+Rapports & get, add, update, delete & /api/rapports \\ \hline
+Frais & get, add, update, delete & /api/frais \\ \hline
+Users & get, add, update, delete & /api/users \\ \hline
+Statistiques & getStatistiquesAPI & /api/statistiques \\ \hline
+\end{longtable}
+
+% =========================================================
+% CHAPITRE 11 : CONFIGURATION
+% =========================================================
+\chapter{Configuration de l'Application}
+
+\section{application.properties}
+
+\begin{lstlisting}[caption=Configuration Spring Boot]
+# MySQL
+spring.datasource.url=jdbc:mysql://localhost:3306/gestion_stages
+spring.datasource.username=root
+spring.datasource.password=projetpfe1
+
+# JPA / Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{5.5cm}|}
+\hline
+\textbf{Propriété} & \textbf{Valeur} & \textbf{Description} \\ \hline
+datasource.url & localhost:3306/gestion\_stages & URL MySQL \\ \hline
+datasource.username & root & Utilisateur BDD \\ \hline
+datasource.password & projetpfe1 & Mot de passe BDD \\ \hline
+hibernate.ddl-auto & update & Mise à jour auto du schéma \\ \hline
+show-sql & true & Affiche les requêtes SQL \\ \hline
+\end{tabular}
+\caption{Paramètres de configuration}
+\end{table}
+
+% =========================================================
+% FIN DU DOCUMENT
+% =========================================================
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[6pt]
+\textit{Document généré le 19/03/2026}\\
+\textit{Projet : Gestion des Stages --- PFE}\\
+\textit{Technologies : Spring Boot 4.0.2 + React.js + MySQL + JWT}
+\end{center}
+
+\end{document}
