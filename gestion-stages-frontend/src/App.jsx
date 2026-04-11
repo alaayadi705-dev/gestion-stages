@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+
 import Dashboard from "./pages/Dashboard";
 
 import StagiairesList from "./pages/stagiaires/StagiairesList";
@@ -29,7 +29,7 @@ function App() {
 
         <Route path="/login" element={<Login />} />
 
-        <Route path="/register" element={<Register />} />
+        
 
         {/* Dashboard */}
         <Route

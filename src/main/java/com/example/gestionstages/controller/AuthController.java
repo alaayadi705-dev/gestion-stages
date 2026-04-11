@@ -18,21 +18,14 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-    @PostMapping("/register")
-    public Map<String, String> register(@RequestBody Utilisateur user) {
-    return authService.register(user);
-    }
+
+    
 
     @PostMapping("/login")
-    public Map<String, String> login(
-            @RequestBody AuthRequest request
-    ) {
-
+    public Map<String, Object> login(@RequestBody AuthRequest request) {
         return authService.login(
                 request.getEmail(),
                 request.getPassword()
         );
-
     }
-
 }

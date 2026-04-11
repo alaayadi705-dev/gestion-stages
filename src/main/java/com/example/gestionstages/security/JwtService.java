@@ -1,9 +1,9 @@
 package com.example.gestionstages.security;
 
+import com.example.gestionstages.entity.Utilisateur;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 import io.jsonwebtoken.security.Keys;
 
 import org.springframework.stereotype.Service;
@@ -24,15 +24,18 @@ public class JwtService {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String email, String role) {
+    // 🔥 FIX FINAL
+    public String generateToken(Utilisateur user) {
 
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("role", role);
+        claims.put("role", user.getRole());
+        claims.put("poste", user.getPoste());
+        claims.put("nom", user.getNom());
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email)
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(
                         new Date(System.currentTimeMillis() + 86400000)
@@ -49,6 +52,10 @@ public class JwtService {
         return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
+    public String extractPoste(String token) {
+        return extractClaim(token, claims -> claims.get("poste", String.class));
+    }
+
     public <T> T extractClaim(
             String token,
             Function<Claims, T> resolver
@@ -62,5 +69,4 @@ public class JwtService {
 
         return resolver.apply(claims);
     }
-
 }

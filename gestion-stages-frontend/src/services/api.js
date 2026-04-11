@@ -199,16 +199,25 @@ export const deleteFraisAPI = async (id) => {
 
 
 // ============================
-// USERS
+// 🔥 USERS (FIXED FILTERS)
 // ============================
 
-export const getUsersAPI = async () => {
-  const res = await fetch(`${API}/users`);
+export const getUsersAPI = async (filters = {}) => {
+
+  // 🔥 remove empty values
+  const cleanFilters = Object.fromEntries(
+    Object.entries(filters).filter(([_, v]) => v !== "" && v !== null)
+  );
+
+  const query = new URLSearchParams(cleanFilters).toString();
+
+  const res = await fetch(`${API}/utilisateurs?${query}`);
+
   return safeJson(res);
 };
 
 export const addUserAPI = async (user) => {
-  const res = await fetch(`${API}/users`, {
+  const res = await fetch(`${API}/utilisateurs`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user)
@@ -217,7 +226,7 @@ export const addUserAPI = async (user) => {
 };
 
 export const updateUserAPI = async (id, user) => {
-  const res = await fetch(`${API}/users/${id}`, {
+  const res = await fetch(`${API}/utilisateurs/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user)
@@ -226,7 +235,9 @@ export const updateUserAPI = async (id, user) => {
 };
 
 export const deleteUserAPI = async (id) => {
-  await fetch(`${API}/users/${id}`, { method: "DELETE" });
+  await fetch(`${API}/utilisateurs/${id}`, {
+    method: "DELETE"
+  });
 };
 
 

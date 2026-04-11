@@ -1,4 +1,6 @@
 package com.example.gestionstages.service;
+import com.example.gestionstages.dto.StageDetailsDTO;
+import java.time.LocalDate;
 
 import com.example.gestionstages.entity.Stage;
 import com.example.gestionstages.repository.StageRepository;
@@ -31,4 +33,7 @@ public class StageService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+   public List<StageDetailsDTO> searchFull(Long id, LocalDate start, LocalDate end, String pays) {
+    return repository.searchFull(id, start, end, pays);
+}
 }

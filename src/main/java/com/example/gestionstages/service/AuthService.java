@@ -27,54 +27,28 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ================= REGISTER =================
-    public Map<String, String> register(Utilisateur user) {
-
-        // vérifier email existe
-        if (repository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
-        }
-
-        // 🔐 تشفير كلمة المرور
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // حفظ المستخدم
-        repository.save(user);
-
-        // إنشاء token مباشرة بعد التسجيل
-        String token = jwtService.generateToken(
-                user.getEmail(),
-                user.getRole()
-        );
-
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-
-        return response;
-    }
-
     // ================= LOGIN =================
-    public Map<String, String> login(String email, String password) {
+    public Map<String, Object> login(String email, String password) {
 
         Utilisateur utilisateur = repository
                 .findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // ✅ مقارنة صحيحة
         if (!passwordEncoder.matches(password, utilisateur.getPassword())) {
             throw new RuntimeException("Email ou mot de passe incorrect");
         }
 
-        // إنشاء JWT
-        String token = jwtService.generateToken(
-                utilisateur.getEmail(),
-                utilisateur.getRole()
-        );
+        // 🔥 FIX: pass user complet
+        String token = jwtService.generateToken(utilisateur);
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("token", token);
+        response.put("nom", utilisateur.getNom());
+        response.put("prenom", utilisateur.getPrenom());
+        response.put("email", utilisateur.getEmail());
+        response.put("role", utilisateur.getRole());
+        response.put("poste", utilisateur.getPoste()); // 🔥 NEW
 
         return response;
     }
 }
-

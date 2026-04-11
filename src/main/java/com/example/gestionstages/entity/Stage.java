@@ -18,6 +18,7 @@ public class Stage {
     private String intitule;
 
     private String objectifs;
+    
 
     private LocalDate dateDebut;
 

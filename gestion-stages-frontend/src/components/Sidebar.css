@@ -56,3 +56,19 @@
 .sidebar {
   background: black !important;
 }
+.user-info {
+  text-align: center;
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.user-info h4 {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.user-role {
+  font-size: 13px;
+  color: #ccc;
+}

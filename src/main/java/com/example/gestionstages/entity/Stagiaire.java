@@ -32,6 +32,8 @@ public class Stagiaire {
     @JoinColumn(name = "stage_id")
     @JsonIgnoreProperties({"stagiaires"})
     private Stage stage;
+    
+    
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "entreprise_id")
@@ -86,4 +88,7 @@ public class Stagiaire {
     public void setStage(Stage stage) {
     this.stage = stage;
     }
+    
+
+    
 }

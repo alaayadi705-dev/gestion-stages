@@ -13,6 +13,7 @@ export default function StagiairesList(){
 
   const [data,setData]=useState([]);
   const [entreprises,setEntreprises]=useState([]);
+  const [stages,setStages]=useState([]);
 
   const [form,setForm]=useState({
     id:null,
@@ -27,7 +28,8 @@ export default function StagiairesList(){
     telephone:"",
     grade:"",
     fonction:"",
-    entrepriseId:""
+    entrepriseId:"",
+    stageId:""
   });
 
   const [editing,setEditing]=useState(false);
@@ -35,19 +37,26 @@ export default function StagiairesList(){
   useEffect(()=>{
     load();
     loadEntreprises();
+    loadStages();
   },[]);
 
   const load = async () => {
-  const res = await getStagiairesAPI();
-  setData(Array.isArray(res) ? res : []);
-};
+    const res = await getStagiairesAPI();
+    setData(Array.isArray(res) ? res : []);
+  };
 
-  const loadEntreprises=async()=>{
-    const res=await getEntreprisesAPI();
+  const loadEntreprises = async () => {
+    const res = await getEntreprisesAPI();
     setEntreprises(res || []);
   };
 
-  const remove=async(id)=>{
+  const loadStages = async () => {
+    const res = await fetch("http://localhost:8080/api/stages");
+    const data = await res.json();
+    setStages(data || []);
+  };
+
+  const remove = async (id) => {
     if(window.confirm("Supprimer ?")){
       await deleteStagiaireAPI(id);
       load();
@@ -56,45 +65,53 @@ export default function StagiairesList(){
 
   const handleSubmit = async () => {
 
-  const payload = {
-    ...form,
-    entreprise: form.entrepriseId
-      ? { id: parseInt(form.entrepriseId) }
-      : null
+    const payload = {
+      ...form,
+
+      entreprise: form.entrepriseId
+        ? { id: parseInt(form.entrepriseId) }
+        : null,
+
+      stage: form.stageId
+        ? { id: parseInt(form.stageId) }
+        : null
+    };
+
+    delete payload.entrepriseId;
+    delete payload.stageId;
+
+    if (editing) {
+      await updateStagiaireAPI(form.id, payload);
+    } else {
+      await addStagiaireAPI(payload);
+    }
+
+    setForm({
+      id:null,
+      nom:"",
+      prenom:"",
+      dateNaissance:"",
+      nationalite:"",
+      paysResidence:"",
+      universite:"",
+      specialite:"",
+      email:"",
+      telephone:"",
+      grade:"",
+      fonction:"",
+      entrepriseId:"",
+      stageId:""
+    });
+
+    setEditing(false);
+    load();
   };
 
-  delete payload.entrepriseId;
-
-  if (editing) {
-    await updateStagiaireAPI(form.id, payload);
-  } else {
-    await addStagiaireAPI(payload);
-  }
-
-  setForm({
-    id: null,
-    nom: "",
-    prenom: "",
-    dateNaissance: "",
-    nationalite: "",
-    paysResidence: "",
-    universite: "",
-    specialite: "",
-    email: "",
-    telephone: "",
-    grade: "",
-    fonction: "",
-    entrepriseId: ""
-  });
-
-  setEditing(false);
-  load();
-};
-
-  const handleEdit=(s)=>{
+  const handleEdit = (s) => {
     setForm({
       ...s,
-      entrepriseId:s.entreprise?.id || ""
+      entrepriseId: s.entreprise?.id || "",
+      stageId: s.stage?.id || ""
     });
     setEditing(true);
   };
@@ -166,6 +183,7 @@ export default function StagiairesList(){
             onChange={e=>setForm({...form,fonction:e.target.value})}
           />
 
+          {/* ===== ENTREPRISE ===== */}
           <select
             value={form.entrepriseId}
             onChange={e=>setForm({...form,entrepriseId:e.target.value})}
@@ -173,6 +191,17 @@ export default function StagiairesList(){
             <option value="">اختر المؤسسة</option>
             {entreprises.map(e=>(
               <option key={e.id} value={e.id}>{e.nom}</option>
+            ))}
+          </select>
+
+          {/* ===== STAGE 🔥 ===== */}
+          <select
+            value={form.stageId}
+            onChange={e=>setForm({...form,stageId:e.target.value})}
+          >
+            <option value="">اختر التربص</option>
+            {stages.map(s=>(
+              <option key={s.id} value={s.id}>{s.intitule}</option>
             ))}
           </select>
 
@@ -198,43 +227,39 @@ export default function StagiairesList(){
               <th>المؤسسة</th>
               <th>الرتبة</th>
               <th>الوظيفة</th>
+              <th>التربص</th>
               <th>إجراءات</th>
             </tr>
           </thead>
 
           <tbody>
-  {data.map((s) => (
-    <tr key={s.id}>
-      <td>{s.id}</td>
-      <td>{s.nom}</td>
-      <td>{s.prenom}</td>
-      <td>{s.nationalite}</td>
-      <td>{s.paysResidence}</td>
-      <td>{s.universite}</td>
-      <td>{s.specialite}</td>
-      <td>{s.email}</td>
-      <td>{s.telephone}</td>
-      <td>{s.entreprise?.nom}</td>
-      <td>{s.grade}</td>
-      <td>{s.fonction}</td>
-      <td>
-        <button
-          className="edit-btn"
-          onClick={() => handleEdit(s)}
-        >
-          تعديل
-        </button>
+            {data.map((s) => (
+              <tr key={s.id}>
+                <td>{s.id}</td>
+                <td>{s.nom}</td>
+                <td>{s.prenom}</td>
+                <td>{s.nationalite}</td>
+                <td>{s.paysResidence}</td>
+                <td>{s.universite}</td>
+                <td>{s.specialite}</td>
+                <td>{s.email}</td>
+                <td>{s.telephone}</td>
+                <td>{s.entreprise?.nom}</td>
+                <td>{s.grade}</td>
+                <td>{s.fonction}</td>
+                <td>{s.stage?.intitule || "-"}</td>
+                <td>
+                  <button className="edit-btn" onClick={() => handleEdit(s)}>
+                    تعديل
+                  </button>
 
-        <button
-          className="delete-btn"
-          onClick={() => remove(s.id)}
-        >
-          حذف
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                  <button className="delete-btn" onClick={() => remove(s.id)}>
+                    حذف
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
         </table>
 

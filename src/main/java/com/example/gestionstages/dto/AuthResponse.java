@@ -2,18 +2,24 @@ package com.example.gestionstages.dto;
 
 public class AuthResponse {
 
+    private String token;   // ✅ جديد
     private Long id;
     private String nom;
     private String prenom;
     private String email;
     private String role;
 
-    public AuthResponse(Long id, String nom, String prenom, String email, String role) {
+    public AuthResponse(String token, Long id, String nom, String prenom, String email, String role) {
+        this.token = token;
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.role = role;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public Long getId() {

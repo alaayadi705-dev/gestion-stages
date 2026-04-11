@@ -4,82 +4,87 @@
   flex: 1;
   padding: 30px;
   margin-right: 260px;
-  min-height: 100vh;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(5px);
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ================= CARD ================= */
 
 .card {
-  background: rgba(255,255,255,0.97);
-  padding: 25px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.95);
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  margin-top: 20px;
+  padding: 20px;
 }
 
 /* ================= HEADER ================= */
 
 .header h1 {
-  margin-bottom: 20px;
-  color: #c62828;
+  margin-bottom: 40px;
+  color: black;
   text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* ================= FORM ================= */
+/* ================= TABLE FINAL FIX ================= */
 
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-radius: 10px;
 }
 
-.form-row input,
-.form-row select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  flex: 1;
+/* 🔥 SCROLL HIDDEN (PRO) */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.table-container:hover::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Firefox */
+.table-container {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.table-container:hover {
+  scrollbar-color: #888 transparent;
 }
 
 /* ================= TABLE ================= */
 
-/* ===== TABLE PRO ===== */
-
 table {
   width: 100%;
+  min-width: 1100px; /* 🔥 مهم */
   border-collapse: collapse;
-  margin-top: 20px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-table th {
-  background: #111; /* أسود */
-  color: #fff;
-  padding: 14px;
   font-size: 14px;
-  letter-spacing: 0.5px;
 }
 
-table td {
-  padding: 14px;
+/* HEADER FIXED */
+thead {
+  position: sticky;
+  top: 0;
+  background: #111;
+  color: white;
+  z-index: 2;
+}
+
+/* TEXT FIX */
+td, th {
+  padding: 10px;
   text-align: center;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-table tr:nth-child(even) {
-  background: #fafafa;
-}
-
-table tr:hover {
-  background: #f1f1f1;
-  transition: 0.2s;
+  white-space: nowrap;
 }
 
 /* ================= BUTTONS ================= */
@@ -121,14 +126,26 @@ button:hover {
   cursor: pointer;
 }
 
+/* ================= SIDEBAR FIXED ================= */
+
+.sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: #0f172a;
+  color: white;
+  padding: 20px;
+  z-index: 1000;
+}
+
 /* ================= DASHBOARD ================= */
 
 .dashboard-container {
   text-align: center;
   padding-top: 40px;
 }
-
-/* logo */
 
 .dashboard-logo {
   position: absolute;
@@ -137,8 +154,6 @@ button:hover {
   width: 90px;
   opacity: 0.95;
 }
-
-/* welcome */
 
 .welcome-box {
   background: rgba(0, 0, 0, 0.6);
@@ -160,16 +175,12 @@ button:hover {
   margin-top: 10px;
 }
 
-/* ================= STATS ================= */
-
 .stats {
   margin-top: 140px;
   display: flex;
   justify-content: center;
   gap: 25px;
 }
-
-/* cards */
 
 .stat-card {
   background: #111;
@@ -186,8 +197,6 @@ button:hover {
   transform: translateY(-8px);
   background: #c62828;
 }
-
-/* content */
 
 .stat-icon {
   font-size: 32px;
