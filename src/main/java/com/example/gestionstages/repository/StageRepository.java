@@ -28,6 +28,28 @@ List<Stage> findByDateDebutBetween(LocalDate start, LocalDate end);
 
 // filter combiné (pays + date)
 List<Stage> findByPaysAndDateDebutBetween(String pays, LocalDate start, LocalDate end);
+// filter by ministere
+List<Stage> findByEntrepriseMinistereNom(String ministere);
+
+@Query("SELECT DISTINCT s FROM Stage s JOIN s.stagiaires st WHERE st.email = :email")
+List<Stage> findByStagiaireEmail(@Param("email") String email);
+
+@Query("SELECT DISTINCT s FROM Stage s JOIN s.stagiaires st JOIN st.utilisateur u WHERE LOWER(u.email) = LOWER(:email)")
+List<Stage> findByUtilisateurLinkedEmail(@Param("email") String email);
+
+    long countByEntrepriseMinistereNom(String ministere);
+
+    long countByStatutAndEntrepriseMinistereNom(String statut, String ministere);
+
+    @Query("SELECT s.pays, COUNT(s) FROM Stage s JOIN s.entreprise e JOIN e.ministere m WHERE m.nom = :ministere GROUP BY s.pays")
+    List<Object[]> countStagesByPaysAndMinistere(@Param("ministere") String ministere);
+
+    @Query("SELECT COUNT(DISTINCT s) FROM Stage s JOIN s.stagiaires st WHERE st.email = :email")
+    long countByStagiaireEmail(@Param("email") String email);
+
+    @Query("SELECT COUNT(DISTINCT s) FROM Stage s JOIN s.stagiaires st WHERE st.email = :email AND s.statut = :statut")
+    long countByStatutAndStagiaireEmail(@Param("statut") String statut, @Param("email") String email);
+
     
 
    @Query("""
@@ -43,12 +65,14 @@ SELECT new com.example.gestionstages.dto.StageDetailsDTO(
     COALESCE(st.prenom, '---'),
     COALESCE(e.nom, '---'),
     COALESCE(SUM(f.montant), 0.0),
+    s.typeStage,
     COALESCE(MAX(r.fichier), '---'),
     COALESCE(MAX(r.statut), '---')
 )
 FROM Stage s
 LEFT JOIN s.stagiaires st
 LEFT JOIN st.entreprise e
+LEFT JOIN e.ministere m
 LEFT JOIN Frais f ON f.stage.id = s.id
 LEFT JOIN RapportStage r ON r.stage.id = s.id
 
@@ -56,6 +80,7 @@ WHERE (:id IS NULL OR s.id = :id)
 AND (:pays IS NULL OR s.pays = :pays)
 AND (:start IS NULL OR s.dateDebut >= :start)
 AND (:end IS NULL OR s.dateFin <= :end)
+AND (:ministere IS NULL OR m.nom = :ministere)
 
 GROUP BY 
     s.id,
@@ -72,7 +97,8 @@ List<StageDetailsDTO> searchFull(
         @Param("id") Long id,
         @Param("start") LocalDate start,
         @Param("end") LocalDate end,
-        @Param("pays") String pays
+        @Param("pays") String pays,
+        @Param("ministere") String ministere
 );
     // ===== FILTER BY DATE =====
     @Query("SELECT s.pays, COUNT(s) FROM Stage s WHERE s.dateDebut >= :start AND s.dateFin <= :end GROUP BY s.pays")

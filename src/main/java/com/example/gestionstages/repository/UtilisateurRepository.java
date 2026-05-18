@@ -12,12 +12,18 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     Optional<Utilisateur> findByEmail(String email);
 
+    List<Utilisateur> findByMinistereNom(String ministere);
+
+    @Query("SELECT u FROM Utilisateur u WHERE u.email = :email OR (u.ministere.nom = :ministere AND u.role = 'SUPERVISEUR')")
+    List<Utilisateur> findUserAndSupervisorByMinistere(@Param("email") String email, @Param("ministere") String ministere);
+
     // 🔥 MULTI FILTER SEARCH
     @Query("""
     SELECT u FROM Utilisateur u
-    WHERE (:id IS NULL OR CAST(u.id as string) LIKE %:id%)
+    LEFT JOIN u.ministere m
+    WHERE (:id IS NULL OR CAST(u.id as String) LIKE %:id%)
     AND (:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%')))
-    AND (:ministere IS NULL OR LOWER(u.ministere) LIKE LOWER(CONCAT('%', :ministere, '%')))
+    AND (:ministere IS NULL OR LOWER(m.nom) LIKE LOWER(CONCAT('%', :ministere, '%')))
     AND (:poste IS NULL OR LOWER(u.poste) LIKE LOWER(CONCAT('%', :poste, '%')))
     AND (:role IS NULL OR u.role = :role)
     """)

@@ -104,7 +104,7 @@ Le projet \textbf{Gestion des Stages} est une application web full-stack destin�
 % =========================================================
 \chapter{Architecture Globale}
 
-L'application suit une \textbf{architecture 3-tiers} basée sur le pattern \textbf{MVC (Model-View-Controller)}.
+L'application suit une \textbf{architecture 3-tiers} basée sur le pattern \textbf{MVC 2 (Model-View-Controller)} avec une vue découplée (voir chapitre \ref{ch:mvc2} pour le détail complet).
 
 \section{Diagramme d'architecture 3-tiers}
 
@@ -1064,14 +1064,101 @@ show-sql & true & Affiche les requêtes SQL \\ \hline
 \end{table}
 
 % =========================================================
+% CHAPITRE 12 : ARCHITECTURE MVC 2
+% =========================================================
+\chapter{Architecture MVC 2}
+\label{ch:mvc2}
+
+\section{Présentation du pattern MVC 2}
+
+Le pattern \textbf{MVC 2 (Model-View-Controller)} sépare l'application en trois couches distinctes ayant chacune un rôle bien défini :
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{5cm}|p{6cm}|}
+\hline
+\textbf{Couche} & \textbf{Rôle} & \textbf{Implémentation dans ce projet} \\ \hline
+\textbf{Model} & Données + logique métier & Entities JPA + Services + Repositories \\ \hline
+\textbf{View} & Interface utilisateur & \textbf{React 18} (SPA --- Single Page Application) \\ \hline
+\textbf{Controller} & Réceptionne les requêtes & Contrôleurs Spring Boot (\texttt{@RestController}) \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Diagramme MVC 2}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    block/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, font=\small},
+    arrow/.style={-{Stealth[length=3mm]}, thick}
+]
+    \node[block, fill=gray!10] (usr) {👤 Utilisateur};
+    \node[block, right=of usr, fill=reactblue!20] (view) {🖥️ View\\(React 18)};
+    \node[block, right=of view, fill=springgreen!20] (ctrl) {⚙️ Controller\\(Spring Boot)};
+    \node[block, right=of ctrl, fill=orange!20] (model) {📦 Model\\(Services)};
+
+    \draw[arrow] (usr) -- (view);
+    \draw[arrow] (view.north east) -- node[above, font=\tiny] {Requête HTTP} (ctrl.north west);
+    \draw[arrow] (ctrl.south west) -- node[below, font=\tiny] {JSON} (view.south east);
+    \draw[arrow] (ctrl) -- (model);
+\end{tikzpicture}
+\caption{Flux MVC 2 de l'application}
+\end{figure}
+
+\section{Correspondance MVC 2 --- Composants du projet}
+
+\subsection{VIEW --- Frontend React}
+
+\begin{longtable}{|l|p{8cm}|}
+\hline
+\textbf{Fichier} & \textbf{Rôle MVC 2} \\ \hline \endhead
+App.jsx & Routeur principal --- dispatche vers les vues \\ \hline
+Login.jsx & Vue --- page de connexion \\ \hline
+StagiairesList.jsx & Vue --- liste et gestion des stagiaires \\ \hline
+Layout.jsx & Template principal (header + sidebar) \\ \hline
+api.js & Client HTTP --- communication avec le Controller \\ \hline
+\end{longtable}
+
+\subsection{CONTROLLER --- Spring Boot}
+
+\begin{longtable}{|l|p{8cm}|}
+\hline
+\textbf{Fichier} & \textbf{Rôle MVC 2} \\ \hline \endhead
+AuthController & Gère l'authentification \\ \hline
+StagiaireController & CRUD stagiaires \\ \hline
+StageController & CRUD stages + recherche \\ \hline
+StatistiquesController & Agrégation des statistiques \\ \hline
+\end{longtable}
+
+\subsection{MODEL --- Logique Métier + Données}
+
+\begin{longtable}{|l|p{8cm}|}
+\hline
+\textbf{Fichier} & \textbf{Rôle MVC 2} \\ \hline \endhead
+entity/Stagiaire.java & Modèle de données --- stagiaire \\ \hline
+service/*Service.java & Logique métier (8 services) \\ \hline
+repository/*Repository.java & Accès BDD via JPA (6 repositories) \\ \hline
+\end{longtable}
+
+\section{Avantages de l'architecture MVC 2}
+
+\begin{itemize}
+    \item \textbf{Séparation des responsabilités :} Chaque couche a un rôle clair.
+    \item \textbf{Maintenabilité :} Modification du frontend sans impacter le backend.
+    \item \textbf{Scalabilité :} Déploiement séparé possible pour React et Spring Boot.
+\end{itemize}
+
+% =========================================================
 % FIN DU DOCUMENT
 % =========================================================
 \vfill
 \begin{center}
 \rule{0.5\textwidth}{0.4pt}\\[6pt]
-\textit{Document généré le 19/03/2026}\\
+\textit{Document généré le 19/03/2026 --- Mis à jour le 11/04/2026}\\
 \textit{Projet : Gestion des Stages --- PFE}\\
-\textit{Technologies : Spring Boot 4.0.2 + React.js + MySQL + JWT}
+\textit{Technologies : Spring Boot 4.0.2 + React.js + MySQL + JWT}\\
+\textit{Architecture : MVC 2 avec Vue découplée (React SPA)}
 \end{center}
 
 \end{document}

@@ -37,29 +37,29 @@ public class UtilisateurController {
 
     // ✅ CREATE
     @PostMapping
-    public Utilisateur create(@RequestBody Utilisateur utilisateur) {
-        return service.save(utilisateur);
+    public org.springframework.http.ResponseEntity<?> create(@RequestBody Utilisateur utilisateur) {
+        try {
+            Utilisateur saved = service.save(utilisateur);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            java.util.Map<String, String> error = new java.util.HashMap<>();
+            error.put("message", e.getMessage() != null ? e.getMessage() : "Erreur inconnue");
+            return org.springframework.http.ResponseEntity.badRequest().body(error);
+        }
     }
 
     // ✅ UPDATE
     @PutMapping("/{id}")
-    public Utilisateur update(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
-        Utilisateur existing = service.getById(id).orElseThrow();
-
-        existing.setNom(utilisateur.getNom());
-        existing.setPrenom(utilisateur.getPrenom());
-        existing.setEmail(utilisateur.getEmail());
-
-        // ⚠️ password يتبدل كان إذا جا جديد
-        if(utilisateur.getPassword() != null && !utilisateur.getPassword().isEmpty()){
-            existing.setPassword(utilisateur.getPassword());
+    public org.springframework.http.ResponseEntity<?> update(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
+        try {
+            utilisateur.setId(id);
+            Utilisateur saved = service.save(utilisateur);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            java.util.Map<String, String> error = new java.util.HashMap<>();
+            error.put("message", e.getMessage() != null ? e.getMessage() : "Erreur inconnue");
+            return org.springframework.http.ResponseEntity.badRequest().body(error);
         }
-
-        existing.setRole(utilisateur.getRole());
-        existing.setMinistere(utilisateur.getMinistere());
-        existing.setPoste(utilisateur.getPoste());
-
-        return service.save(existing);
     }
 
     // ✅ DELETE

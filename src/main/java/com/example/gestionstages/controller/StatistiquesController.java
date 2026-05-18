@@ -38,34 +38,70 @@ public class StatistiquesController {
     // ================= DASHBOARD =================
     @GetMapping
     public Map<String, Object> getStats() {
-
         Map<String, Object> stats = new HashMap<>();
 
-        stats.put("totalStagiaires", stagiaireRepository.count());
-        stats.put("totalEntreprises", entrepriseRepository.count());
-        stats.put("totalStages", stageRepository.count());
+        boolean isSuperviseur = com.example.gestionstages.security.SecurityUtils.isSuperviseur();
+        boolean isUser = com.example.gestionstages.security.SecurityUtils.isUser();
+        String ministere = com.example.gestionstages.security.SecurityUtils.getCurrentUserMinistere();
+        String email = com.example.gestionstages.security.SecurityUtils.getCurrentUserEmail();
 
-        stats.put("totalRapports",
-                rapportRepository.countByStatut("DEPOSE")
-              + rapportRepository.countByStatut("VALIDE")
-              + rapportRepository.countByStatut("REJETE")
-              + rapportRepository.countByStatut("EN_ATTENTE")
-        );
+        if (isUser) {
+            // USER: only their own data
+            stats.put("totalStagiaires", 1);
+            stats.put("totalEntreprises", entrepriseRepository.countByStagiaireEmail(email));
+            stats.put("totalStages", stageRepository.countByStagiaireEmail(email));
+            stats.put("totalRapports", rapportRepository.countByStagiaireEmail(email));
+            
+            Double userFrais = fraisRepository.sumMontantTotalByStagiaire(email);
+            stats.put("coutTotal", userFrais != null ? userFrais : 0.0);
+            stats.put("totalFrais", userFrais != null ? userFrais : 0.0);
+            
+            stats.put("stagesEnCours", stageRepository.countByStatutAndStagiaireEmail("EN_COURS", email));
+            stats.put("stagesClotures", stageRepository.countByStatutAndStagiaireEmail("CLOTURE", email));
+            stats.put("rapportsValides", 0L);
+            
+            stats.put("stagesParPays", List.of());
+            stats.put("stagiairesParPays", List.of());
+            
+        } else if (isSuperviseur) {
+            // SUPERVISEUR: only their ministry's data
+            stats.put("totalStagiaires", stagiaireRepository.countByEntrepriseMinistereNom(ministere));
+            stats.put("totalEntreprises", (long) entrepriseRepository.findByMinistereNom(ministere).size());
+            stats.put("totalStages", stageRepository.countByEntrepriseMinistereNom(ministere));
+            stats.put("totalRapports", rapportRepository.countByMinistere(ministere));
 
-        stats.put("totalFrais", fraisRepository.sumMontantTotal());
+            Double minFrais = fraisRepository.sumMontantTotalByMinistere(ministere);
+            stats.put("coutTotal", minFrais != null ? minFrais : 0.0);
+            stats.put("totalFrais", minFrais != null ? minFrais : 0.0);
+            
+            stats.put("stagesEnCours", stageRepository.countByStatutAndEntrepriseMinistereNom("EN_COURS", ministere));
+            stats.put("stagesClotures", stageRepository.countByStatutAndEntrepriseMinistereNom("CLOTURE", ministere));
+            stats.put("rapportsValides", rapportRepository.countByStatutAndMinistere("VALIDE", ministere));
+            
+            List<Object[]> stagesParPays = stageRepository.countStagesByPaysAndMinistere(ministere);
+            stats.put("stagesParPays", stagesParPays != null ? stagesParPays : List.of());
+            List<Object[]> stagiairesParPays = stagiaireRepository.countStagiairesByPaysAndMinistere(ministere);
+            stats.put("stagiairesParPays", stagiairesParPays != null ? stagiairesParPays : List.of());
+        } else {
+            // ADMIN: all data
+            stats.put("totalStagiaires", stagiaireRepository.count());
+            stats.put("totalEntreprises", entrepriseRepository.count());
+            stats.put("totalStages", stageRepository.count());
+            stats.put("totalRapports", rapportRepository.count());
 
-        stats.put("stagesParPays", stageRepository.countStagesByPays());
-        stats.put("stagiairesParPays", stagiaireRepository.countStagiairesByPays());
-        stats.put("coutParStage", fraisRepository.sumMontantByStage());
-        stats.put("coutParPays", fraisRepository.sumMontantByPays());
+            Double globalFrais = fraisRepository.sumMontantTotal();
+            stats.put("coutTotal", globalFrais != null ? globalFrais : 0.0);
+            stats.put("totalFrais", globalFrais != null ? globalFrais : 0.0);
 
-        stats.put("stagesEnCours", stageRepository.countByStatut("EN_COURS"));
-        stats.put("stagesClotures", stageRepository.countByStatut("CLOTURE"));
-
-        stats.put("rapportsDeposes", rapportRepository.countByStatut("DEPOSE"));
-        stats.put("rapportsValides", rapportRepository.countByStatut("VALIDE"));
-        stats.put("rapportsRejetes", rapportRepository.countByStatut("REJETE"));
-        stats.put("rapportsEnAttente", rapportRepository.countByStatut("EN_ATTENTE"));
+            stats.put("stagesEnCours", stageRepository.countByStatut("EN_COURS"));
+            stats.put("stagesClotures", stageRepository.countByStatut("CLOTURE"));
+            stats.put("rapportsValides", rapportRepository.countByStatut("VALIDE"));
+            
+            List<Object[]> stagesParPays = stageRepository.countStagesByPays();
+            stats.put("stagesParPays", stagesParPays != null ? stagesParPays : List.of());
+            List<Object[]> stagiairesParPays = stagiaireRepository.countStagiairesByPays();
+            stats.put("stagiairesParPays", stagiairesParPays != null ? stagiairesParPays : List.of());
+        }
 
         return stats;
     }
@@ -83,7 +119,11 @@ public List<StageDetailsDTO> filterFull(
     LocalDate s = start != null ? LocalDate.parse(start) : null;
     LocalDate e = end != null ? LocalDate.parse(end) : null;
 
-    return stageRepository.searchFull(id, s, e, pays); // ✅ FIX
+    String ministere = null;
+    if (com.example.gestionstages.security.SecurityUtils.isSuperviseur()) {
+        ministere = com.example.gestionstages.security.SecurityUtils.getCurrentUserMinistere();
+    }
+    return stageRepository.searchFull(id, s, e, pays, ministere);
 }
 
 @GetMapping("/filter")
@@ -153,7 +193,11 @@ public List<StageDetailsDTO> search(
             ? LocalDate.parse(end)
             : null;
 
-    return stageRepository.searchFull(id, startDate, endDate, pays);
+    String ministere = null;
+    if (com.example.gestionstages.security.SecurityUtils.isSuperviseur()) {
+        ministere = com.example.gestionstages.security.SecurityUtils.getCurrentUserMinistere();
+    }
+    return stageRepository.searchFull(id, startDate, endDate, pays, ministere);
 }
 }
 

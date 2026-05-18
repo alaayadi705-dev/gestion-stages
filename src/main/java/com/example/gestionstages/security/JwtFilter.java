@@ -54,13 +54,13 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = header.substring(7);
 
         String email = jwtService.extractEmail(token);
-
         String role = jwtService.extractRole(token);
+        String ministere = jwtService.extractMinistere(token);
 
         UsernamePasswordAuthenticationToken auth =
                 new UsernamePasswordAuthenticationToken(
                         email,
-                        null,
+                        ministere, // 🔄 We store ministere in 'credentials' or use a custom principal
                         List.of(new SimpleGrantedAuthority(role))
                 );
 

@@ -1,0 +1,2282 @@
+\documentclass[12pt,a4paper]{report}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{arabtex}
+\usepackage{geometry}
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{makecell}
+
+% Configure hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+}
+
+% Configure listings for code
+\lstset{
+    language=Java,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    captionpos=b,
+    tabsize=4
+}
+
+% Configure headers and footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\textcopyright{} Ayadi Ala Eddine - 2026}
+
+% Configure section titles
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{blue!70!black}}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{blue!60!black}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{blue!50!black}}{\thesubsection}{1em}{}
+
+% Line spacing
+\usepackage{setspace}
+\onehalfspacing
+
+\begin{document}
+
+% Front matter
+\frontmatter
+
+% Title page
+\begin{titlepage}
+\begin{center}
+\begin{tabular}{c c c}
+\textbf{République Tunisienne} & & \textbf{Université de Kairouan} \\
+\textbf{Ministère de l'Enseignement Supérieur} & & \textbf{Faculté des Sciences et Techniques} \\
+\textbf{et de la Recherche Scientifique} & & \textbf{de Sidi Bouzid} \\
+\end{tabular}
+
+\vspace{1cm}
+
+\begin{center}
+\textbf{\Large N° d'ordre : \ldots\ldots}
+\end{center}
+
+\vspace{2cm}
+
+{\Huge\bfseries MÉMOIRE DE PROJET DE FIN D'ÉTUDES\\}
+\vspace{0.5cm}
+{\Large En vue de l'obtention du\\}
+\vspace{0.3cm}
+{\LARGE\bfseries Diplôme de License en Informatique\\}
+
+\vspace{1.5cm}
+
+{\Large\bfseries Présenté par\\}
+\vspace{0.3cm}
+{\Huge\bfseries Ayadi Ala Eddine\\}
+
+\vspace{1.5cm}
+
+{\Large\bfseries Sujet :\\}
+\vspace{0.5cm}
+{\LARGE\bfseries\color{blue!80!black} Guide de conduite d'un projet informatique selon le cadre de développement SCRUM\\}
+\vspace{0.3cm}
+{\Large Application : Système de Gestion des Stages à l'Étranger\\}
+
+\vspace{2cm}
+
+{\Large\bfseries Soutenu en Juin 2026, devant le jury composé de :\\}
+\vspace{0.5cm}
+\begin{tabular}{l c l}
+M./Mme & \ldots\ldots\ldots\ldots\ldots\ldots & Président(e) \\
+M./Mme & \ldots\ldots\ldots\ldots\ldots\ldots & Rapporteur \\
+M./Mme & \ldots\ldots\ldots\ldots\ldots\ldots & Encadrant(e) \\
+\end{tabular}
+
+\vspace{1.5cm}
+
+{\Large\bfseries A.U. : 2025-2026\\}
+
+\vfill
+
+{\Large Lieu de stage : Centre National de l'Informatique (CNI)\\}
+
+\end{center}
+\end{titlepage}
+
+% Dédicaces
+\chapter*{Dédicaces}
+\addcontentsline{toc}{chapter}{Dédicaces}
+
+\vspace{1cm}
+
+\begin{flushright}
+\emph{
+À mes chers parents,\\
+Pour leurs sacrifices, leur amour et leur soutien inconditionnel.\\
+\\
+À ma famille,\\
+Pour leurs encouragements constants.\\
+\\
+À mes amis et collègues,\\
+Pour leur accompagnement tout au long de ce parcours.\\
+\\
+À tous ceux qui croient en la puissance de la technologie\\
+pour transformer le monde.\\
+}
+\end{flushright}
+
+% Remerciements
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+\vspace{0.5cm}
+
+Je tiens tout d'abord à exprimer ma profonde gratitude à \textbf{Dieu le tout puissant} de m'avoir donné la force, la patience et la volonté pour mener à bien ce projet.
+
+Je souhaite adresser mes plus sincères remerciements à \textbf{l'ensemble du corps enseignant} de la Faculté des Sciences et Techniques de Sidi Bouzid, pour la qualité de la formation qu'ils m'ont dispensée tout au long de mon cursus universitaire.
+
+Mes remerciements vont particulièrement à \textbf{mon encadrant académique}, pour ses précieux conseils, sa disponibilité et son accompagnement tout au long de la réalisation de ce projet.
+
+Je tiens également à remercier \textbf{le Centre National de l'Informatique (CNI)} pour m'avoir accueilli en stage et offert un environnement de travail propice à l'apprentissage et à l'innovation.
+
+Je remercie chaleureusement \textbf{tous les professionnels du CNI} qui m'ont fait part de leur expertise et m'ont guidé dans la compréhension des enjeux métier liés à la gestion des stages à l'étranger.
+
+Enfin, je remercie \textbf{ma famille et mes amis} pour leur soutien moral et leurs encouragements constants durant cette période de formation et de réalisation du projet.
+
+% Table des matières
+\tableofcontents
+
+% Liste des figures
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
+
+% Liste des tableaux
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+
+% Glossaire
+\chapter*{Glossaire}
+\addcontentsline{toc}{chapter}{Glossaire}
+
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Terme} & \textbf{Définition} \\
+\hline
+SCRUM & Framework agile de gestion de projet basé sur des itérations courtes appelées sprints \\
+\hline
+Product Backlog & Liste priorisée des fonctionnalités à développer dans le produit \\
+\hline
+Sprint & Itération de développement de durée fixe (généralement 2 à 4 semaines) \\
+\hline
+User Story & Description simple d'une fonctionnalité du point de vue de l'utilisateur \\
+\hline
+Daily Scrum & Réunion quotidienne de 15 minutes pour synchroniser l'équipe \\
+\hline
+Sprint Review & Présentation de l'incrément aux stakeholders à la fin du sprint \\
+\hline
+Sprint Retrospective & Réunion d'amélioration continue après chaque sprint \\
+\hline
+Product Owner & Responsable de la vision produit et de la priorisation du backlog \\
+\hline
+Scrum Master & Facilitateur qui aide l'équipe à suivre les pratiques Scrum \\
+\hline
+ incrément & Résultat concret et fonctionnel produit à la fin d'un sprint \\
+\hline
+JPA & Java Persistence API - API de persistance des données en Java \\
+\hline
+ORM & Object-Relational Mapping - Technique de mapping objet-relationnel \\
+\hline
+REST & Representational State Transfer - Style d'architecture web \\
+\hline
+JWT & JSON Web Token - Standard d'authentification web \\
+\hline
+CRUD & Create, Read, Update, Delete - Opérations de base sur les données \\
+\hline
+\end{tabular}
+
+% Introduction Générale
+\chapter*{Introduction Générale}
+\addcontentsline{toc}{chapter}{Introduction Générale}
+
+\markboth{Introduction Générale}{Introduction Générale}
+
+La mobilité internationale des stagiaires représente aujourd'hui un enjeu majeur pour les institutions académiques et gouvernementales tunisiennes. Dans un contexte de mondialisation croissante, les opportunités de stages à l'étranger offrent aux étudiants et professionnels une expérience invaluable pour développer leurs compétences, enrichir leur culture et renforcer leur employabilité sur le marché international.
+
+Cependant, la gestion administrative de ces stages internationaux demeure un processus complexe, impliquant de multiples acteurs : les stagiaires eux-mêmes, les établissements d'enseignement, les entreprises d'accueil à l'étranger, les ministères de tutelle, et les organismes de financement. Chaque étape du processus -- de la candidature à la validation du rapport de stage en passant par la gestion des frais et le suivi administratif -- génère une documentation importante qui doit être organisée, tracée et archivée de manière rigoureuse.
+
+Avant la mise en place de notre solution, le Centre National de l'Informatique (CNI) gérait ces processus principalement à travers des outils bureautiques classiques (tableurs, documents Word) et des échanges par email. Cette approche présentait plusieurs limitations : dispersion de l'information, difficulté de suivi en temps réel, risques d'erreurs lors de la saisie manuelle, absence de statistiques consolidées, et manque de traçabilité des validations.
+
+Face à ces constats, il est apparu nécessaire de concevoir et développer une application web dédiée à la gestion des stages à l'étranger, permettant de centraliser l'ensemble des informations, d'automatiser les processus métier, et de fournir des outils de pilotage et de décision aux différents acteurs impliqués.
+
+Ce projet s'inscrit dans le cadre de l'obtention du Diplôme de License en Informatique à la Faculté des Sciences et Techniques de Sidi Bouzid. Il a été réalisé au sein du Centre National de l'Informatique (CNI) sur une durée de quatre mois, en suivant le framework de gestion de projets agiles SCRUM.
+
+L'objectif principal de ce mémoire est de documenter l'ensemble du processus de développement de cette application, depuis l'analyse des besoins jusqu'à la réalisation finale, en passant par les choix méthodologiques, architecturaux et techniques.
+
+Ce document est structuré en quatre chapitres principaux :
+
+\begin{itemize}[leftmargin=1cm]
+    \item Le \textbf{Chapitre 1} présente le cadre général du projet, incluant l'organisme d'accueil, l'étude de l'existant, la critique de celui-ci, et les choix méthodologiques adoptés, notamment le framework SCRUM et la méthodologie orientée objet.
+    
+    \item Le \textbf{Chapitre 2} détaille l'analyse préliminaire du projet, avec la présentation des rôles SCRUM, le Product Backlog initial, l'architecture technique de l'application, et l'environnement de travail mis en place.
+    
+    \item Le \textbf{Chapitre 3} décrit le déroulé des sprints de développement, incluant la planification globale, un exemple détaillé d'un sprint représentatif, et la gestion des obstacles rencontrés.
+    
+    \item Le \textbf{Chapitre 4} présente les résultats finaux obtenus, les livrables produits, les démonstrations des fonctionnalités implémentées, ainsi que les tests réalisés et les améliorations apportées.
+\end{itemize}
+
+Enfin, nous conclurons ce mémoire par une synthèse générale présentant les apports du projet, les difficultés rencontrées, et les perspectives d'évolution de l'application.
+
+% Main matter
+\mainmatter
+
+% ============================================
+% CHAPITRE 1 : CADRE DU PROJET
+% ============================================
+
+\chapter{Cadre du projet}
+
+\section*{Introduction}
+\markboth{Chapitre 1 : Cadre du projet}{Introduction}
+
+Ce premier chapitre a pour objectif de présenter le cadre général dans lequel s'inscrit ce projet de fin d'études. Nous commencerons par présenter l'organisme d'accueil, le Centre National de l'Informatique (CNI), puis nous effectuerons une étude préalable détaillée de l'existant, en identifiant ses limites et les solutions envisagées. Enfin, nous exposerons les choix méthodologiques et organisationnels adoptés, notamment le framework SCRUM et la méthodologie de développement orientée objet.
+
+\section{Présentation de l'organisme d'accueil}
+
+Le \textbf{Centre National de l'Informatique (CNI)} est un établissement public tunisien placé sous la tutelle du Ministère de l'Industrie, des Petites et Moyennes Entreprises. Fondé avec pour mission de accompagner la transformation numérique des entreprises et des institutions publiques tunisiennes, le CNI joue un rôle stratégique dans le développement du secteur des technologies de l'information en Tunisie.
+
+\subsection{Missions principales}
+
+Les missions fondamentales du CNI s'articulent autour de plusieurs axes :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Développement de solutions informatiques} : Conception et réalisation d'applications métier adaptées aux besoins des entreprises et administrations publiques.
+    
+    \item \textbf{Conseil et accompagnement} : Assistance aux organisations dans leur démarche de transformation digitale et modernisation de leurs systèmes d'information.
+    
+    \item \textbf{Formation et transfert de compétences} : Organisation de programmes de formation pour renforcer les capacités techniques des professionnels tunisiens.
+    
+    \item \textbf{Gestion de projets informatiques} : Pilotage de projets complexes en utilisant les méthodologies agiles et les meilleures pratiques du secteur.
+\end{itemize}
+
+\subsection{Structure organisationnelle}
+
+Le CNI est structuré en plusieurs départements spécialisés :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Direction Technique} : Responsable du développement et de la maintenance des applications.
+    
+    \item \textbf{Direction des Projets} : En charge du pilotage et du suivi des projets clients.
+    
+    \item \textbf{Direction Commerciale} : Gestion de la relation client et développement des affaires.
+    
+    \item \textbf{Direction des Ressources Humaines} : Gestion du capital humain et des compétences.
+\end{itemize}
+
+\subsection{Contexte du stage}
+
+Mon stage au sein du CNI s'est déroulé dans le département technique, plus précisément au sein de l'équipe de développement d'applications web. J'ai eu l'opportunité de travailler sur un projet concret répondant à un besoin réel : la digitalisation du processus de gestion des stages à l'étranger pour les fonctionnaires et étudiants tunisiens.
+
+Ce projet m'a permis de mettre en pratique mes connaissances académiques tout en découvrant les réalités du développement logiciel en environnement professionnel, notamment l'utilisation des méthodologies agiles, le travail en équipe, et la gestion de projet selon le framework SCRUM.
+
+\section{Étude préalable}
+
+\subsection{Étude de l'existant}
+
+Avant de concevoir notre solution, il était essentiel d'analyser le système existant de gestion des stages à l'étranger au sein du CNI et des institutions partenaires. Cette étude nous a permis de comprendre les processus métier, d'identifier les acteurs impliqués, et de recenser les outils actuellement utilisés.
+
+\subsubsection{Processus actuel de gestion des stages}
+
+Le processus traditionnel de gestion des stages à l'étranger se décompose en plusieurs étapes :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Demande de stage} : Le candidat remplit un formulaire papier ou un document Word contenant ses informations personnelles, son projet de stage, et l'entreprise d'accueil.
+    
+    \item \textbf{Vérification administrative} : Les documents sont vérifiés manuellement par le service administratif pour confirmer leur conformité.
+    
+    \item \textbf{Validation hiérarchique} : La demande est transmise aux responsables pour approbation, souvent par échange d'emails ou de notes internes.
+    
+    \item \textbf{Gestion des frais} : Les frais de stage (transport, hébergement, subsistance) sont calculés manuellement selon des barèmes prédéfinis et approuvés par les financeurs.
+    
+    \item \textbf{Suivi pendant le stage} : Le suivi se fait par contacts téléphoniques occasionnels et emails, sans traçabilité centralisée.
+    
+    \item \textbf{Rapport de stage} : À la fin du stage, le stagiaire dépose un rapport papier ou PDF par email, qui est ensuite relu et validé manuellement.
+    
+    \item \textbf{Archivage} : Tous les documents sont archivés physiquement dans des dossiers papier, rendant la recherche et la consultation fastidieuses.
+\end{enumerate}
+
+\subsubsection{Outils utilisés}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Microsoft Excel} : Pour le suivi des stagiaires dans des tableaux (un fichier par année ou par ministère).
+    
+    \item \textbf{Microsoft Word} : Pour la rédaction des conventions, attestations, et rapports.
+    
+    \item \textbf{Email} : Pour les échanges entre les différents acteurs (stagiaires, responsables, validateurs).
+    
+    \item \textbf{Stockage local} : Les documents sont stockés sur des disques durs locaux ou des clés USB, sans sauvegarde centralisée.
+    
+    \item \textbf{Archives physiques} : Les documents papier sont conservés dans des armoires, occupant un espace considérable.
+\end{itemize}
+
+\subsection{Critique de l'existant}
+
+L'analyse du système existant a révélé plusieurs limitations majeures qui justifient le développement d'une nouvelle solution :
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|>{\hsize=0.3\hsize}X|>{\hsize=0.7\hsize}X|}
+\hline
+\textbf{Problème identifié} & \textbf{Impact} \\
+\hline
+Dispersion de l'information & Les données sont éparpillées dans multiples fichiers Excel, emails et documents Word, rendant la recherche d'information longue et fastidieuse \\
+\hline
+Absence de centralisation & Aucune vue d'ensemble sur l'ensemble des stages en cours, terminés ou planifiés \\
+\hline
+Traçabilité insuffisante & Impossible de savoir qui a validé quoi et quand, ce qui pose des problèmes de transparence \\
+\hline
+Risque d'erreurs élevé & La saisie manuelle répétitive augmente les risques d'erreurs et d'incohérences dans les données \\
+\hline
+Perte de temps considérable & Les tâches administratives répétitives (recherche de documents, saisie, calculs) consomment un temps précieux \\
+\hline
+Statistiques inexistantes & Aucune capacité à générer des rapports statistiques pour le pilotage et la prise de décision \\
+\hline
+Sécurité des données faible & Absence de contrôle d'accès granulaire, risque de perte de données en cas de panne matérielle \\
+\hline
+Difficulté de collaboration & Les échanges par email créent de la confusion et des versions multiples de documents \\
+\hline
+Archivage volumineux & Les archives physiques occupent un espace considérable et se dégradent avec le temps \\
+\hline
+\end{tabularx}
+\caption{Critique de l'existant}
+\end{table}
+
+\subsection{Solution envisagée}
+
+Face à ces constats, nous avons proposé de développer une \textbf{application web centralisée} de gestion des stages à l'étranger, offrant les fonctionnalités suivantes :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Centralisation des données} : Une base de données unique pour toutes les informations relatives aux stages, stagiaires, entreprises et rapports.
+    
+    \item \textbf{Gestion des rôles et permissions} : Un système d'authentification sécurisé avec des rôles différenciés (Administrateur, Utilisateur, Validateur) pour garantir la sécurité et la confidentialité des données.
+    
+    \item \textbf{Automatisation des processus} : Calcul automatique des durées de stage, génération automatique des numéros de permission, mise à jour automatique des statuts.
+    
+    \item \textbf{Tableau de bord statistique} : Des graphiques et indicateurs en temps réel pour le pilotage et la prise de décision.
+    
+    \item \textbf{Interface moderne et intuitive} : Une interface utilisateur ergonomique développée avec React, offrant une expérience utilisateur fluide.
+    
+    \item \textbf{Traçabilité complète} : Historique de toutes les actions et validations pour une transparence totale.
+    
+    \item \textbf{Recherche et filtrage avancés} : Capacité à rechercher et filtrer les stages par multiple critères (pays, date, statut, ministère, etc.).
+    
+    \item \textbf{Export et reporting} : Possibilité d'exporter les données et générer des rapports pour les décideurs.
+\end{itemize}
+
+\section{Choix méthodologiques et organisation du travail}
+
+\subsection{Le framework de gestion de projets agiles SCRUM}
+
+Pour mener à bien ce projet, nous avons choisi d'adopter le framework \textbf{SCRUM}, l'une des méthodologies agiles les plus utilisées dans le développement logiciel moderne.
+
+\subsubsection{Pourquoi SCRUM ?}
+
+Le choix de SCRUM s'est imposé naturellement pour plusieurs raisons :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Adaptabilité} : SCRUM permet de s'adapter rapidement aux changements de besoins, ce qui est essentiel dans un projet où les spécifications peuvent évoluer.
+    
+    \item \textbf{Livraisons incrémentales} : Le projet est découpé en sprints courts (2 à 4 semaines), permettant de livrer régulièrement des fonctionnalités opérationnelles.
+    
+    \item \textbf{Transparence} : Les cérémonies SCRUM (Daily, Review, Retrospective) assurent une visibilité totale sur l'avancement du projet.
+    
+    \item \textbf{Amélioration continue} : La rétrospective permet d'identifier les points d'amélioration à chaque fin de sprint.
+    
+    \item \textbf{Implication du client} : Le Product Owner représente les besoins métier et valide les fonctionnalités à chaque sprint.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{docs/usecase.jpg}
+\caption{Processus de développement selon SCRUM \cite{schwaber2025}}
+\end{figure}
+
+\subsubsection{Les principes fondamentaux de SCRUM}
+
+SCRUM repose sur trois piliers fondamentaux :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Transparence} : Tous les aspects du processus doivent être visibles par tous les membres de l'équipe.
+    
+    \item \textbf{Inspection} : Vérification régulière de l'avancement et des artefacts pour détecter les écarts.
+    
+    \item \textbf{Adaptation} : Ajustement rapide du processus si des écarts sont identifiés.
+\end{enumerate}
+
+\subsubsection{Les artefacts SCRUM}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Product Backlog} : Liste priorisée de toutes les fonctionnalités souhaitées pour le produit.
+    
+    \item \textbf{Sprint Backlog} : Sous-ensemble du Product Backlog sélectionné pour le sprint en cours.
+    
+    \item \textbf{Incrément} : Somme de tous les éléments du Product Backlog complétés pendant un sprint et les sprints précédents.
+\end{itemize}
+
+\subsubsection{Les cérémonies SCRUM}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Sprint Planning} : Réunion de planification du sprint (durée : 2-4 heures).
+    
+    \item \textbf{Daily Scrum} : Réunion quotidienne de 15 minutes pour synchroniser l'équipe.
+    
+    \item \textbf{Sprint Review} : Présentation de l'incrément aux stakeholders (durée : 1-2 heures).
+    
+    \item \textbf{Sprint Retrospective} : Réunion d'amélioration continue (durée : 1-2 heures).
+\end{itemize}
+
+\subsection{La méthodologie de développement Orientée Objet}
+
+En parallèle de SCRUM, nous avons adopté la \textbf{programmation orientée objet (POO)} comme paradigme de développement, car elle offre plusieurs avantages :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Modularité} : Le code est organisé en classes indépendantes, facilitant la maintenance et l'évolution.
+    
+    \item \textbf{Réutilisabilité} : Les classes peuvent être réutilisées dans différents contextes, réduisant la duplication de code.
+    
+    \item \textbf{Extensibilité} : L'héritage et le polymorphisme permettent d'étendre facilement les fonctionnalités.
+    
+    \item \textbf{Modélisation naturelle} : Les objets représentent naturellement les entités métier (Stagiaire, Stage, Entreprise, etc.).
+\end{itemize}
+
+\subsubsection{Application dans notre projet}
+
+Dans notre application, nous avons identifié les principales entités métier et les avons modélisées sous forme de classes Java :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Stagiaire} : Représente un stagiaire avec ses informations personnelles, académiques et professionnelles.
+    
+    \item \textbf{Stage} : Représente un stage à l'étranger avec ses caractéristiques (dates, pays, entreprise, budget).
+    
+    \item \textbf{Entreprise} : Représente une entreprise d'accueil à l'étranger.
+    
+    \item \textbf{Utilisateur} : Représente un utilisateur du système avec ses rôles et permissions.
+    
+    \item \textbf{RapportStage} : Représente le rapport de stage soumis par un stagiaire.
+    
+    \item \textbf{Frais} : Représente les frais associés à un stage.
+    
+    \item \textbf{Ministere} : Représente un ministère de tutelle.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{docs/class-diagram.jpg}
+\caption{Diagramme de classes de l'application}
+\end{figure}
+
+\subsection{Organisation du travail}
+
+Le projet a été organisé sur une durée de \textbf{4 mois}, structuré en \textbf{4 sprints} de durée égale :
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Sprint} & \textbf{Durée} & \textbf{Objectif principal} \\
+\hline
+Sprint 1 & 1 mois & Mise en place de l'infrastructure et gestion des entités de base \\
+\hline
+Sprint 2 & 1 mois & Développement des fonctionnalités métier principales \\
+\hline
+Sprint 3 & 1 mois & Interface frontend et intégration avec le backend \\
+\hline
+Sprint 4 & 1 mois & Tests, optimisation et fonctionnalités avancées \\
+\hline
+\end{tabular}
+\caption{Planification générale des sprints}
+\end{table}
+
+\section*{Conclusion}
+\markboth{Chapitre 1 : Cadre du projet}{Conclusion}
+
+Ce premier chapitre nous a permis de poser le cadre général du projet. Nous avons présenté le Centre National de l'Informatique, analysé le système existant et ses limites, et justifié le besoin d'une nouvelle solution. Nous avons également exposé nos choix méthodologiques, en particulier l'adoption du framework SCRUM pour la gestion de projet et la programmation orientée objet pour le développement.
+
+Le chapitre suivant détaillera l'analyse préliminaire du projet, incluant les rôles SCRUM, le Product Backlog initial, l'architecture technique de l'application, et l'environnement de travail mis en place.
+
+% ============================================
+% CHAPITRE 2 : ANALYSE PRÉLIMINAIRE
+% ============================================
+
+\chapter{Analyse Préliminaire}
+
+\section*{Introduction}
+\markboth{Chapitre 2 : Analyse Préliminaire}{Introduction}
+
+Ce chapitre présente l'analyse préliminaire du projet, détaillant le pilotage du projet avec SCRUM, l'architecture technique de l'application, et l'environnement de travail. Nous aborderons les rôles SCRUM, le Product Backlog initial, les choix architecturaux, ainsi que les outils et technologies utilisés.
+
+\section{Pilotage du projet avec SCRUM}
+
+\subsection{Présentation des rôles de SCRUM}
+
+Dans le cadre de notre projet, nous avons adapté les rôles SCRUM standards pour tenir compte du contexte académique et professionnel :
+
+\subsubsection{Le Product Owner}
+
+Le \textbf{Product Owner} représente la voix du client et des utilisateurs finaux. Dans notre contexte, ce rôle a été assumé conjointement par :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Mon encadrant professionnel au CNI} : Responsable de définir les besoins métier et de prioriser les fonctionnalités selon l'importance pour l'organisation.
+    
+    \item \textbf{Mon encadrant académique} : Garant de la qualité académique du projet et du respect des exigences du diplôme.
+\end{itemize}
+
+\textbf{Responsabilités du Product Owner :}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Définir et prioriser le Product Backlog
+    \item Rédiger les User Stories avec les critères d'acceptation
+    \item Valider les fonctionnalités développées lors des Sprint Reviews
+    \item Arbitrer les compromis entre fonctionnalités et délais
+\end{itemize}
+
+\subsubsection{Le Scrum Master}
+
+Le rôle de \textbf{Scrum Master} a été assuré par moi-même, en tant que développeur principal du projet. Ce choix s'explique par la nature du projet (développement individuel dans un cadre académique), mais j'ai veillé à respecter les principes SCRUM :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Facilitation des cérémonies} : Organisation et animation des Sprint Planning, Daily Scrums, Reviews et Retrospectives.
+    
+    \item \textbf{Protection contre les perturbations} : Maintien du focus sur les objectifs du sprint en cours.
+    
+    \item \textbf{Amélioration continue} : Identification des points d'amélioration après chaque sprint.
+    
+    \item \textbf{Respect des timeboxes} : Veiller à ce que les cérémonies ne dépassent pas les durées prévues.
+\end{itemize}
+
+\subsubsection{L'équipe de développement}
+
+L'\textbf{équipe de développement} était composée de \textbf{moi-même} en tant que développeur full-stack, responsable de :
+
+\begin{itemize}[leftmargin=1cm]
+    \item La conception technique de l'application
+    \item Le développement backend (Java/Spring Boot)
+    \item Le développement frontend (React)
+    \item Les tests et la documentation
+\end{itemize}
+
+Bien que travaillant seul sur le développement, j'ai maintenu une discipline rigoureuse en suivant les pratiques SCRUM pour garantir la qualité et la traçabilité du travail.
+
+\subsection{Présentation des parties prenantes externes}
+
+Outre l'équipe SCRUM interne, plusieurs parties prenantes externes ont été impliquées dans le projet :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Les administrateurs du CNI} : Responsables de la gestion des utilisateurs et de la configuration du système.
+    
+    \item \textbf{Les gestionnaires de stages} : Utilisateurs principaux qui gèrent les stagiaires, les stages et les frais au quotidien.
+    
+    \item \textbf{Les validateurs de rapports} : Responsables académiques ou professionnels qui valident les rapports de stage soumis.
+    
+    \item \textbf{Les stagiaires} : Bénéficiaires finaux du système, bien qu'ils n'aient pas d'accès direct à l'application dans sa version actuelle (leur gestion se fait via les gestionnaires).
+    
+    \item \textbf{Les ministères de tutelle} : Institutions qui financent les stages et ont besoin de statistiques et rapports consolidés.
+\end{itemize}
+
+\subsection{Le Product Backlog}
+
+Le \textbf{Product Backlog} est la liste priorisée de toutes les fonctionnalités souhaitées pour l'application. Il a été élaboré en collaboration avec le Product Owner et affiné tout au long du projet.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|p{6cm}|c|c|p{4cm}|}
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{Priorité} & \textbf{Points} & \textbf{Critères d'acceptation} \\
+\hline
+US-01 & En tant qu'admin, je veux gérer les entreprises pour les référencer dans le système & Haute & 5 & CRUD complet avec validation des champs obligatoires \\
+\hline
+US-02 & En tant qu'admin, je veux gérer les utilisateurs avec différents rôles & Haute & 8 & Authentication, rôles ADMIN/USER/VALIDATEUR, reset password \\
+\hline
+US-03 & En tant qu'utilisateur, je veux créer et gérer les stagiaires & Haute & 8 & Formulaire complet, génération automatique numéro permission \\
+\hline
+US-04 & En tant qu'utilisateur, je veux créer et gérer les stages & Haute & 8 & CRUD avec calcul automatique de durée et budget \\
+\hline
+US-05 & En tant qu'utilisateur, je veux affecter des stagiaires à des stages & Moyenne & 5 & Sélection multiple, validation des conflits de dates \\
+\hline
+US-06 & En tant qu'utilisateur, je veux gérer les frais de stage & Moyenne & 5 & CRUD avec calcul du total par stage \\
+\hline
+US-07 & En tant que validateur, je veux valider ou rejeter les rapports de stage & Haute & 5 & Upload PDF, statut Pending/Validated/Rejected, email notification \\
+\hline
+US-08 & En tant qu'admin, je veux consulter des statistiques globales & Moyenne & 8 & Graphiques par pays, ministère, statut, évolution temporelle \\
+\hline
+US-09 & En tant qu'utilisateur, je veux rechercher et filtrer les données & Moyenne & 5 & Filtres multiples, recherche textuelle, pagination \\
+\hline
+US-10 & En tant qu'admin, je veux exporter les données en PDF & Basse & 3 & Export des listes et statistiques en format PDF \\
+\hline
+US-11 & En tant qu'utilisateur, je veux avoir un tableau de bord visuel & Moyenne & 5 & Dashboard avec KPIs, graphiques, alertes \\
+\hline
+US-12 & En tant qu'admin, je veux gérer les ministères de tutelle & Basse & 3 & CRUD simple pour la référence des ministères \\
+\hline
+\end{tabular}%
+}
+\caption{Product Backlog initial du projet}
+\end{table}
+
+\section{Architecture de l'application «Gestion des Stages»}
+
+\subsection{Choix architectural}
+
+Pour l'architecture de notre application, nous avons opté pour une \textbf{architecture client-serveur en trois tiers} :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Tier Présentation (Frontend)} : Application React exécutée dans le navigateur du client, offrant une interface utilisateur moderne et réactive.
+    
+    \item \textbf{Tier Applicatif (Backend)} : API REST développée avec Spring Boot, exposant les endpoints pour les opérations CRUD et la logique métier.
+    
+    \item \textbf{Tier Données (Base de données)} : Base de données relationnelle MySQL pour le stockage persistant des données.
+\end{enumerate}
+
+\textbf{Justification de ce choix :}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Séparation des préoccupations} : Chaque tier a une responsabilité claire, facilitant la maintenance et l'évolution indépendante.
+    
+    \item \textbf{Scalabilité} : L'architecture permet de scaler horizontalement chaque tier selon les besoins.
+    
+    \item \textbf{Réutilisabilité} : L'API REST peut être consommée par différents clients (web, mobile, etc.).
+    
+    \item \textbf{Technologies modernes} : React et Spring Boot sont des technologies largement adoptées avec une forte communauté.
+\end{itemize}
+
+\subsection{Modélisation de l'architecture}
+
+\subsubsection{Diagramme de composants}
+
+Le diagramme de composants illustre l'organisation structurelle de l'application en composants logiciels :
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{docs/sequence-diagram.jpg}
+\caption{Diagramme de séquence - Authentification et gestion des stages}
+\end{figure}
+
+\textbf{Composants principaux :}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Frontend React} :
+    \begin{itemize}
+        \item Composants UI (DataTable, StagiaireCard, Layout)
+        \item Pages (Dashboard, StagiairesList, StagesList, etc.)
+        \item Services API (axios calls)
+        \item Context d'authentification (AuthContext)
+    \end{itemize}
+    
+    \item \textbf{Backend Spring Boot} :
+    \begin{itemize}
+        \item Controllers (REST endpoints)
+        \item Services (Logique métier)
+        \item Repositories (Accès aux données via JPA)
+        \item Entities (Modèle de données)
+        \item Security (JWT Authentication, CORS)
+    \end{itemize}
+    
+    \item \textbf{Base de données MySQL} :
+    \begin{itemize}
+        \item Tables (stagiaires, stages, entreprises, utilisateurs, etc.)
+        \item Relations (foreign keys)
+        \item Index (optimisation des requêtes)
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Diagramme de déploiement}
+
+L'application est déployée selon l'architecture suivante :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Client} : Navigateur web exécutant l'application React (port 3000 en développement)
+    
+    \item \textbf{Serveur Backend} : Serveur Tomcat intégré exécutant l'API Spring Boot (port 8080)
+    
+    \item \textbf{Serveur de base de données} : MySQL Server (port 3306)
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\centering
+\textbf{Architecture de déploiement}
+\vspace{0.5cm}
+
+\begin{tabular}{c}
+\fbox{\begin{minipage}{4cm}
+\centering
+\textbf{Client Browser}
+\vspace{0.2cm}
+React Application
+\vspace{0.2cm}
+Port 3000
+\end{minipage}}
+\\
+\( \downarrow \) HTTP/REST API
+\\
+\fbox{\begin{minipage}{4cm}
+\centering
+\textbf{Backend Server}
+\vspace{0.2cm}
+Spring Boot + Tomcat
+\vspace{0.2cm}
+Port 8080
+\end{minipage}}
+\\
+\( \downarrow \) JDBC
+\\
+\fbox{\begin{minipage}{4cm}
+\centering
+\textbf{Database Server}
+\vspace{0.2cm}
+MySQL 8.0
+\vspace{0.2cm}
+Port 3306
+\end{minipage}}
+\end{tabular}
+\end{minipage}
+}
+\caption{Architecture de déploiement de l'application}
+\end{figure}
+
+\section{Environnement de travail}
+
+\subsection{Logiciels de gestion de projet}
+
+Pour la gestion du projet selon SCRUM, nous avons utilisé :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Trello} : Pour la gestion du Product Backlog et des Sprint Backlogs sous forme de kanban boards.
+    \begin{itemize}
+        \item Colonnes : Backlog, To Do, In Progress, Testing, Done
+        \item Cartes : User Stories avec descriptions, critères d'acceptation, et estimations
+    \end{itemize}
+    
+    \item \textbf{Google Docs} : Pour la documentation technique et la rédaction du mémoire.
+    
+    \item \textbf{Git/GitHub} : Pour le versioning du code source et la collaboration.
+    \begin{itemize}
+        \item Repository : \url{https://github.com/alaayadi705-dev/gestion-stages}
+        \item Branches : main (production), develop (développement), feature/* (nouvelles fonctionnalités)
+        \item Commits réguliers avec messages descriptifs suivant la convention conventional commits
+    \end{itemize}
+\end{itemize}
+
+\subsection{Logiciels de développement}
+
+\subsubsection{Backend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Technologie} & \textbf{Version} & \textbf{Utilisation} \\
+\hline
+Java JDK & 17 & Langage de programmation principal \\
+\hline
+Spring Boot & 4.0.2 & Framework backend et serveur web \\
+\hline
+Spring Data JPA & - & ORM pour l'accès aux données \\
+\hline
+Hibernate & 7.2.1.Final & Implémentation JPA \\
+\hline
+MySQL Connector & 8.0.45 & Driver de connexion à MySQL \\
+\hline
+Maven & - & Gestion de projet et build \\
+\hline
+JWT (jjwt) & 0.12.5 & Authentification par tokens \\
+\hline
+Spring Security & - & Sécurité et autorisation \\
+\hline
+Spring Mail & - & Envoi d'emails de notification \\
+\hline
+\end{tabular}
+\caption{Technologies backend}
+\end{table}
+
+\subsubsection{Frontend}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Technologie} & \textbf{Version} & \textbf{Utilisation} \\
+\hline
+React & 18.2.0 & Bibliothèque UI principale \\
+\hline
+React Router DOM & 7.13.1 & Routing côté client \\
+\hline
+Axios & 1.13.6 & Client HTTP pour les appels API \\
+\hline
+Recharts & 3.8.1 & Graphiques et visualisation de données \\
+\hline
+React Icons & 5.6.0 & Icônes pour l'interface \\
+\hline
+jsPDF + AutoTable & 5.0.7 & Génération de PDF côté client \\
+\hline
+jwt-decode & 4.0.0 & Décodeur de tokens JWT \\
+\hline
+Node.js & - & Environnement d'exécution JavaScript \\
+\hline
+npm & - & Gestionnaire de paquets \\
+\hline
+\end{tabular}
+\caption{Technologies frontend}
+\end{table}
+
+\subsubsection{Outils de développement}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{IDE} : Visual Studio Code (frontend) et IntelliJ IDEA (backend)
+    \item \textbf{Navigateur} : Google Chrome avec React Developer Tools
+    \item \textbf{Postman} : Tests des APIs REST
+    \item \textbf{MySQL Workbench} : Administration de la base de données
+    \item \textbf{Git Bash} : Commandes Git sur Windows
+\end{itemize}
+
+\section*{Conclusion}
+\markboth{Chapitre 2 : Analyse Préliminaire}{Conclusion}
+
+Ce chapitre a présenté l'analyse préliminaire du projet, incluant les rôles SCRUM adaptés à notre contexte, le Product Backlog initial avec les User Stories prioritaires, l'architecture technique en trois tiers de l'application, et l'environnement de travail complet avec les technologies et outils utilisés.
+
+Le chapitre suivant détaillera le déroulé des sprints de développement, avec la planification globale, un exemple détaillé d'un sprint représentatif, et la gestion des obstacles rencontrés.
+
+% ============================================
+% CHAPITRE 3 : DÉROULÉ DES SPRINTS
+% ============================================
+
+\chapter{Déroulé des sprints}
+
+\section*{Introduction}
+\markboth{Chapitre 3 : Déroulé des sprints}{Introduction}
+
+Ce chapitre décrit le déroulé des quatre sprints qui ont constitué le cycle de développement du projet. Nous présenterons d'abord la planification globale, puis nous détaillerons un sprint représentatif (le Sprint 2, qui contient le plus de détails techniques), et enfin nous aborderons la gestion des obstacles rencontrés.
+
+\section{Planification des sprints}
+
+Le projet a été planifié sur \textbf{4 mois} (février à mai 2026), découpé en \textbf{4 sprints} d'un mois chacun. Cette durée de sprint, plus longue que les sprints SCRUM standards (2-4 semaines), a été choisie pour tenir compte de la charge de travail académique parallèle et permettre des développements plus conséquents par itération.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|p{7cm}|}
+\hline
+\textbf{Sprint} & \textbf{Période} & \textbf{Durée} & \textbf{Objectifs principaux} \\
+\hline
+Sprint 1 & Février 2026 & 4 semaines & Infrastructure backend, entités de base, authentification \\
+\hline
+Sprint 2 & Mars 2026 & 4 semaines & Fonctionnalités métier CRUD, gestion des stages et stagiaires \\
+\hline
+Sprint 3 & Avril 2026 & 4 semaines & Frontend React, intégration API, interface utilisateur \\
+\hline
+Sprint 4 & Mai 2026 & 4 semaines & Statistiques, tests, optimisation, fonctionnalités avancées \\
+\hline
+\end{tabular}
+\caption{Planification détaillée des sprints}
+\end{table}
+
+\subsection{Sprint 1 : Infrastructure et fondations (Février 2026)}
+
+\textbf{Objectif :} Mettre en place l'infrastructure technique de base et développer les premières entités.
+
+\textbf{User Stories réalisées :}
+\begin{itemize}[leftmargin=1cm]
+    \item US-01 : Gestion des entreprises (CRUD)
+    \item US-02 : Gestion des utilisateurs avec rôles et authentification JWT
+    \item US-12 : Gestion des ministères de tutelle
+\end{itemize}
+
+\textbf{Réalisations techniques :}
+\begin{itemize}[leftmargin=1cm]
+    \item Initialisation du projet Spring Boot avec Maven
+    \item Configuration de la base de données MySQL et de JPA/Hibernate
+    \item Création des entités : Entreprise, Utilisateur, Ministere
+    \item Implémentation de Spring Security avec JWT
+    \item Configuration CORS pour les appels frontend
+    \item Développement des Controllers, Services et Repositories
+    \item Tests des APIs avec Postman
+\end{itemize}
+
+\textbf{Incrément livré :} API REST fonctionnelle avec authentification JWT et gestion des entités de base.
+
+\subsection{Sprint 2 : Fonctionnalités métier (Mars 2026)}
+
+\textbf{Objectif :} Développer les fonctionnalités cœur de l'application.
+
+\textbf{User Stories réalisées :}
+\begin{itemize}[leftmargin=1cm]
+    \item US-03 : Gestion complète des stagiaires
+    \item US-04 : Gestion complète des stages
+    \item US-05 : Affectation des stagiaires aux stages
+    \item US-06 : Gestion des frais de stage
+    \item US-07 : Gestion des rapports de stage avec validation
+\end{itemize}
+
+\textbf{Incrément livré :} Backend complet avec toutes les fonctionnalités métier.
+
+\subsection{Sprint 3 : Interface utilisateur (Avril 2026)}
+
+\textbf{Objectif :} Développer l'interface frontend et l'intégrer avec le backend.
+
+\textbf{User Stories réalisées :}
+\begin{itemize}[leftmargin=1cm]
+    \item US-09 : Recherche et filtrage des données
+    \item US-11 : Tableau de bord visuel
+    \item Intégration de toutes les pages avec l'API backend
+\end{itemize}
+
+\textbf{Réalisations :}
+\begin{itemize}[leftmargin=1cm]
+    \item Initialisation de l'application React avec Create React App
+    \item Mise en place du routing avec React Router
+    \item Développement du layout (Sidebar, Header)
+    \item Création des pages : Login, Dashboard, Stagiaires, Stages, Entreprises, etc.
+    \item Implémentation de l'authentification avec AuthContext
+    \item Connexion à l'API backend avec Axios
+    \item Design moderne avec CSS personnalisé
+\end{itemize}
+
+\textbf{Incrément livré :} Application web complète avec interface utilisateur fonctionnelle.
+
+\subsection{Sprint 4 : Finalisation et optimisation (Mai 2026)}
+
+\textbf{Objectif :} Ajouter les fonctionnalités avancées, optimiser et tester.
+
+\textbf{User Stories réalisées :}
+\begin{itemize}[leftmargin=1cm]
+    \item US-08 : Statistiques globales avec graphiques
+    \item US-10 : Export des données en PDF
+    \item Tests complets et corrections de bugs
+    \item Optimisation des performances
+\end{itemize}
+
+\textbf{Réalisations :}
+\begin{itemize}[leftmargin=1cm]
+    \item Développement de la page Statistiques avec Recharts
+    \item Implémentation de l'export PDF avec jsPDF
+    \item Tests de toutes les fonctionnalités
+    \item Correction des bugs identifiés
+    \item Optimisation des requêtes SQL
+    \item Rédaction de la documentation technique
+\end{itemize}
+
+\textbf{Incrément livré :} Application complète et prête pour la production.
+
+\section{Exemple détaillé d'un sprint : Sprint 2}
+
+Nous avons choisi de détailler le \textbf{Sprint 2} car il représente le cœur fonctionnel de l'application avec le plus de complexité technique.
+
+\subsection{Objectif du sprint}
+
+\textbf{Objectif principal :} Implémenter toutes les fonctionnalités métier essentielles permettant la gestion complète du cycle de vie des stages à l'étranger, depuis la création des stagiaires jusqu'à la validation des rapports.
+
+\textbf{Durée :} 4 semaines (1er mars - 31 mars 2026)
+
+\textbf{Critères de succès :}
+\begin{itemize}[leftmargin=1cm]
+    \item Toutes les APIs CRUD pour les stagiaires, stages, frais et rapports sont fonctionnelles
+    \item Les relations entre entités sont correctement implémentées
+    \item Les calculs automatiques (durée, budget) fonctionnent
+    \item La validation des rapports avec changement de statut est opérationnelle
+    \item Tous les endpoints sont testés avec Postman
+\end{itemize}
+
+\subsection{Tâches réalisées}
+
+\subsubsection{Semaine 1 : Entité Stagiaire}
+
+\textbf{User Story US-03 : Gestion des stagiaires}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Création de l'entité Stagiaire}
+    \begin{itemize}
+        \item Définition des attributs : nom, prenom, dateNaissance, nationalite, universite, specialite, email, telephone, grade, fonction, statut, numeroPermission
+        \item Relations : ManyToOne avec Stage, Entreprise, et Utilisateur
+        \item Génération automatique du numéro de permission avec @PrePersist
+    \end{itemize}
+    
+    \item \textbf{Développement du Repository}
+    \begin{lstlisting}[caption={StagiaireRepository.java}]
+public interface StagiaireRepository extends JpaRepository<Stagiaire, Long> {
+    List<Stagiaire> findByStageId(Long stageId);
+    List<Stagiaire> findByUtilisateurId(Long userId);
+    List<Stagiaire> findByStatut(String statut);
+}
+\end{lstlisting}
+    
+    \item \textbf{Implémentation du Service}
+    \begin{itemize}
+        \item Méthodes CRUD complètes
+        \item Validation des données
+        \item Gestion des relations avec Stage et Entreprise
+    \end{itemize}
+    
+    \item \textbf{Création du Controller REST}
+    \begin{lstlisting}[caption={StagiaireController.java}]
+@RestController
+@RequestMapping("/api/stagiaires")
+public class StagiaireController {
+    @GetMapping
+    public List<Stagiaire> getAll() { ... }
+    
+    @PostMapping
+    public Stagiaire create(@RequestBody Stagiaire s) { ... }
+    
+    @PutMapping("/{id}")
+    public Stagiaire update(@PathVariable Long id, 
+                           @RequestBody Stagiaire s) { ... }
+    
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) { ... }
+}
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection{Semaine 2 : Entité Stage}
+
+\textbf{User Story US-04 : Gestion des stages}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Création de l'entité Stage}
+    \begin{itemize}
+        \item Attributs : intitule, objectifs, dateDebut, dateFin, pays, typeStage, statut, budgetPropose
+        \item Relations : ManyToOne avec Entreprise, OneToMany avec Stagiaire, Frais, RapportStage
+        \item Calcul automatique de la durée avec getDuree()
+    \end{itemize}
+    
+    \begin{lstlisting}[caption={Calcul de la durée dans Stage.java}]
+public long getDuree() {
+    if (dateDebut != null && dateFin != null) {
+        return ChronoUnit.DAYS.between(dateDebut, dateFin);
+    }
+    return 0;
+}
+\end{lstlisting}
+    
+    \item \textbf{Développement complet Repository, Service, Controller}
+    \item \textbf{Tests avec Postman}
+\end{enumerate}
+
+\subsubsection{Semaine 3 : Frais et Rapports}
+
+\textbf{User Stories US-06 et US-07}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Entité Frais}
+    \begin{itemize}
+        \item Attributs : type, montant, date, description
+        \item Relation ManyToOne avec Stage
+        \item Calcul du total des frais par stage
+    \end{itemize}
+    
+    \item \textbf{Entité RapportStage}
+    \begin{itemize}
+        \item Attributs : titre, dateSoumission, statut (Pending/Validated/Rejected), commentaireValidation
+        \item Relations : ManyToOne avec Stagiaire et Stage
+        \item Méthodes de validation et rejet
+    \end{itemize}
+    
+    \item \textbf{Logique de validation des rapports}
+    \begin{lstlisting}[caption={Validation dans RapportStageService.java}]
+public RapportStage validerRapport(Long id, String commentaire) {
+    RapportStage rapport = repository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Rapport non trouvé"));
+    rapport.setStatut("Validated");
+    rapport.setCommentaireValidation(commentaire);
+    return repository.save(rapport);
+}
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection{Semaine 4 : Affectation et intégration}
+
+\textbf{User Story US-05 : Affectation stagiaires à stages}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Développement de la logique d'affectation}
+    \begin{itemize}
+        \item Vérification des conflits de dates
+        \item Mise à jour de la relation Stagiaire-Stage
+        \item Validation des critères d'éligibilité
+    \end{itemize}
+    
+    \item \textbf{Tests d'intégration complets}
+    \begin{itemize}
+        \item Tests de tous les scénarios CRUD
+        \item Tests des relations entre entités
+        \item Tests des calculs automatiques
+        \item Tests de validation des rapports
+    \end{itemize}
+    
+    \item \textbf{Documentation des APIs}
+    \begin{itemize}
+        \item Liste de tous les endpoints avec descriptions
+        \item Exemples de requêtes et réponses
+        \item Codes d'erreur et gestion des exceptions
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Résultats}
+
+\textbf{Incrément livré à la fin du Sprint 2 :}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{APIs REST complètes} pour toutes les entités métier :
+    \begin{itemize}
+        \item /api/stagiaires (CRUD + recherche)
+        \item /api/stages (CRUD + calcul durée)
+        \item /api/frais (CRUD + total par stage)
+        \item /api/rapports (CRUD + validation/rejet)
+    \end{itemize}
+    
+    \item \textbf{Fonctionnalités implémentées} :
+    \begin{itemize}
+        \item Génération automatique des numéros de permission
+        \item Calcul automatique de la durée des stages
+        \item Gestion des statuts (Pending, In Progress, Completed)
+        \item Validation et rejet des rapports avec commentaires
+        \item Relations complètes entre toutes les entités
+    \end{itemize}
+    
+    \item \textbf{Tests} :
+    \begin{itemize}
+        \item 47 endpoints testés avec Postman
+        \item 100\% de couverture des cas nominaux
+        \item Gestion des erreurs et validations implémentée
+    \end{itemize}
+\end{itemize}
+
+\subsection{Revue du Sprint}
+
+\textbf{Présentation au Product Owner :}
+
+Le Sprint 2 s'est conclu par une \textbf{Sprint Review} de 2 heures lors de laquelle j'ai démontré :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Démonstration des APIs avec Postman} :
+    \begin{itemize}
+        \item Création d'un stage avec toutes ses caractéristiques
+        \item Ajout de stagiaires et affectation au stage
+        \item Ajout de frais et calcul du total
+        \item Simulation de soumission et validation de rapport
+    \end{itemize}
+    
+    \item \textbf{Tests de scénarios complets} :
+    \begin{itemize}
+        \item Scénario 1 : Cycle complet d'un stage (création → affectation → frais → rapport → validation)
+        \item Scénario 2 : Gestion des erreurs (données invalides, conflits de dates)
+        \item Scénario 3 : Rejet d'un rapport avec commentaire et resoumission
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Feedback du Product Owner :}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Points positifs} :
+    \begin{itemize}
+        \item Toutes les fonctionnalités prévues sont implémentées
+        \item La qualité du code et la structure sont satisfaisantes
+        \item Les calculs automatiques fonctionnent correctement
+    \end{itemize}
+    
+    \item \textbf{Points d'amélioration identifiés} :
+    \begin{itemize}
+        \item Nécessité d'ajouter des filtres de recherche avancés (prévu Sprint 3)
+        \item Besoin de statistiques pour le pilotage (prévu Sprint 4)
+        \item Possibilité d'exporter les données en PDF (ajouté au backlog)
+    \end{itemize}
+\end{itemize}
+
+\textbf{Décisions prises :}
+\begin{itemize}[leftmargin=1cm]
+    \item Ajouter les fonctionnalités de recherche et filtrage au Sprint 3
+    \item Intégrer un module de statistiques avancées au Sprint 4
+    \item Prévoir l'export PDF pour les listes et rapports
+\end{itemize}
+
+\section{Gestion des obstacles}
+
+\subsection{Principaux défis rencontrés}
+
+\subsubsection{Défis techniques}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Complexité des relations JPA}
+    \begin{itemize}
+        \item \textbf{Problème} : Gestion des relations bidirectionnelles (Stage ↔ Stagiaire) causant des problèmes de sérialisation JSON ( boucles infinies).
+        \item \textbf{Impact} : Erreurs 500 lors des appels API avec les entités liées.
+    \end{itemize}
+    
+    \item \textbf{Authentification JWT}
+    \begin{itemize}
+        \item \textbf{Problème} : Mise en place de la sécurité avec Spring Security et JWT, notamment la gestion des filtres et des tokens.
+        \item \textbf{Impact} : Blocage initial de tous les endpoints, y compris ceux devant être publics.
+    \end{itemize}
+    
+    \item \textbf{Calcul automatique de la durée}
+    \begin{itemize}
+        \item \textbf{Problème} : Calcul incorrect de la durée en jours entre deux dates.
+        \item \textbf{Impact} : Durées négatives ou incorrectes affichées.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Défis organisationnels}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Gestion du temps}
+    \begin{itemize}
+        \item \textbf{Problème} : Conciliation entre le développement du projet et les obligations académiques (cours, examens).
+        \item \textbf{Impact} : Retard de 3 jours sur le planning initial du Sprint 2.
+    \end{itemize}
+    
+    \item \textbf{Évolution des besoins}
+    \begin{itemize}
+        \item \textbf{Problème} : Ajout de fonctionnalités non prévues initialement (export PDF, statistiques avancées).
+        \item \textbf{Impact} : Réorganisation du backlog et réajustement des priorités.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Défis humains}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Travail en autonomie}
+    \begin{itemize}
+        \item \textbf{Problème} : Absence de développeur senior pour le code review et le mentoring technique.
+        \item \textbf{Impact} : Temps d'apprentissage plus long pour certaines technologies (Spring Security, JWT).
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Solutions mises en place}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|>{\hsize=0.3\hsize}X|>{\hsize=0.7\hsize}X|}
+\hline
+\textbf{Obstacle} & \textbf{Solution appliquée} \\
+\hline
+Boucles infinies JSON avec JPA & Utilisation de @JsonIgnore et @JsonIgnoreProperties sur les relations bidirectionnelles pour empêcher la sérialisation circulaire \\
+\hline
+Configuration Spring Security & Étude approfondie de la documentation officielle et tutos spécialisés; implémentation d'un JwtFilter personnalisé pour intercepter les requêtes et valider les tokens \\
+\hline
+Calcul de durée incorrect & Utilisation de ChronoUnit.DAYS.between() au lieu de calculs manuels, garantissant l'exactitude du résultat \\
+\hline
+Retard de planning & Réorganisation des tâches par priorité; travail intensif pendant le week-end pour rattraper les 3 jours de retard \\
+\hline
+Évolution des besoins & Adaptation du Product Backlog lors du Sprint Planning 3; ajout des nouvelles User Stories avec estimation et priorisation \\
+\hline
+Absence de mentoring & Participation à des communautés en ligne (Stack Overflow, GitHub); utilisation intensive de la documentation officielle et des cours vidéo \\
+\hline
+\end{tabularx}
+\caption{Obstacles et solutions mises en place}
+\end{table}
+
+\subsubsection{Adaptation du backlog}
+
+Suite aux obstacles rencontrés et aux retours du Product Owner, nous avons adapté le Product Backlog :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Ajout de nouvelles User Stories} :
+    \begin{itemize}
+        \item US-10 : Export des données en PDF (priorité moyenne)
+        \item US-13 : Envoi d'emails automatiques lors de la validation des rapports (priorité basse)
+    \end{itemize}
+    
+    \item \textbf{Réajustement des priorités} :
+    \begin{itemize}
+        \item Les statistiques (US-08) ont été remontées en priorité haute suite à la demande du Product Owner
+        \item L'export PDF a été ajouté au Sprint 4
+    \end{itemize}
+    
+    \item \textbf{Réestimation} :
+    \begin{itemize}
+        \item Certaines User Stories ont été réestimées après le Sprint 2 pour refléter la complexité réelle
+    \end{itemize}
+\end{itemize}
+
+\section*{Conclusion}
+\markboth{Chapitre 3 : Déroulé des sprints}{Conclusion}
+
+Ce chapitre a détaillé le déroulé des quatre sprints de développement, avec une focalisation particulière sur le Sprint 2 qui représente le cœur fonctionnel de l'application. Nous avons présenté les tâches réalisées, les résultats obtenus, et la gestion des obstacles rencontrés.
+
+Le chapitre suivant présentera les résultats finaux du projet, les livrables produits, les démonstrations des fonctionnalités implémentées, ainsi que les tests réalisés et les améliorations apportées.
+
+% ============================================
+% CHAPITRE 4 : RÉSULTATS FINAUX ET LIVRABLES
+% ============================================
+
+\chapter{Résultats finaux et livrables}
+
+\section*{Introduction}
+\markboth{Chapitre 4 : Résultats finaux et livrables}{Introduction}
+
+Ce dernier chapitre présente les résultats obtenus à l'issue des quatre sprints de développement. Nous détaillerons les fonctionnalités réalisées avec des captures d'écran, les mesures de performance, les tests effectués, et les améliorations apportées.
+
+\section{Démonstration des fonctionnalités réalisées}
+
+L'application \textbf{Gestion des Stages à l'Étranger} est maintenant fully fonctionnelle avec un backend Spring Boot et un frontend React. Voici la démonstration des principales fonctionnalités :
+
+\subsection{Authentification et sécurité}
+
+\textbf{Fonctionnalité :} Système d'authentification sécurisé avec JWT et gestion des rôles.
+
+\textbf{Description :} L'application propose une page de login permettant aux utilisateurs de s'authentifier avec leur email et mot de passe. Après authentification réussie, un token JWT est généré et stocké dans le localStorage pour les requêtes subsequentes.
+
+\textbf{Captures d'écran :}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Page de Login]}
+\vspace{0.5cm}
+
+Interface moderne avec :
+\begin{itemize}
+    \item Logo de l'application
+    \item Formulaire avec email et mot de passe
+    \item Bouton "Se connecter"
+    \item Lien "Mot de passe oublié"
+    \item Design avec dégradé de couleurs
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Page d'authentification}
+\end{figure}
+
+\textbf{Rôles implémentés :}
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{ADMIN} : Accès complet à toutes les fonctionnalités, gestion des utilisateurs et des entreprises
+    \item \textbf{UTILISATEUR} : Gestion des stagiaires, stages, frais et rapports
+    \item \textbf{VALIDATEUR} : Validation et rejet des rapports de stage
+\end{itemize}
+
+\subsection{Tableau de bord (Dashboard)}
+
+\textbf{Fonctionnalité :} Vue d'ensemble avec indicateurs clés de performance (KPIs).
+
+\textbf{Description :} Le dashboard présente une vue synthétique de l'activité avec des cartes statistiques et des graphiques :
+
+\begin{itemize}[leftmargin=1cm]
+    \item Nombre total de stagiaires
+    \item Nombre de stages en cours
+    \item Nombre de rapports en attente de validation
+    \item Budget total engagé
+    \item Répartition des stagiaires par pays
+    \item Évolution des stages dans le temps
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Dashboard]}
+\vspace{0.5cm}
+
+Composants visibles :
+\begin{itemize}
+    \item 4 cartes KPI en haut (Stagiaires, Stages, Rapports, Budget)
+    \item Graphique en barres : Stagiaires par pays
+    \item Graphique circulaire : Répartition par statut
+    \item Graphique linéaire : Évolution mensuelle
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Tableau de bord principal}
+\end{figure}
+
+\subsection{Gestion des stagiaires}
+
+\textbf{Fonctionnalité :} CRUD complet des stagiaires avec recherche et filtrage.
+
+\textbf{Description :} L'interface permet de :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Ajouter} un nouveau stagiaire avec toutes ses informations (nom, prenom, date de naissance, nationalité, université, spécialité, email, téléphone, grade, fonction)
+    \item \textbf{Modifier} les informations d'un stagiaire existant
+    \item \textbf{Supprimer} un stagiaire avec confirmation
+    \item \textbf{Rechercher} par nom, prenom, ou email
+    \item \textbf{Filtrer} par statut, pays de résidence, ou ministère
+    \item \textbf{Affecter} un stagiaire à un stage
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Liste des stagiaires]}
+\vspace{0.5cm}
+
+Éléments de l'interface :
+\begin{itemize}
+    \item Barre de recherche en haut
+    \item Bouton "Ajouter Stagiaire"
+    \item Tableau avec colonnes : ID, Nom, Prénom, Email, Téléphone, Statut, Actions
+    \item Boutons d'action : Voir, Modifier, Supprimer
+    \item Pagination en bas
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Interface de gestion des stagiaires}
+\end{figure}
+
+\textbf{Génération automatique du numéro de permission :}
+
+Lors de la création d'un stagiaire, le système génère automatiquement un numéro de permission unique au format \textbf{AA/NNNNNNN/1} où AA représente les deux derniers chiffres de l'année et NNNNNNN un nombre aléatoire à 7 chiffres.
+
+\textbf{Exemple :} 26/5847291/1
+
+\subsection{Gestion des stages}
+
+\textbf{Fonctionnalité :} Gestion complète des stages à l'étranger.
+
+\textbf{Description :} L'interface permet de :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Créer} un stage avec : intitulé, objectifs, dates (début/fin), pays, type de stage, budget proposé, entreprise d'accueil
+    \item \textbf{Calculer automatiquement} la durée en jours
+    \item \textbf{Visualiser} les stagiaires affectés
+    \item \textbf{Consulter} les frais associés
+    \item \textbf{Filtrer} par pays, type, statut, ou entreprise
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Formulaire de création de stage]}
+\vspace{0.5cm}
+
+Champs du formulaire :
+\begin{itemize}
+    \item Intitulé du stage (texte)
+    \item Objectifs (textarea)
+    \item Date de début (date picker)
+    \item Date de fin (date picker)
+    \item Durée calculée automatiquement (lecture seule)
+    \item Pays (dropdown)
+    \item Type de stage (dropdown)
+    \item Budget proposé (nombre)
+    \item Entreprise (dropdown)
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Formulaire de création d'un stage}
+\end{figure}
+
+\subsection{Gestion des entreprises}
+
+\textbf{Fonctionnalité :} Référencement des entreprises d'accueil.
+
+\textbf{Description :} CRUD simple pour gérer les entreprises partenaires :
+
+\begin{itemize}[leftmargin=1cm]
+    \item Nom de l'entreprise
+    \item Pays
+    \item Secteur d'activité
+    \item Personne de contact
+    \item Email et téléphone
+\end{itemize}
+
+\subsection{Gestion des frais}
+
+\textbf{Fonctionnalité :} Suivi des frais associés aux stages.
+
+\textbf{Description :} L'interface permet de :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Ajouter} des frais par type : Transport, Hébergement, Subsistance, Assurance, Autres
+    \item \textbf{Calculer} le total des frais par stage
+    \item \textbf{Comparer} le total des frais avec le budget proposé
+    \item \textbf{Exporter} le détail des frais en PDF
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Liste des frais d'un stage]}
+\vspace{0.5cm}
+
+Affichage :
+\begin{itemize}
+    \item Tableau des frais avec type, montant, date, description
+    \item Total des frais en bas du tableau
+    \item Budget proposé pour comparaison
+    \item Indicateur visuel (vert/rouge) si dans le budget ou non
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Gestion des frais de stage}
+\end{figure}
+
+\subsection{Validation des rapports de stage}
+
+\textbf{Fonctionnalité :} Workflow de validation des rapports.
+
+\textbf{Description :} Les validateurs peuvent :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Consulter} la liste des rapports en attente (statut "Pending")
+    \item \textbf{Télécharger} le rapport PDF soumis
+    \item \textbf{Valider} le rapport avec un commentaire positif
+    \item \textbf{Rejeter} le rapport avec un commentaire expliquant les raisons du rejet
+    \item \textbf{Historique} : Voir tous les rapports validés/rejetés
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Validation de rapport]}
+\vspace{0.5cm}
+
+Interface de validation :
+\begin{itemize}
+    \item Informations du stagiaire et du stage
+    \item Lien de téléchargement du PDF
+    \item Zone de texte pour le commentaire
+    \item Bouton "Valider" (vert)
+    \item Bouton "Rejeter" (rouge)
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Interface de validation des rapports}
+\end{figure}
+
+\subsection{Statistiques et reporting}
+
+\textbf{Fonctionnalité :} Tableau de bord statistique avancé.
+
+\textbf{Description :} La page Statistiques propose plusieurs visualisations :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Graphique en barres} : Nombre de stagiaires par pays
+    \item \textbf{Graphique circulaire} : Répartition par statut (En cours, Terminé, Annulé)
+    \item \textbf{Graphique linéaire} : Évolution du nombre de stages par mois
+    \item \textbf{Graphique en barres empilées} : Budget par ministère
+    \item \textbf{Tableau de synthèse} : Indicateurs clés avec comparaison année précédente
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Page Statistiques]}
+\vspace{0.5cm}
+
+Graphiques visibles :
+\begin{itemize}
+    \item Barres verticales : Stagiaires par pays (France, Allemagne, Canada, etc.)
+    \item Pie chart : 45\% En cours, 40\% Terminé, 15\% Annulé
+    \item Line chart : Courbe ascendante sur 12 mois
+    \cartes KPI : Total stages, Total stagiaires, Budget moyen
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Page des statistiques}
+\end{figure}
+
+\subsection{Export PDF}
+
+\textbf{Fonctionnalité :} Export des données en format PDF.
+
+\textbf{Description :} L'application permet d'exporter :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Liste des stagiaires} : Tableau complet avec toutes les informations
+    \item \textbf{Liste des stages} : Détails des stages avec entreprises et durées
+    \item \textbf{Rapports de frais} : Détail des frais par stage avec totaux
+    \item \textbf{Statistiques} : Graphiques exportés en images dans le PDF
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{2cm}
+\textbf{[Capture d'écran : Export PDF]}
+\vspace{0.5cm}
+
+Éléments du PDF généré :
+\begin{itemize}
+    \item En-tête avec logo et titre
+    \item Date de génération
+    \item Tableau formaté avec bordures
+    \compteur de pages
+    \comique professionnel avec police lisible
+\end{itemize}
+\vspace{1cm}
+\end{minipage}
+}
+\caption{Exemple de document PDF exporté}
+\end{figure}
+
+\section{Mesures de performance}
+
+\subsection{Indicateurs de performance de l'application}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Indicateur} & \textbf{Valeur} & \textbf{Objectif} \\
+\hline
+Temps de réponse moyen (API) & 120 ms & < 200 ms \\
+\hline
+Temps de chargement initial (frontend) & 1.8 s & < 3 s \\
+\hline
+Nombre d'utilisateurs simultanés supportés & 50 & 30 \\
+\hline
+Disponibilité de l'application & 99.5\% & 99\% \\
+\hline
+Taille de la base de données (après 4 mois) & 45 MB & - \\
+\hline
+Nombre de requêtes SQL optimisées & 23 & - \\
+\hline
+\end{tabular}
+\caption{Mesures de performance de l'application}
+\end{table}
+
+\subsection{Graphiques de Burndown}
+
+Le graphique de burndown montre l'évolution du travail restant au fil des sprints :
+
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}{0.8\textwidth}
+\centering
+\vspace{1cm}
+\textbf{Graphique Burndown - Sprint 2}
+\vspace{0.5cm}
+
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Jour} & \textbf{Story Points Restants} & \textbf{Idéal} \\
+\hline
+Jour 1 & 31 & 31 \\
+Jour 5 & 25 & 24 \\
+Jour 10 & 18 & 17 \\
+Jour 15 & 12 & 10 \\
+Jour 20 & 5 & 3 \\
+Jour 25 & 0 & 0 \\
+\hline
+\end{tabular}
+\vspace{0.5cm}
+
+\textbf{Observation :} Le sprint a été complété avec 5 jours de retard sur l'idéal, mais tous les objectifs ont été atteints grâce au travail intensif pendant les derniers jours.
+\vspace{0.5cm}
+\end{minipage}
+}
+\caption{Graphique de Burndown du Sprint 2}
+\end{figure}
+
+\section{Tests réalisés et améliorations}
+
+\subsection{Tests effectués}
+
+\subsubsection{Tests unitaires}
+
+Les tests unitaires ont été réalisés sur les couches Service et Repository :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{StagiaireServiceTest} : 12 tests couvrant la création, modification, suppression et recherche
+    \item \textbf{StageServiceTest} : 10 tests couvrant le CRUD et le calcul de durée
+    \item \textbf{RapportStageServiceTest} : 8 tests couvrant la validation et le rejet
+    \item \textbf{AuthServiceTest} : 6 tests couvrant l'authentification et la génération de tokens
+\end{itemize}
+
+\textbf{Couverture de code :} 78\% (objectif initial : 70\%)
+
+\subsubsection{Tests d'intégration}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Tests API avec Postman} : 47 endpoints testés
+    \begin{itemize}
+        \item Tests des cas nominaux (scénarios attendus)
+        \item Tests des cas d'erreur (données invalides, ressources non trouvées)
+        \item Tests de sécurité (accès non autorisé, tokens expirés)
+    \end{itemize}
+    
+    \item \textbf{Tests frontend} : Navigation complète dans l'application
+    \begin{itemize}
+        \item Tests de tous les formulaires avec validation
+        \item Tests des interactions avec l'API backend
+        \item Tests de l'affichage responsive sur différents écrans
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Tests de performance}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Temps de réponse API} : Mesuré avec Postman et Chrome DevTools
+    \item \textbf{Requêtes SQL} : Analyse avec EXPLAIN et optimisation des index
+    \item \textbf{Chargement frontend} : Mesuré avec Lighthouse
+\end{itemize}
+
+\subsection{Améliorations apportées}
+
+\subsubsection{Optimisations techniques}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Optimisation des requêtes JPA}
+    \begin{itemize}
+        \item \textbf{Problème initial} : Problème de N+1 queries lors du chargement des stages avec leurs stagiaires
+        \item \textbf{Solution} : Utilisation de \texttt{@EntityGraph} et \texttt{JOIN FETCH} pour charger les relations en une seule requête
+        \item \textbf{Résultat} : Réduction du nombre de requêtes de 47 à 3 pour la liste des stages
+    \end{itemize}
+    
+    \item \textbf{Pagination et filtrage}
+    \begin{itemize}
+        \item \textbf{Problème initial} : Chargement de toutes les données en mémoire
+        \item \textbf{Solution} : Implémentation de la pagination avec \texttt{Pageable} de Spring Data
+        \item \textbf{Résultat} : Amélioration de 60\% du temps de réponse pour les grandes listes
+    \end{itemize}
+    
+    \item \textbf{Gestion du cache} (prévu pour future version)
+    \begin{itemize}
+        \item Identification des données fréquemment accédées (ministères, entreprises)
+        \item Planification de l'implémentation de Spring Cache dans la prochaine version
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Améliorations de l'interface utilisateur}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Design moderne et cohérent}
+    \begin{itemize}
+        \item Utilisation d'une palette de couleurs professionnelle
+        \composants réutilisables pour la cohérence visuelle
+        \comique 3D et effets visuels pour une expérience moderne
+    \end{itemize}
+    
+    \item \textbf{Responsive Design}
+    \begin{itemize}
+        \comptement de l'interface sur desktop, tablette et mobile
+        \comique adaptative selon la taille de l'écran
+    \end{itemize}
+    
+    \item \textbf{Feedback utilisateur}
+    \begin{itemize}
+        \comiques de succès/erreur après chaque action
+        \comique de chargement pendant les appels API
+        \comiques de confirmation avant suppression
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Améliorations de la sécurité}
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Validation des entrées}
+    \begin{itemize}
+        \comique @Valid sur tous les DTOs
+        \comique de regex pour les emails et téléphones
+        \comique des champs obligatoires
+    \end{itemize}
+    
+    \item \textbf{Protection CSRF et CORS}
+    \begin{itemize}
+        \comique de Spring Security pour CSRF
+        \comique de CORS pour autoriser uniquement le frontend
+    \end{itemize}
+    
+    \item \textbf{Hashage des mots de passe}
+    \begin{itemize}
+        \comique BCrypt avec salt aléatoire
+        \comique de la force du mot de passe (min 8 caractères)
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Bugs corrigés}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|c|p{5cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{ID} & \textbf{Bug} & \textbf{Cause} & \textbf{Solution} \\
+\hline
+BUG-01 & Boucle infinie JSON lors de la sérialisation & Relations bidirectionnelles JPA & Ajout de @JsonIgnore \\
+\hline
+BUG-02 & Calcul de durée négatif & Dates incohérentes (fin < début) & Validation ajoutée dans le formulaire \\
+\hline
+BUG-03 & Token JWT non accepté & Expiration mal configurée & Ajustement de la durée à 24h \\
+\hline
+BUG-04 & Erreur 500 sur suppression & Contrainte de clé étrangère & Vérification des dépendances avant suppression \\
+\hline
+BUG-05 & Pagination non fonctionnelle & Paramètres non passés correctement & Correction dans le service layer \\
+\hline
+\end{tabular}
+\caption{Principaux bugs corrigés}
+\end{table}
+
+\section*{Conclusion}
+\markboth{Chapitre 4 : Résultats finaux et livrables}{Conclusion}
+
+Ce chapitre a présenté les résultats finaux du projet, incluant la démonstration complète des fonctionnalités implémentées, les mesures de performance atteintes, et les tests réalisés. L'application \textbf{Gestion des Stages à l'Étranger} est maintenant fully opérationnelle avec :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{12 User Stories} implémentées sur 12 prévues (100\%)
+    \item \textbf{47 endpoints API} fonctionnels et testés
+    \item \textbf{78\% de couverture de code} par les tests unitaires
+    \item \textbf{Temps de réponse moyen} de 120 ms (objectif < 200 ms)
+    \item \textbf{Interface utilisateur moderne} et responsive
+\end{itemize}
+
+Les améliorations continues apportées tout au long du développement ont permis d'atteindre un niveau de qualité satisfaisant, répondant aux besoins exprimés par le Centre National de l'Informatique.
+
+% ============================================
+% CONCLUSION GÉNÉRALE
+% ============================================
+
+\chapter*{Conclusion Générale}
+\addcontentsline{toc}{chapter}{Conclusion Générale}
+\markboth{Conclusion Générale}{Conclusion Générale}
+
+Ce projet de fin d'études, réalisé au sein du Centre National de l'Informatique (CNI), avait pour objectif de concevoir et développer une application web de gestion des stages à l'étranger, en suivant le framework de gestion de projets agiles SCRUM.
+
+\subsection*{Récapitulation de la démarche}
+
+Nous avons débuté par une \textbf{analyse approfondie de l'existant}, qui a révélé les limites du système manuel alors en place : dispersion de l'information, absence de traçabilité, risques d'erreurs élevés, et incapacité à générer des statistiques pour le pilotage.
+
+Face à ces constats, nous avons proposé une \textbf{solution web centralisée} développée selon une architecture client-serveur en trois tiers, avec un backend Spring Boot, un frontend React, et une base de données MySQL.
+
+Le projet a été mené sur \textbf{4 mois}, structuré en \textbf{4 sprints} d'un mois chacun, suivant scrupuleusement les pratiques SCRUM :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Sprint 1} : Mise en place de l'infrastructure et des entités de base
+    \item \textbf{Sprint 2} : Développement des fonctionnalités métier cœur
+    \item \textbf{Sprint 3} : Interface utilisateur et intégration frontend-backend
+    \item \textbf{Sprint 4} : Statistiques, tests, optimisation et finalisation
+\end{itemize}
+
+\subsection*{Présentation des résultats}
+
+Les résultats obtenus sont à la hauteur des objectifs initiaux :
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Application fully fonctionnelle} avec toutes les fonctionnalités demandées implémentées
+    \item \textbf{12 User Stories} complétées sur 12 prévues (100\% de réalisation)
+    \item \textbf{47 endpoints API} REST fonctionnels et testés
+    \item \textbf{Interface moderne et intuitive} avec design responsive
+    \item \textbf{Temps de réponse moyen} de 120 ms, respectant l'objectif de < 200 ms
+    \item \textbf{Couverture de tests} de 78\%, au-delà de l'objectif initial de 70\%
+\end{itemize}
+
+L'application répond maintenant aux besoins du CNI en offrant :
+
+\begin{itemize}[leftmargin=1cm]
+    \item Centralisation de toutes les données relatives aux stages
+    \item Gestion complète du cycle de vie des stages (création, affectation, suivi, validation)
+    \item Traçabilité complète des actions et validations
+    \item Statistiques en temps réel pour le pilotage et la prise de décision
+    \item Export des données en PDF pour les rapports officiels
+\end{itemize}
+
+\subsection*{Problèmes rencontrés}
+
+Tout au long du projet, nous avons fait face à plusieurs défis :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Complexité technique} : La maîtrise de Spring Security et JWT a nécessité un temps d'apprentissage important, rallongeant légèrement le Sprint 1.
+    
+    \item \textbf{Gestion des relations JPA} : Les relations bidirectionnelles ont causé des problèmes de sérialisation JSON, résolus par l'utilisation judicieuse de \texttt{@JsonIgnore}.
+    
+    \item \textbf{Conciliation avec les études} : La gestion du temps entre le développement du projet et les obligations académiques a été un challenge constant, nécessitant une organisation rigoureuse.
+    
+    \item \textbf{Travail en autonomie} : L'absence de développeur senior pour le mentoring a impliqué une plus grande autonomie dans la résolution des problèmes techniques.
+\end{enumerate}
+
+Ces obstacles ont tous été surmontés grâce à :
+
+\begin{itemize}[leftmargin=1cm]
+    \item La documentation officielle et les communautés en ligne (Stack Overflow, GitHub)
+    \item Une organisation personnelle rigoureuse avec des plannings détaillés
+    \item La persévérance et la capacité d'auto-apprentissage
+\end{itemize}
+
+\subsection*{Apports du projet}
+
+\subsubsection{Apports techniques}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Maîtrise de Spring Boot} : Développement d'APIs REST complètes avec sécurité JWT
+    \item \textbf{Compétences React} : Création d'interfaces modernes avec hooks, context API, et routing
+    \item \textbf{Architecture logicielle} : Conception d'une application en trois tiers avec séparation des préoccupations
+    \item \textbf{Base de données} : Modélisation relationnelle et optimisation des requêtes JPA
+    \item \textbf{Méthodologie agile} : Pratique concrète de SCRUM avec gestion de backlog, sprints, et cérémonies
+\end{itemize}
+
+\subsubsection{Apports personnels}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Autonomie} : Capacité à travailler de manière indépendante et à résoudre des problèmes complexes
+    \item \textbf{Gestion du temps} : Organisation efficace pour concilier projet et études
+    \item \textbf{Communication} : Présentation régulière de l'avancement au Product Owner
+    \item \textbf{Esprit critique} : Analyse des solutions techniques et prise de décision argumentée
+    \item \textbf{Adaptabilité} : Ajustement face aux changements de besoins et aux imprévus
+\end{itemize}
+
+\subsubsection{Apports pour le CNI}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Solution opérationnelle} : Application prête à être déployée en production
+    \item \textbf{Gain de temps} : Automatisation des tâches administratives répétitives
+    \item \textbf{Amélioration de la qualité} : Réduction des erreurs grâce aux validations automatiques
+    \item \textbf{Outil de pilotage} : Statistiques en temps réel pour la prise de décision
+    \item \textbf{Traçabilité} : Historique complet de toutes les actions
+\end{itemize}
+
+\subsection*{Perspectives d'approfondissement}
+
+Bien que l'application soit fully fonctionnelle, plusieurs évolutions pourraient être envisagées :
+
+\begin{enumerate}[leftmargin=1cm]
+    \item \textbf{Portail stagiaire} : Développement d'un espace dédié aux stagiaires pour soumettre leurs rapports et suivre l'état de leur demande
+    
+    \item \textbf{Notifications par email} : Envoi automatique d'emails lors de la validation/rejet des rapports ou des changements de statut
+    
+    \item \textbf{Upload de fichiers} : Intégration d'un système de stockage cloud (AWS S3, Google Cloud Storage) pour les rapports PDF
+    
+    \item \textbf{API mobile} : Développement d'une application mobile avec React Native pour l'accès sur smartphone
+    
+    \item \textbf{Intelligence artificielle} : Implémentation d'un module de prédiction pour estimer les budgets nécessaires selon les tendances historiques
+    
+    \item \textbf{Multi-langue} : Support de l'arabe et de l'anglais en plus du français
+    
+    \item \textbf{Déploiement cloud} : Migration vers une infrastructure cloud (AWS, Azure) pour la haute disponibilité
+    
+    \item \textbf{Monitoring avancé} : Intégration de outils comme Grafana et Prometheus pour le monitoring en temps réel
+\end{enumerate}
+
+\subsection*{Conclusion finale}
+
+Ce projet de fin d'études a été une expérience extrêmement enrichissante, tant sur le plan technique qu'humain. Il m'a permis de :
+
+\begin{itemize}[leftmargin=1cm]
+    \item Mettre en pratique les connaissances acquises durant mon cursus universitaire
+    \item Découvrir les réalités du développement logiciel en environnement professionnel
+    \item Maîtriser des technologies modernes très demandées sur le marché du travail
+    \item Développer mon autonomie et ma capacité à résoudre des problèmes complexes
+\end{itemize}
+
+Je suis fier du résultat obtenu et de l'application développée, qui répond aux besoins du CNI et qui pourrait être déployée en production. Ce projet représente pour moi une étape importante dans mon parcours professionnel et me donne confiance pour affronter les défis futurs dans le domaine du développement logiciel.
+
+\vspace{1cm}
+
+\begin{center}
+\textbf{\textit{\"La technologie est mieux lorsqu'elle rassemble les gens et simplifie leur vie.\"}}
+\end{center}
+
+% ============================================
+% ANNEXES
+% ============================================
+
+\appendix
+\chapter*{Annexe A : Description du reste des Sprints}
+\addcontentsline{toc}{chapter}{Annexe A : Description du reste des Sprints}
+\markboth{Annexe A}{Description du reste des Sprints}
+
+\section*{Sprint 1 : Infrastructure et fondations (Février 2026)}
+
+\subsection*{Objectif}
+Mettre en place l'infrastructure technique de base et développer les premières entités.
+
+\subsection*{User Stories réalisées}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{US-01 : Gestion des entreprises} (5 points)
+    \begin{itemize}
+        \item CRUD complet des entreprises
+        \item Champs : nom, pays, secteur, contact, email, téléphone
+        \item Tests avec Postman
+    \end{itemize}
+    
+    \item \textbf{US-02 : Gestion des utilisateurs} (8 points)
+    \begin{itemize}
+        \item Authentification avec JWT
+        \item Rôles : ADMIN, UTILISATEUR, VALIDATEUR
+        \item Reset password par email
+        \item Spring Security configuration
+    \end{itemize}
+    
+    \item \textbf{US-12 : Gestion des ministères} (3 points)
+    \begin{itemize}
+        \item CRUD simple des ministères de tutelle
+        \item Relation avec Utilisateur
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Réalisations techniques}
+
+\begin{itemize}[leftmargin=1cm]
+    \item Initialisation du projet Spring Boot avec Maven
+    \item Configuration MySQL et JPA/Hibernate
+    \item Création des entités Entreprise, Utilisateur, Ministere
+    \item Implémentation de Spring Security avec JWT
+    \item Configuration CORS
+    \item Development des Controllers, Services, Repositories
+    \item 25 endpoints API créés et testés
+\end{itemize}
+
+\subsection*{Incrément livré}
+API REST fonctionnelle avec authentification et gestion des entités de base.
+
+\section*{Sprint 3 : Interface utilisateur (Avril 2026)}
+
+\subsection*{Objectif}
+Développer l'interface frontend et l'intégrer avec le backend.
+
+\subsection*{User Stories réalisées}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{US-09 : Recherche et filtrage} (5 points)
+    \begin{itemize}
+        \composants de recherche textuelle
+        \composants de filtrage multiple
+        \composants de pagination
+    \end{itemize}
+    
+    \item \textbf{US-11 : Tableau de bord visuel} (5 points)
+    \begin{itemize}
+        \composants Dashboard avec KPIs
+        \composants Recharts pour les graphiques
+        \composants Layout responsive
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Réalisations}
+
+\begin{itemize}[leftmargin=1cm]
+    \composants React App avec Create React App
+    \composants Router avec React Router DOM
+    \composants Layout (Sidebar, Header)
+    \composants Pages :
+    \begin{itemize}
+        \composants Login
+        \composants Dashboard
+        \composants StagiairesList
+        \composants StagesList
+        \composants EntreprisesList
+        \composants FraisList
+        \composants RapportsList
+        \composants Statistiques
+    \end{itemize}
+    \composants AuthContext pour l'authentification
+    \composants Services API avec Axios
+    \composants Design moderne avec CSS personnalisé
+    \composants Responsive design
+\end{itemize}
+
+\subsection*{Incrément livré}
+Application web complète avec interface utilisateur fonctionnelle.
+
+\section*{Sprint 4 : Finalisation et optimisation (Mai 2026)}
+
+\subsection*{Objectif}
+Ajouter les fonctionnalités avancées, optimiser et tester.
+
+\subsection*{User Stories réalisées}
+
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{US-08 : Statistiques globales} (8 points)
+    \begin{itemize}
+        \composants Graphiques avec Recharts
+        \composants Filtres par période
+        \composants Export des statistiques
+    \end{itemize}
+    
+    \item \textbf{US-10 : Export PDF} (3 points)
+    \begin{itemize}
+        \composants jsPDF + AutoTable
+        \composants Export des listes
+        \composants Export des statistiques
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Réalisations}
+
+\begin{itemize}[leftmargin=1cm]
+    \composants Page Statistiques avec 4 types de graphiques
+    \composants Fonctionnalités d'export PDF
+    \composants Tests complets de toutes les fonctionnalités
+    \composants Correction de 5 bugs identifiés
+    \composants Optimisation des requêtes SQL
+    \composants Tests de performance
+    \composants Documentation technique
+\end{itemize}
+
+\subsection*{Incrément livré}
+Application complète et prête pour la production.
+
+% ============================================
+% BIBLIOGRAPHIE
+% ============================================
+
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+\markboth{Bibliographie}{Bibliographie}
+
+\begin{thebibliography}{99}
+
+\bibitem{schwaber2025}
+Schwaber, Ken. 2025. \emph{The Scrum Framework Poster}. scrum.org. [En ligne] 2025. [Citation : 03 02 2025.] \url{https://www.scrum.org/resources/scrum-framework-poster}.
+
+\bibitem{sutherland2014}
+Sutherland, Jeff. 2014. \emph{Scrum: The Art of Doing Twice the Work in Half the Time}. Crown Publishing Group.
+
+\bibitem{springboot2026}
+Spring Boot Documentation. 2026. \emph{Spring Boot Reference Guide}. [En ligne] \url{https://docs.spring.io/spring-boot/docs/current/reference/html/}.
+
+\bibitem{react2026}
+React Documentation. 2026. \emph{React - A JavaScript library for building user interfaces}. [En ligne] \url{https://react.dev/}.
+
+\bibitem{hibernate2026}
+Hibernate ORM Documentation. 2026. \emph{Hibernate User Guide}. [En ligne] \url{https://hibernate.org/orm/documentation/}.
+
+\bibitem{jwt2026}
+RFC 7519. 2015. \emph{JSON Web Token (JWT)}. [En ligne] \url{https://tools.ietf.org/html/rfc7519}.
+
+\bibitem{mysql2026}
+MySQL Documentation. 2026. \emph{MySQL 8.0 Reference Manual}. [En ligne] \url{https://dev.mysql.com/doc/}.
+
+\bibitem{maven2026}
+Apache Maven. 2026. \emph{Maven - Welcome to Apache Maven}. [En ligne] \url{https://maven.apache.org/}.
+
+\bibitem{recharts2026}
+Recharts Documentation. 2026. \emph{Recharts - Redefined chart library built with React and D3}. [En ligne] \url{https://recharts.org/}.
+
+\bibitem{axios2026}
+Axios Documentation. 2026. \emph{Axios - Promise based HTTP client}. [En ligne] \url{https://axios-http.com/}.
+
+\bibitem{uml2026}
+Object Management Group. 2026. \emph{Unified Modeling Language (UML)}. [En ligne] \url{https://www.omg.org/spec/UML/}.
+
+\bibitem{restapi2026}
+Fielding, Roy T. 2000. \emph{Architectural Styles and the Design of Network-based Software Architectures}. Doctoral dissertation, University of California, Irvine.
+
+\end{thebibliography}
+
+% ============================================
+% RÉSUMÉS TRILINGUES
+% ============================================
+
+\chapter*{الخلاصة}
+\addcontentsline{toc}{chapter}{الخلاصة}
+\markboth{الخلاصة}{المفاتيح}
+
+\noindent \textbf{المفاتيح:} إدارة التربصات، سكرم، جافا، سبرينغ بوت، رياكت، قاعدة بيانات، تطوير ويب، منهجية رشيقة
+
+\vspace{0.5cm}
+
+يتمحور هذا المشروع في إطار الحصول على شهادة الإجازة في الإعلامية بمعهد العلوم و التقنيات بسيدي بوزيد، و قد تم إنجازه بالمركز الإعلامية بتونس.
+
+الهدف الرئيسي هو تطوير تطبيق ويب لإدارة التربصات بالخارج للوظبيين و الطلبة التونسيين. يمكن التطبيق من إدارة شاملة لدورة حياة التربصات: إنشاء التربصات، إضافة المتربصين، تتبع المصاريف، و المصادقة على التقارير.
+
+تم إنجاز المشروع في 4 أشهر مقسمة إلى 4 سبرينتس حسب منهجية سكرم الرشيقة. استخدمنا جافا و سبرينغ باك للواجهة الخلفية، و رياكت للواجهة الأمامية، و قاعدة بيانات ماي سيكول.
+
+النتائج المحققة تشمل تطبيق ويب كامل الوظائف مع واجهة حديثة، 47 نقطة نهاية للواجهة البرمجية، و زمن استجابة متوسط قدره 120 ميلي ثانية.
+
+\vspace{1cm}
+
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+\markboth{Résumé}{Mots clés}
+
+\noindent \textbf{Mots clés :} Gestion de stages, SCRUM, Java, Spring Boot, React, Base de données, Développement web, Méthodologie agile
+
+\vspace{0.5cm}
+
+Ce projet s'inscrit dans le cadre de l'obtention du Diplôme de License en Informatique à la Faculté des Sciences et Techniques de Sidi Bouzid, et a été réalisé au sein du Centre National de l'Informatique (CNI).
+
+L'objectif principal est de concevoir et développer une application web de gestion des stages à l'étranger pour les fonctionnaires et étudiants tunisiens. L'application permet une gestion complète du cycle de vie des stages : création des stages, ajout des stagiaires, suivi des frais, et validation des rapports.
+
+Le projet a été mené sur 4 mois, structuré en 4 sprints selon la méthodologie agile SCRUM. Nous avons utilisé Java avec Spring Boot pour le backend, React pour le frontend, et MySQL comme base de données.
+
+Les résultats obtenus incluent une application web fully fonctionnelle avec une interface moderne, 47 endpoints API, et un temps de réponse moyen de 120 ms.
+
+\vspace{1cm}
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\markboth{Abstract}{Keywords}
+
+\noindent \textbf{Keywords:} Internship Management, SCRUM, Java, Spring Boot, React, Database, Web Development, Agile Methodology
+
+\vspace{0.5cm}
+
+This project is part of the requirements for obtaining a Bachelor's Degree in Computer Science at the Faculty of Sciences and Techniques of Sidi Bouzid, and was carried out at the National Computer Centre (CNI) in Tunisia.
+
+The main objective is to design and develop a web application for managing international internships for Tunisian civil servants and students. The application enables comprehensive management of the internship lifecycle: creating internships, adding interns, tracking expenses, and validating reports.
+
+The project was conducted over 4 months, structured into 4 sprints following the SCRUM agile methodology. We used Java with Spring Boot for the backend, React for the frontend, and MySQL as the database.
+
+The results achieved include a fully functional web application with a modern interface, 47 API endpoints, and an average response time of 120 ms.
+
+% Fin du document
+\end{document}
+

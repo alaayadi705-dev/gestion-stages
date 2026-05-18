@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head><title>Rapports</title></head>
+<body>
+    <div th:fragment="content">
+        <h1 class="h2 pt-3 pb-2 mb-3 border-bottom">Rapports de Stage</h1>
+        <div class="card"><div class="card-body">
+            <table class="table table-hover">
+                <thead><tr><th>Titre</th><th>Statut</th><th>Date Dépôt</th><th>Stagiaire</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="r : ${rapports}">
+                        <td th:text="${r.titre}"></td>
+                        <td><span class="badge bg-info" th:text="${r.statut}"></span></td>
+                        <td th:text="${r.dateDepot}"></td>
+                        <td th:text="${r.stagiaire != null ? r.stagiaire.nom : 'N/A'}"></td>
+                        <td><a th:href="@{/web/rapports/delete/{id}(id=${r.id})}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div></div>
+    </div>
+</body>
+</html>

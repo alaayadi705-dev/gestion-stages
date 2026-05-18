@@ -20,6 +20,10 @@ public class Entreprise {
     private String email;
 
     private String telephone;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ministere_id")
+    private Ministere ministere;
 
     // relation avec stages
     @OneToMany(
@@ -77,6 +81,14 @@ public void setId(Long id) {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public Ministere getMinistere() {
+        return ministere;
+    }
+
+    public void setMinistere(Ministere ministere) {
+        this.ministere = ministere;
     }
 
     public List<Stage> getStages() {

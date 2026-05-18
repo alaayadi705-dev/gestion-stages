@@ -28,6 +28,9 @@ public class Stagiaire {
 
     private String grade;
     private String fonction;
+    private String statut;
+    private String numeroPermission;
+
     @ManyToOne
     @JoinColumn(name = "stage_id")
     @JsonIgnoreProperties({"stagiaires"})
@@ -40,9 +43,18 @@ public class Stagiaire {
     @JsonIgnoreProperties({"stages"})
     private Entreprise entreprise;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Utilisateur utilisateur;
+
     public Stagiaire() {}
 
     // ===== GETTERS SETTERS =====
+
+    public Utilisateur getUtilisateur() { return utilisateur; }
+    public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
+
+
 
     public Long getId() { return id; }
 
@@ -89,6 +101,28 @@ public class Stagiaire {
     this.stage = stage;
     }
     
+    public String getStatut() {
+        return statut;
+    }
 
-    
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    public String getNumeroPermission() {
+        return numeroPermission;
+    }
+
+    public void setNumeroPermission(String numeroPermission) {
+        this.numeroPermission = numeroPermission;
+    }
+
+    @PrePersist
+    public void generateNumeroPermission() {
+        if (this.numeroPermission == null || this.numeroPermission.isEmpty()) {
+            int year = java.time.Year.now().getValue() % 100;
+            long random = (long) (Math.random() * 9000000) + 1000000;
+            this.numeroPermission = String.format("%d/%d/1", year, random);
+        }
+    }
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head><title>Entreprises</title></head>
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Entreprises Partenaires</h1>
+            <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nouvelle Entreprise</a>
+        </div>
+        <div class="card"><div class="card-body">
+            <table class="table table-hover">
+                <thead><tr><th>Nom</th><th>Adresse</th><th>Email</th><th>Téléphone</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="ent : ${entreprises}">
+                        <td th:text="${ent.nom}"></td>
+                        <td th:text="${ent.adresse}"></td>
+                        <td th:text="${ent.email}"></td>
+                        <td th:text="${ent.telephone}"></td>
+                        <td>
+                            <a th:href="@{/web/entreprises/delete/{id}(id=${ent.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ?')"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div></div>
+    </div>
+</body>
+</html>

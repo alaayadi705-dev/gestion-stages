@@ -1,6 +1,7 @@
 package com.example.gestionstages.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -30,6 +31,8 @@ public class Stage {
 
     private String statut;
 
+    private Double budgetPropose;
+
     // relation entreprise
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "entreprise_id")
@@ -41,16 +44,23 @@ public class Stage {
     private List<RapportStage> rapports;
 
     // relation stagiaires
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"stage", "entreprise"})
     private List<Stagiaire> stagiaires;
 
-    // relation frais
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("stage")
     private List<Frais> frais;
 
     public Stage() {}
+
+    public Double getBudgetPropose() {
+        return budgetPropose;
+    }
+
+    public void setBudgetPropose(Double budgetPropose) {
+        this.budgetPropose = budgetPropose;
+    }
 
     public Long getId() {
         return id;

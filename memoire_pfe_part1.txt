@@ -1,0 +1,470 @@
+République Tunisienne                    Université de Kairouan
+Ministère de l'Enseignement Supérieur      Faculté des Sciences et Techniques
+et de la Recherche Scientifique            de Sidi Bouzid
+
+
+N° d'ordre : ……
+
+
+===============================================================================
+
+              MÉMOIRE DE PROJET DE FIN D'ÉTUDES
+
+              En vue de l'obtention du
+              Diplôme de License en Informatique
+
+              Présenté par
+              Ayadi Ala Eddine
+
+
+              Sujet :
+
+        Guide de conduite d'un projet informatique 
+        selon le cadre de développement SCRUM
+        
+        Application : Système de Gestion des Stages à l'Étranger
+
+
+              Soutenu en Juin 2026, devant le jury composé de :
+              
+              M./Mme ……………………………… Président(e)
+              M./Mme ……………………………… Rapporteur
+              M./Mme ……………………………… Encadrant(e)
+
+
+              A.U. : 2025-2026
+
+
+              Lieu de stage : Centre National de l'Informatique (CNI)
+
+===============================================================================
+
+
+================================================================================
+                                  DÉDICACES
+================================================================================
+
+
+    À mes chers parents,
+    Pour leurs sacrifices, leur amour et leur soutien inconditionnel.
+
+    À ma famille,
+    Pour leurs encouragements constants.
+
+    À mes amis et collègues,
+    Pour leur accompagnement tout au long de ce parcours.
+
+    À tous ceux qui croient en la puissance de la technologie
+    pour transformer le monde.
+
+
+================================================================================
+                                REMERCIEMENTS
+================================================================================
+
+
+Je tiens tout d'abord à exprimer ma profonde gratitude à Dieu le tout puissant de m'avoir donné la force, la patience et la volonté pour mener à bien ce projet.
+
+Je souhaite adresser mes plus sincères remerciements à l'ensemble du corps enseignant de la Faculté des Sciences et Techniques de Sidi Bouzid, pour la qualité de la formation qu'ils m'ont dispensée tout au long de mon cursus universitaire.
+
+Mes remerciements vont particulièrement à mon encadrant académique, pour ses précieux conseils, sa disponibilité et son accompagnement tout au long de la réalisation de ce projet.
+
+Je tiens également à remercier le Centre National de l'Informatique (CNI) pour m'avoir accueilli en stage et offert un environnement de travail propice à l'apprentissage et à l'innovation.
+
+Je remercie chaleureusement tous les professionnels du CNI qui m'ont fait part de leur expertise et m'ont guidé dans la compréhension des enjeux métier liés à la gestion des stages à l'étranger.
+
+Enfin, je remercie ma famille et mes amis pour leur soutien moral et leurs encouragements constants durant cette période de formation et de réalisation du projet.
+
+
+================================================================================
+                              TABLE DES MATIÈRES
+================================================================================
+
+Dédicaces ................................................................ i
+Remerciements ............................................................ ii
+Table des matières ......................................................... iii
+Liste des figures ........................................................... v
+Liste des tableaux .......................................................... vi
+Glossaire ................................................................. viii
+Introduction Générale ...................................................... 1
+
+Chapitre 1 : Cadre du projet ............................................... 2
+  1. Présentation de l'organisme d'accueil ............................. 2
+  2. Étude préalable ................................................... 2
+     2.1. Étude de l'existant .......................................... 2
+     2.2. Critique de l'existant ....................................... 2
+     2.3. Solution envisagée ........................................... 2
+  3. Choix méthodologiques et organisation du travail .................... 2
+     3.1. Le framework SCRUM ........................................... 2
+     3.2. La méthodologie Orientée Objet ............................... 2
+     3.3. Organisation du travail ...................................... 2
+  Conclusion ............................................................. 2
+
+Chapitre 2 : Analyse Préliminaire ........................................ 3
+  1. Pilotage du projet avec SCRUM ..................................... 3
+     1.1. Présentation des rôles de SCRUM .............................. 3
+     1.2. Présentation des parties prenantes externes .................. 3
+     1.3. Le Product Backlog ........................................... 3
+  2. Architecture de l'application ..................................... 3
+     2.1. Choix architectural .......................................... 3
+     2.2. Modélisation de l'architecture ............................... 3
+  3. Environnement de travail .......................................... 3
+     3.1. Logiciels de gestion de projet ............................... 3
+     3.2. Logiciels de développement ................................... 3
+  Conclusion ............................................................. 3
+
+Chapitre 3 : Déroulé des sprints ......................................... 4
+  1. Planification des sprints ......................................... 4
+  2. Exemple détaillé d'un sprint ...................................... 4
+     2.1. Objectif du sprint ........................................... 4
+     2.2. Tâches réalisées ............................................. 4
+     2.3. Résultats .................................................... 4
+     2.4. Revue du Sprint .............................................. 4
+  3. Gestion des obstacles ............................................. 4
+     3.1. Principaux défis rencontrés .................................. 4
+     3.2. Solutions mises en place ..................................... 4
+  Conclusion ............................................................. 4
+
+Chapitre 4 : Résultats finaux et livrables ............................... 5
+  1. Démonstration des fonctionnalités réalisées ....................... 5
+  2. Mesures de performance ............................................ 5
+  3. Tests réalisés et améliorations ................................... 5
+  Conclusion ............................................................. 5
+
+Conclusion Générale ...................................................... 6
+Annexe A : Description du reste des Sprints .............................. 7
+Bibliographie ............................................................ 8
+Résumés trilingues ....................................................... 9
+
+
+================================================================================
+                               LISTE DES FIGURES
+================================================================================
+
+Figure 1 : Processus de développement selon SCRUM .......................... 15
+Figure 2 : Diagramme de classes de l'application ......................... 22
+Figure 3 : Diagramme de séquence - Authentification ...................... 28
+Figure 4 : Architecture de déploiement ................................. 30
+Figure 5 : Page d'authentification ..................................... 45
+Figure 6 : Tableau de bord principal ................................... 47
+Figure 7 : Interface de gestion des stagiaires ......................... 49
+Figure 8 : Formulaire de création d'un stage ......................... 51
+Figure 9 : Gestion des frais de stage ................................ 53
+Figure 10 : Interface de validation des rapports ....................... 55
+Figure 11 : Page des statistiques .................................... 57
+Figure 12 : Exemple de document PDF exporté ............................ 59
+Figure 13 : Graphique de Burndown du Sprint 2 ......................... 61
+
+
+================================================================================
+                              LISTE DES TABLEAUX
+================================================================================
+
+Tableau 1 : Critique de l'existant ..................................... 12
+Tableau 2 : Planification générale des sprints ......................... 18
+Tableau 3 : Product Backlog initial du projet .......................... 25
+Tableau 4 : Technologies backend ....................................... 32
+Tableau 5 : Technologies frontend ...................................... 33
+Tableau 6 : Planification détaillée des sprints ........................ 38
+Tableau 7 : Obstacles et solutions mises en place ...................... 43
+Tableau 8 : Mesures de performance de l'application .................... 60
+Tableau 9 : Principaux bugs corrigés ................................... 64
+
+
+================================================================================
+                                 GLOSSAIRE
+================================================================================
+
+Terme                 | Définition
+----------------------|----------------------------------------------------------------
+SCRUM                 | Framework agile de gestion de projet basé sur des itérations
+                      | courtes appelées sprints
+Product Backlog       | Liste priorisée des fonctionnalités à développer dans le produit
+Sprint                | Itération de développement de durée fixe (2 à 4 semaines)
+User Story            | Description simple d'une fonctionnalité du point de vue utilisateur
+Daily Scrum           | Réunion quotidienne de 15 minutes pour synchroniser l'équipe
+Sprint Review         | Présentation de l'incrément aux stakeholders à la fin du sprint
+Sprint Retrospective  | Réunion d'amélioration continue après chaque sprint
+Product Owner         | Responsable de la vision produit et de la priorisation du backlog
+Scrum Master          | Facilitateur qui aide l'équipe à suivre les pratiques Scrum
+Incrément             | Résultat concret et fonctionnel produit à la fin d'un sprint
+JPA                   | Java Persistence API - API de persistance des données en Java
+ORM                   | Object-Relational Mapping - Technique de mapping objet-relationnel
+REST                  | Representational State Transfer - Style d'architecture web
+JWT                   | JSON Web Token - Standard d'authentification web
+CRUD                  | Create, Read, Update, Delete - Opérations de base sur les données
+
+
+================================================================================
+                           INTRODUCTION GÉNÉRALE
+================================================================================
+
+La mobilité internationale des stagiaires représente aujourd'hui un enjeu majeur pour les institutions académiques et gouvernementales tunisiennes. Dans un contexte de mondialisation croissante, les opportunités de stages à l'étranger offrent aux étudiants et professionnels une expérience invaluable pour développer leurs compétences, enrichir leur culture et renforcer leur employabilité sur le marché international.
+
+Cependant, la gestion administrative de ces stages internationaux demeure un processus complexe, impliquant de multiples acteurs : les stagiaires eux-mêmes, les établissements d'enseignement, les entreprises d'accueil à l'étranger, les ministères de tutelle, et les organismes de financement. Chaque étape du processus – de la candidature à la validation du rapport de stage en passant par la gestion des frais et le suivi administratif – génère une documentation importante qui doit être organisée, tracée et archivée de manière rigoureuse.
+
+Avant la mise en place de notre solution, le Centre National de l'Informatique (CNI) gérait ces processus principalement à travers des outils bureautiques classiques (tableurs, documents Word) et des échanges par email. Cette approche présentait plusieurs limitations : dispersion de l'information, difficulté de suivi en temps réel, risques d'erreurs lors de la saisie manuelle, absence de statistiques consolidées, et manque de traçabilité des validations.
+
+Face à ces constats, il est apparu nécessaire de concevoir et développer une application web dédiée à la gestion des stages à l'étranger, permettant de centraliser l'ensemble des informations, d'automatiser les processus métier, et de fournir des outils de pilotage et de décision aux différents acteurs impliqués.
+
+Ce projet s'inscrit dans le cadre de l'obtention du Diplôme de License en Informatique à la Faculté des Sciences et Techniques de Sidi Bouzid. Il a été réalisé au sein du Centre National de l'Informatique (CNI) sur une durée de quatre mois, en suivant le framework de gestion de projets agiles SCRUM.
+
+L'objectif principal de ce mémoire est de documenter l'ensemble du processus de développement de cette application, depuis l'analyse des besoins jusqu'à la réalisation finale, en passant par les choix méthodologiques, architecturaux et techniques.
+
+Ce document est structuré en quatre chapitres principaux :
+
+• Le Chapitre 1 présente le cadre général du projet, incluant l'organisme d'accueil, l'étude de l'existant, la critique de celui-ci, et les choix méthodologiques adoptés, notamment le framework SCRUM et la méthodologie orientée objet.
+
+• Le Chapitre 2 détaille l'analyse préliminaire du projet, avec la présentation des rôles SCRUM, le Product Backlog initial, l'architecture technique de l'application, et l'environnement de travail mis en place.
+
+• Le Chapitre 3 décrit le déroulé des sprints de développement, incluant la planification globale, un exemple détaillé d'un sprint représentatif, et la gestion des obstacles rencontrés.
+
+• Le Chapitre 4 présente les résultats finaux obtenus, les livrables produits, les démonstrations des fonctionnalités implémentées, ainsi que les tests réalisés et les améliorations apportées.
+
+Enfin, nous conclurons ce mémoire par une synthèse générale présentant les apports du projet, les difficultés rencontrées, et les perspectives d'évolution de l'application.
+
+
+================================================================================
+                      CHAPITRE 1 : CADRE DU PROJET
+================================================================================
+
+INTRODUCTION
+
+Ce premier chapitre a pour objectif de présenter le cadre général dans lequel s'inscrit ce projet de fin d'études. Nous commencerons par présenter l'organisme d'accueil, le Centre National de l'Informatique (CNI), puis nous effectuerons une étude préalable détaillée de l'existant, en identifiant ses limites et les solutions envisagées. Enfin, nous exposerons les choix méthodologiques et organisationnels adoptés, notamment le framework SCRUM et la méthodologie de développement orientée objet.
+
+
+1. PRÉSENTATION DE L'ORGANISME D'ACCUEIL
+
+Le Centre National de l'Informatique (CNI) est un établissement public tunisien placé sous la tutelle du Ministère de l'Industrie, des Petites et Moyennes Entreprises. Fondé avec pour mission d'accompagner la transformation numérique des entreprises et des institutions publiques tunisiennes, le CNI joue un rôle stratégique dans le développement du secteur des technologies de l'information en Tunisie.
+
+1.1. Missions principales
+
+Les missions fondamentales du CNI s'articulent autour de plusieurs axes :
+
+• Développement de solutions informatiques : Conception et réalisation d'applications métier adaptées aux besoins des entreprises et administrations publiques.
+
+• Conseil et accompagnement : Assistance aux organisations dans leur démarche de transformation digitale et modernisation de leurs systèmes d'information.
+
+• Formation et transfert de compétences : Organisation de programmes de formation pour renforcer les capacités techniques des professionnels tunisiens.
+
+• Gestion de projets informatiques : Pilotage de projets complexes en utilisant les méthodologies agiles et les meilleures pratiques du secteur.
+
+1.2. Structure organisationnelle
+
+Le CNI est structuré en plusieurs départements spécialisés :
+
+• Direction Technique : Responsable du développement et de la maintenance des applications.
+
+• Direction des Projets : En charge du pilotage et du suivi des projets clients.
+
+• Direction Commerciale : Gestion de la relation client et développement des affaires.
+
+• Direction des Ressources Humaines : Gestion du capital humain et des compétences.
+
+1.3. Contexte du stage
+
+Mon stage au sein du CNI s'est déroulé dans le département technique, plus précisément au sein de l'équipe de développement d'applications web. J'ai eu l'opportunité de travailler sur un projet concret répondant à un besoin réel : la digitalisation du processus de gestion des stages à l'étranger pour les fonctionnaires et étudiants tunisiens.
+
+Ce projet m'a permis de mettre en pratique mes connaissances académiques tout en découvrant les réalités du développement logiciel en environnement professionnel, notamment l'utilisation des méthodologies agiles, le travail en équipe, et la gestion de projet selon le framework SCRUM.
+
+
+2. ÉTUDE PRÉALABLE
+
+2.1. Étude de l'existant
+
+Avant de concevoir notre solution, il était essentiel d'analyser le système existant de gestion des stages à l'étranger au sein du CNI et des institutions partenaires. Cette étude nous a permis de comprendre les processus métier, d'identifier les acteurs impliqués, et de recenser les outils actuellement utilisés.
+
+Processus actuel de gestion des stages
+
+Le processus traditionnel de gestion des stages à l'étranger se décompose en plusieurs étapes :
+
+1. Demande de stage : Le candidat remplit un formulaire papier ou un document Word contenant ses informations personnelles, son projet de stage, et l'entreprise d'accueil.
+
+2. Vérification administrative : Les documents sont vérifiés manuellement par le service administratif pour confirmer leur conformité.
+
+3. Validation hiérarchique : La demande est transmise aux responsables pour approbation, souvent par échange d'emails ou de notes internes.
+
+4. Gestion des frais : Les frais de stage (transport, hébergement, subsistance) sont calculés manuellement selon des barèmes prédéfinis et approuvés par les financeurs.
+
+5. Suivi pendant le stage : Le suivi se fait par contacts téléphoniques occasionnels et emails, sans traçabilité centralisée.
+
+6. Rapport de stage : À la fin du stage, le stagiaire dépose un rapport papier ou PDF par email, qui est ensuite relu et validé manuellement.
+
+7. Archivage : Tous les documents sont archivés physiquement dans des dossiers papier, rendant la recherche et la consultation fastidieuses.
+
+Outils utilisés
+
+• Microsoft Excel : Pour le suivi des stagiaires dans des tableaux (un fichier par année ou par ministère).
+
+• Microsoft Word : Pour la rédaction des conventions, attestations, et rapports.
+
+• Email : Pour les échanges entre les différents acteurs (stagiaires, responsables, validateurs).
+
+• Stockage local : Les documents sont stockés sur des disques durs locaux ou des clés USB, sans sauvegarde centralisée.
+
+• Archives physiques : Les documents papier sont conservés dans des armoires, occupant un espace considérable.
+
+2.2. Critique de l'existant
+
+L'analyse du système existant a révélé plusieurs limitations majeures qui justifient le développement d'une nouvelle solution :
+
+┌─────────────────────────────┬────────────────────────────────────────────────────┐
+│ Problème identifié          │ Impact                                           │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Dispersion de l'information │ Les données sont éparpillées dans multiples        │
+│                             │ fichiers Excel, emails et documents Word, rendant  │
+│                             │ la recherche d'information longue et fastidieuse  │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Absence de centralisation   │ Aucune vue d'ensemble sur l'ensemble des stages   │
+│                             │ en cours, terminés ou planifiés                   │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Traçabilité insuffisante    │ Impossible de savoir qui a validé quoi et quand,  │
+│                             │ ce qui pose des problèmes de transparence         │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Risque d'erreurs élevé      │ La saisie manuelle répétitive augmente les risques│
+│                             │ d'erreurs et d'incohérences dans les données      │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Perte de temps considérable │ Les tâches administratives répétitives consomment │
+│                             │ un temps précieux                                  │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Statistiques inexistantes   │ Aucune capacité à générer des rapports statistiques│
+│                             │ pour le pilotage et la prise de décision          │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Sécurité des données faible │ Absence de contrôle d'accès granulaire, risque de │
+│                             │ perte de données en cas de panne matérielle       │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Difficulté de collaboration │ Les échanges par email créent de la confusion et  │
+│                             │ des versions multiples de documents               │
+├─────────────────────────────┼────────────────────────────────────────────────────┤
+│ Archivage volumineux        │ Les archives physiques occupent un espace         │
+│                             │ considérable et se dégradent avec le temps        │
+└─────────────────────────────┴────────────────────────────────────────────────────┘
+
+Tableau 1 : Critique de l'existant
+
+2.3. Solution envisagée
+
+Face à ces constats, nous avons proposé de développer une application web centralisée de gestion des stages à l'étranger, offrant les fonctionnalités suivantes :
+
+• Centralisation des données : Une base de données unique pour toutes les informations relatives aux stages, stagiaires, entreprises et rapports.
+
+• Gestion des rôles et permissions : Un système d'authentification sécurisé avec des rôles différenciés (Administrateur, Utilisateur, Validateur) pour garantir la sécurité et la confidentialité des données.
+
+• Automatisation des processus : Calcul automatique des durées de stage, génération automatique des numéros de permission, mise à jour automatique des statuts.
+
+• Tableau de bord statistique : Des graphiques et indicateurs en temps réel pour le pilotage et la prise de décision.
+
+• Interface moderne et intuitive : Une interface utilisateur ergonomique développée avec React, offrant une expérience utilisateur fluide.
+
+• Traçabilité complète : Historique de toutes les actions et validations pour une transparence totale.
+
+• Recherche et filtrage avancés : Capacité à rechercher et filtrer les stages par multiple critères (pays, date, statut, ministère, etc.).
+
+• Export et reporting : Possibilité d'exporter les données et générer des rapports pour les décideurs.
+
+
+3. CHOIX MÉTHODOLOGIQUES ET ORGANISATION DU TRAVAIL
+
+3.1. Le framework de gestion de projets agiles SCRUM
+
+Pour mener à bien ce projet, nous avons choisi d'adopter le framework SCRUM, l'une des méthodologies agiles les plus utilisées dans le développement logiciel moderne.
+
+Pourquoi SCRUM ?
+
+Le choix de SCRUM s'est imposé naturellement pour plusieurs raisons :
+
+• Adaptabilité : SCRUM permet de s'adapter rapidement aux changements de besoins, ce qui est essentiel dans un projet où les spécifications peuvent évoluer.
+
+• Livraisons incrémentales : Le projet est découpé en sprints courts (2 à 4 semaines), permettant de livrer régulièrement des fonctionnalités opérationnelles.
+
+• Transparence : Les cérémonies SCRUM (Daily, Review, Retrospective) assurent une visibilité totale sur l'avancement du projet.
+
+• Amélioration continue : La rétrospective permet d'identifier les points d'amélioration à chaque fin de sprint.
+
+• Implication du client : Le Product Owner représente les besoins métier et valide les fonctionnalités à chaque sprint.
+
+Les principes fondamentaux de SCRUM
+
+SCRUM repose sur trois piliers fondamentaux :
+
+1. Transparence : Tous les aspects du processus doivent être visibles par tous les membres de l'équipe.
+
+2. Inspection : Vérification régulière de l'avancement et des artefacts pour détecter les écarts.
+
+3. Adaptation : Ajustement rapide du processus si des écarts sont identifiés.
+
+Les artefacts SCRUM
+
+• Product Backlog : Liste priorisée de toutes les fonctionnalités souhaitées pour le produit.
+
+• Sprint Backlog : Sous-ensemble du Product Backlog sélectionné pour le sprint en cours.
+
+• Incrément : Somme de tous les éléments du Product Backlog complétés pendant un sprint et les sprints précédents.
+
+Les cérémonies SCRUM
+
+• Sprint Planning : Réunion de planification du sprint (durée : 2-4 heures).
+
+• Daily Scrum : Réunion quotidienne de 15 minutes pour synchroniser l'équipe.
+
+• Sprint Review : Présentation de l'incrément aux stakeholders (durée : 1-2 heures).
+
+• Sprint Retrospective : Réunion d'amélioration continue (durée : 1-2 heures).
+
+3.2. La méthodologie de développement Orientée Objet
+
+En parallèle de SCRUM, nous avons adopté la programmation orientée objet (POO) comme paradigme de développement, car elle offre plusieurs avantages :
+
+• Modularité : Le code est organisé en classes indépendantes, facilitant la maintenance et l'évolution.
+
+• Réutilisabilité : Les classes peuvent être réutilisées dans différents contextes, réduisant la duplication de code.
+
+• Extensibilité : L'héritage et le polymorphisme permettent d'étendre facilement les fonctionnalités.
+
+• Modélisation naturelle : Les objets représentent naturellement les entités métier (Stagiaire, Stage, Entreprise, etc.).
+
+Application dans notre projet
+
+Dans notre application, nous avons identifié les principales entités métier et les avons modélisées sous forme de classes Java :
+
+• Stagiaire : Représente un stagiaire avec ses informations personnelles, académiques et professionnelles.
+
+• Stage : Représente un stage à l'étranger avec ses caractéristiques (dates, pays, entreprise, budget).
+
+• Entreprise : Représente une entreprise d'accueil à l'étranger.
+
+• Utilisateur : Représente un utilisateur du système avec ses rôles et permissions.
+
+• RapportStage : Représente le rapport de stage soumis par un stagiaire.
+
+• Frais : Représente les frais associés à un stage.
+
+• Ministere : Représente un ministère de tutelle.
+
+3.3. Organisation du travail
+
+Le projet a été organisé sur une durée de 4 mois, structuré en 4 sprints de durée égale :
+
+┌──────────┬──────────┬────────────────────────────────────────────┐
+│ Sprint   │ Durée    │ Objectif principal                        │
+├──────────┼──────────┼────────────────────────────────────────────┤
+│ Sprint 1 │ 1 mois   │ Mise en place de l'infrastructure et      │
+│          │          │ gestion des entités de base               │
+├──────────┼──────────┼────────────────────────────────────────────┤
+│ Sprint 2 │ 1 mois   │ Développement des fonctionnalités métier  │
+│          │          │ principales                                │
+├──────────┼──────────┼────────────────────────────────────────────┤
+│ Sprint 3 │ 1 mois   │ Interface frontend et intégration avec le │
+│          │          │ backend                                    │
+├──────────┼──────────┼────────────────────────────────────────────┤
+│ Sprint 4 │ 1 mois   │ Tests, optimisation et fonctionnalités    │
+│          │          │ avancées                                   │
+└──────────┴──────────┴────────────────────────────────────────────┘
+
+Tableau 2 : Planification générale des sprints
+
+CONCLUSION
+
+Ce premier chapitre nous a permis de poser le cadre général du projet. Nous avons présenté le Centre National de l'Informatique, analysé le système existant et ses limites, et justifié le besoin d'une nouvelle solution. Nous avons également exposé nos choix méthodologiques, en particulier l'adoption du framework SCRUM pour la gestion de projet et la programmation orientée objet pour le développement.
+
+Le chapitre suivant détaillera l'analyse préliminaire du projet, incluant les rôles SCRUM, le Product Backlog initial, l'architecture technique de l'application, et l'environnement de travail mis en place.

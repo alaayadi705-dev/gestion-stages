@@ -1,0 +1,60 @@
+@startuml
+title Diagramme de Cas d'Utilisation - Gestion des Stages à l'Étranger
+
+left to right direction
+
+actor "👨‍💼 Administrateur" as Admin
+actor "👨‍🎓 Gestionnaire" as User  
+actor "🧑‍🏫 Validateur" as Validator
+
+rectangle "Système de Gestion des Stages" {
+    
+    usecase "Gérer les Entreprises" as UC1
+    usecase "Gérer les Utilisateurs" as UC2
+    usecase "Consulter Statistiques" as UC3
+    usecase "Gérer Ministères" as UC4
+    usecase "Exporter Données PDF" as UC5
+    
+    usecase "Gérer Stagiaires" as UC6
+    usecase "Gérer Stages" as UC7
+    usecase "Affecter Stagiaires à Stages" as UC8
+    usecase "Gérer Frais" as UC9
+    usecase "Rechercher & Filtrer" as UC10
+    usecase "Consulter Dashboard" as UC11
+    
+    usecase "Valider Rapports" as UC12
+    usecase "Rejeter Rapports" as UC13
+    usecase "Consulter Rapports" as UC14
+    
+    usecase "Authentifier Utilisateur" as UC15
+    usecase "Générer Token JWT" as UC16
+    usecase "Générer N° Permission" as UC17
+    usecase "Calculer Durée Stage" as UC18
+    usecase "Calculer Total Frais" as UC19
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+
+Validator --> UC12
+Validator --> UC13
+Validator --> UC14
+
+UC1 ..> UC15 : <<include>>
+UC2 ..> UC15 : <<include>>
+UC6 ..> UC17 : <<include>>
+UC7 ..> UC18 : <<include>>
+UC9 ..> UC19 : <<include>>
+UC12 ..> UC15 : <<include>>
+
+@enduml

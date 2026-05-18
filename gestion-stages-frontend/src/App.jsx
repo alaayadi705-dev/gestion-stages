@@ -13,8 +13,10 @@ import StagesList from "./pages/stages/StagesList";
 import EntreprisesList from "./pages/entreprises/EntreprisesList";
 import RapportsList from "./pages/rapports/RapportsList";
 import UsersList from "./pages/users/UsersList";
+import Profile from "./pages/users/Profile";
 import FraisList from "./pages/frais/FraisList";
 import Statistiques from "./pages/Statistiques";
+import MinisteresList from "./pages/ministeres/MinisteresList";
 
 function App() {
 
@@ -67,6 +69,11 @@ function App() {
         />
 
         <Route
+          path="/profile"
+          element={<Layout><Profile/></Layout>}
+        />
+
+        <Route
           path="/frais"
           element={<Layout><FraisList/></Layout>}
         />
@@ -74,6 +81,11 @@ function App() {
         <Route
           path="/statistiques"
           element={<Layout><Statistiques/></Layout>}
+        />
+
+        <Route
+          path="/ministeres"
+          element={<Layout><MinisteresList/></Layout>}
         />
 
       </Routes>

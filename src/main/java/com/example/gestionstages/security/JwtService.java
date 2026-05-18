@@ -26,22 +26,27 @@ public class JwtService {
 
     // 🔥 FIX FINAL
     public String generateToken(Utilisateur user) {
+        try {
+            System.out.println("Generating token for user: " + user.getEmail());
+            Map<String, Object> claims = new HashMap<>();
 
-        Map<String, Object> claims = new HashMap<>();
+            claims.put("role", user.getRole() != null ? user.getRole() : "");
+            claims.put("poste", user.getPoste() != null ? user.getPoste() : "");
+            claims.put("nom", user.getNom() != null ? user.getNom() : "");
+            claims.put("ministere", user.getMinistere() != null ? user.getMinistere().getNom() : "");
 
-        claims.put("role", user.getRole());
-        claims.put("poste", user.getPoste());
-        claims.put("nom", user.getNom());
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(user.getEmail())
-                .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 86400000)
-                )
-                .signWith(getSignKey(), SignatureAlgorithm.HS256)
-                .compact();
+            return Jwts.builder()
+                    .claims(claims)
+                    .subject(user.getEmail())
+                    .issuedAt(new Date())
+                    .expiration(new Date(System.currentTimeMillis() + 86400000))
+                    .signWith(getSignKey())
+                    .compact();
+        } catch (Exception e) {
+            System.err.println("Error in generateToken: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public String extractEmail(String token) {
@@ -56,16 +61,20 @@ public class JwtService {
         return extractClaim(token, claims -> claims.get("poste", String.class));
     }
 
+    public String extractMinistere(String token) {
+        return extractClaim(token, claims -> claims.get("ministere", String.class));
+    }
+
     public <T> T extractClaim(
             String token,
             Function<Claims, T> resolver
     ) {
 
         final Claims claims = Jwts.parser()
-                .setSigningKey(getSignKey())
+                .verifyWith((javax.crypto.SecretKey) getSignKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
         return resolver.apply(claims);
     }

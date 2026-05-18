@@ -1,0 +1,227 @@
+@startuml
+title Diagramme de Classes - Gestion des Stages à l'Étranger
+
+package "Entities" {
+    
+    class Utilisateur {
+        -Long id
+        -String cin
+        -String nom
+        -String prenom
+        -String cnrpsCnss
+        -String nationalite
+        -LocalDate dateNaissance
+        -String lieuNaissance
+        -String rib
+        -String fonction
+        -String grade
+        -String email
+        -String password
+        -String role
+        -LocalDateTime dateAjout
+        -boolean etat
+        -String resetCode
+        -LocalDateTime resetCodeExpiry
+        +getId()
+        +getEmail()
+        +getRole()
+        +isEtat()
+    }
+    
+    class Ministere {
+        -Long id
+        -String nom
+        -List<Entreprise> entreprises
+        +getId()
+        +getNom()
+    }
+    
+    class Entreprise {
+        -Long id
+        -String nom
+        -String adresse
+        -String email
+        -String telephone
+        -List<Stage> stages
+        +getId()
+        +getNom()
+        +getAdresse()
+    }
+    
+    class Stage {
+        -Long id
+        -String intitule
+        -String objectifs
+        -LocalDate dateDebut
+        -LocalDate dateFin
+        -String pays
+        -String typeStage
+        -String statut
+        -Double budgetPropose
+        -List<Stagiaire> stagiaires
+        -List<Frais> frais
+        -List<RapportStage> rapports
+        +getId()
+        +getDuree() long
+        +getIntitule()
+    }
+    
+    class Stagiaire {
+        -Long id
+        -String nom
+        -String prenom
+        -LocalDate dateNaissance
+        -String nationalite
+        -String paysResidence
+        -String universite
+        -String specialite
+        -String email
+        -String telephone
+        -String grade
+        -String fonction
+        -String statut
+        -String numeroPermission
+        +getId()
+        +getNom()
+        +generateNumeroPermission()
+    }
+    
+    class Frais {
+        -Long id
+        -String typeFrais
+        -double montant
+        -String devise
+        -String support
+        +getId()
+        +getMontant()
+        +getTypeFrais()
+    }
+    
+    class RapportStage {
+        -Long id
+        -String titre
+        -String description
+        -String fichier
+        -String statut
+        -LocalDate dateDepot
+        -String commentaires
+        -LocalDate dateValidation
+        +getId()
+        +getStatut()
+        +getTitre()
+    }
+}
+
+package "Controllers" {
+    class StagiaireController {
+        -StagiaireService service
+        +getAll() List<Stagiaire>
+        +getById(id) Stagiaire
+        +create(stagiaire) Stagiaire
+        +update(id, stagiaire) Stagiaire
+        +delete(id) void
+    }
+    
+    class StageController {
+        -StageService service
+        +getAll() List<Stage>
+        +getById(id) Stage
+        +create(stage) Stage
+        +update(id, stage) Stage
+        +delete(id) void
+    }
+    
+    class RapportStageController {
+        -RapportStageService service
+        +getAll() List<RapportStage>
+        +getEnAttente() List<RapportStage>
+        +valider(id, commentaires) RapportStage
+        +rejeter(id, commentaires) RapportStage
+    }
+}
+
+package "Services" {
+    class StagiaireService {
+        -StagiaireRepository repository
+        +getAll() List<Stagiaire>
+        +create(stagiaire) Stagiaire
+        +update(id, stagiaire) Stagiaire
+    }
+    
+    class StageService {
+        -StageRepository repository
+        +getAll() List<Stage>
+        +create(stage) Stage
+        +calculateDuree(stage) long
+    }
+    
+    class RapportStageService {
+        -RapportStageRepository repository
+        -EmailService emailService
+        +validerRapport(id, commentaires) RapportStage
+        +rejeterRapport(id, commentaires) RapportStage
+    }
+}
+
+package "Repositories" {
+    interface StagiaireRepository {
+        +findAll() List<Stagiaire>
+        +findById(id) Optional<Stagiaire>
+        +save(stagiaire) Stagiaire
+        +findByStatut(statut) List<Stagiaire>
+    }
+    
+    interface StageRepository {
+        +findAll() List<Stage>
+        +findById(id) Optional<Stage>
+        +save(stage) Stage
+    }
+    
+    interface RapportStageRepository {
+        +findAll() List<RapportStage>
+        +findByStatut(statut) List<RapportStage>
+        +save(rapport) RapportStage
+    }
+}
+
+%% Relationships between entities
+Ministere "1" --> "*" Entreprise : supervise >
+Ministere "1" --> "*" Utilisateur : emploie >
+Entreprise "1" --> "*" Stage : organise >
+Stage "1" --> "*" Stagiaire : accueille >
+Stage "1" --> "*" Frais : génère >
+Stage "1" --> "*" RapportStage : reçoit >
+Stagiaire "1" --> "1" RapportStage : possède >
+Utilisateur "1" --> "*" Stagiaire : gère >
+
+%% Controller to Service
+StagiaireController --> StagiaireService : uses
+StageController --> StageService : uses
+RapportStageController --> RapportStageService : uses
+
+%% Service to Repository
+StagiaireService --> StagiaireRepository : uses
+StageService --> StageRepository : uses
+RapportStageService --> RapportStageRepository : uses
+RapportStageService --> EmailService : uses
+
+note right of Stagiaire.generateNumeroPermission
+    Génère automatiquement:
+    Format: AA/NNNNNNN/1
+    Exemple: 26/5847291/1
+end note
+
+note right of Stage.getDuree
+    Calcule la durée en jours
+    entre dateDebut et dateFin
+    Utilisation: ChronoUnit.DAYS.between()
+end note
+
+note right of RapportStage
+    Statuts possibles:
+    - EN_ATTENTE
+    - VALIDE
+    - REFUSE
+end note
+
+@enduml

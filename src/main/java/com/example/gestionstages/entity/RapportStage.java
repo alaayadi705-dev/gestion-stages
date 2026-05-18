@@ -23,6 +23,10 @@ public class RapportStage {
     private String statut;
 
     private LocalDate dateDepot;
+    
+    private String commentaires;
+    
+    private LocalDate dateValidation;
 
     // relation vers stagiaire
     @ManyToOne(fetch = FetchType.EAGER)
@@ -85,6 +89,22 @@ public class RapportStage {
 
     public void setDateDepot(LocalDate dateDepot) {
         this.dateDepot = dateDepot;
+    }
+
+    public String getCommentaires() {
+        return commentaires;
+    }
+
+    public void setCommentaires(String commentaires) {
+        this.commentaires = commentaires;
+    }
+
+    public LocalDate getDateValidation() {
+        return dateValidation;
+    }
+
+    public void setDateValidation(LocalDate dateValidation) {
+        this.dateValidation = dateValidation;
     }
 
     public Stagiaire getStagiaire() {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head>
+    <title>Stagiaires - Gestion Stages</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Liste des Stagiaires</h1>
+            <a href="#" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nouveau Stagiaire</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Université</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="st : ${stagiaires}">
+                            <td th:text="${st.id}">1</td>
+                            <td th:text="${st.nom}">Nom</td>
+                            <td th:text="${st.prenom}">Prénom</td>
+                            <td th:text="${st.email}">email@example.com</td>
+                            <td th:text="${st.universite}">Univ</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></button>
+                                <a th:href="@{/web/stagiaires/delete/{id}(id=${st.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Confirmer la suppression ?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

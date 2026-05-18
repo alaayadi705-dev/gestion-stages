@@ -28,4 +28,20 @@ public class AuthController {
                 request.getPassword()
         );
     }
+
+    @PostMapping("/forgot-password")
+    public Map<String, String> forgotPassword(@RequestBody Map<String, String> request) {
+        authService.requestPasswordReset(request.get("email"));
+        return Map.of("message", "Code envoyé par email");
+    }
+
+    @PostMapping("/reset-password")
+    public Map<String, String> resetPassword(@RequestBody Map<String, String> request) {
+        authService.resetPassword(
+                request.get("email"),
+                request.get("code"),
+                request.get("newPassword")
+        );
+        return Map.of("message", "Mot de passe réinitialisé avec succès");
+    }
 }

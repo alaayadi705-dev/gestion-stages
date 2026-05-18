@@ -28,19 +28,38 @@ public class RapportStageController {
     }
 
     @PostMapping
-    public RapportStage create(@RequestBody RapportStage rapport) {
-        return service.save(rapport);
+    public org.springframework.http.ResponseEntity<?> create(@RequestBody RapportStage rapport) {
+        try {
+            RapportStage saved = service.save(rapport);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(java.util.Map.of("message", "Erreur: " + e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public RapportStage update(@PathVariable Long id, @RequestBody RapportStage rapport) {
-        RapportStage existing = service.getById(id).orElseThrow();
-        existing.setTitre(rapport.getTitre());
-        existing.setDescription(rapport.getDescription());
-        existing.setStatut(rapport.getStatut());
-        existing.setFichier(rapport.getFichier());
-        existing.setStagiaire(rapport.getStagiaire());
-        return service.save(existing);
+    public org.springframework.http.ResponseEntity<?> update(@PathVariable Long id, @RequestBody RapportStage rapport) {
+        try {
+            RapportStage existing = service.getById(id)
+                    .orElseThrow(() -> new RuntimeException("Rapport non trouvé avec l'id : " + id));
+            
+            existing.setTitre(rapport.getTitre());
+            existing.setDescription(rapport.getDescription());
+            existing.setStatut(rapport.getStatut());
+            existing.setFichier(rapport.getFichier());
+            
+            if (rapport.getStagiaire() != null) {
+                existing.setStagiaire(rapport.getStagiaire());
+            }
+            if (rapport.getStage() != null) {
+                existing.setStage(rapport.getStage());
+            }
+
+            RapportStage saved = service.save(existing);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(java.util.Map.of("message", "Erreur: " + e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

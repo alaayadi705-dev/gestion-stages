@@ -18,6 +18,7 @@
 12. [Catalogue des Endpoints API](#12-catalogue-des-endpoints-api)
 13. [Configuration de l'Application](#13-configuration)
 14. [Diagramme d'Architecture Applicative](#14-diagramme-architecture-applicative)
+15. [Architecture MVC 2](#15-architecture-mvc-2)
 
 ---
 
@@ -37,7 +38,7 @@ Le projet **Gestion des Stages** est une application web full-stack destinée à
 
 ## 2. Architecture Globale
 
-L'application suit une **architecture 3-tiers** basée sur le pattern **MVC (Model-View-Controller)** :
+L'application suit une **architecture 3-tiers** basée sur le pattern **MVC 2 (Model-View-Controller)** avec une vue découplée (voir [Section 15 — Architecture MVC 2](#15-architecture-mvc-2) pour le détail complet) :
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -1049,6 +1050,186 @@ graph TB
 
 ---
 
-> **Document généré le** 19/03/2026
+## 15. Architecture MVC 2
+
+### 15.1 Présentation du pattern MVC 2
+
+Le pattern **MVC 2 (Model-View-Controller)** sépare l'application en trois couches distinctes ayant chacune un rôle bien défini :
+
+| Couche | Rôle | Implémentation dans ce projet |
+|--------|------|-------------------------------|
+| **Model** | Données + logique métier | Entities JPA + Services + Repositories |
+| **View** | Interface utilisateur | **React 18** (SPA — Single Page Application) |
+| **Controller** | Réceptionne les requêtes, orchestre le Model et retourne les données à la View | Contrôleurs Spring Boot (`@RestController`) |
+
+### 15.2 Diagramme MVC 2
+
+```mermaid
+graph LR
+    U["👤 Utilisateur"] --> V["🖥️ View\n(React 18)"]
+    V -- "Requête HTTP\n(Axios)" --> C["⚙️ Controller\n(Spring Boot)"]
+    C -- "Appel service" --> M["📦 Model\n(Entity + Service + Repository)"]
+    M -- "Données" --> C
+    C -- "Réponse JSON" --> V
+    V -- "Affichage HTML" --> U
+```
+
+### 15.3 Correspondance MVC 2 — Composants du projet
+
+#### 🟦 VIEW — Frontend React (Port 3000)
+
+La couche **View** est responsable de l'affichage et de l'interaction avec l'utilisateur.
+
+| Fichier | Rôle MVC 2 |
+|---------|------------|
+| `App.jsx` | Routeur principal — dispatche les requêtes vers les vues |
+| `pages/Login.jsx` | Vue — page de connexion |
+| `pages/Dashboard.jsx` | Vue — tableau de bord |
+| `pages/stagiaires/StagiairesList.jsx` | Vue — liste et gestion des stagiaires |
+| `pages/stages/StagesList.jsx` | Vue — liste et gestion des stages |
+| `pages/entreprises/EntreprisesList.jsx` | Vue — liste et gestion des entreprises |
+| `pages/frais/FraisList.jsx` | Vue — liste et gestion des frais |
+| `pages/rapports/RapportsList.jsx` | Vue — liste et gestion des rapports |
+| `pages/users/UsersList.jsx` | Vue — liste et gestion des utilisateurs |
+| `pages/Statistiques.jsx` | Vue — statistiques et graphiques |
+| `components/Layout.jsx` | Template principal (header + sidebar + contenu) |
+| `components/Sidebar.jsx` | Navigation latérale |
+| `components/DataTable.jsx` | Composant table réutilisable |
+| `services/api.js` | Client HTTP — communication avec le Controller |
+| `context/AuthContext.jsx` | Gestion de l'état d'authentification (JWT) |
+
+#### 🟩 CONTROLLER — Spring Boot (Port 8080)
+
+La couche **Controller** reçoit les requêtes HTTP, appelle la couche Model, et retourne les données à la View.
+
+| Fichier | Rôle MVC 2 |
+|---------|------------|
+| `AuthController` | Gère l'authentification (login/register) |
+| `StagiaireController` | CRUD stagiaires — GET, POST, PUT, DELETE |
+| `StageController` | CRUD stages + recherche avancée |
+| `EntrepriseController` | CRUD entreprises |
+| `FraisController` | CRUD frais |
+| `RapportStageController` | CRUD rapports de stage |
+| `UtilisateurController` | CRUD utilisateurs |
+| `StatistiquesController` | Agrégation et retour des statistiques |
+
+#### 🟧 MODEL — Logique Métier + Données
+
+La couche **Model** contient les entités, la logique métier et l'accès aux données.
+
+| Fichier | Rôle MVC 2 |
+|---------|------------|
+| `entity/Stagiaire.java` | Modèle de données — stagiaire |
+| `entity/Stage.java` | Modèle de données — stage |
+| `entity/Entreprise.java` | Modèle de données — entreprise |
+| `entity/Frais.java` | Modèle de données — frais |
+| `entity/RapportStage.java` | Modèle de données — rapport de stage |
+| `entity/Utilisateur.java` | Modèle de données — utilisateur |
+| `entity/Ministere.java` | Modèle de données — ministère |
+| `service/*Service.java` | Logique métier (8 services) |
+| `repository/*Repository.java` | Accès base de données via JPA (6 repositories) |
+
+### 15.4 Flux MVC 2 — Exemple : Consultation de la liste des stagiaires
+
+```mermaid
+sequenceDiagram
+    actor U as Utilisateur
+    participant V as View (React)
+    participant C as Controller (StagiaireController)
+    participant M as Model (StagiaireService)
+    participant DB as MySQL
+
+    U->>V: Clic sur "Stagiaires" dans le menu
+    V->>V: React Router → StagiairesList.jsx
+    V->>C: GET /api/stagiaires (Axios + JWT)
+    C->>M: stagiaireService.getAll()
+    M->>DB: SELECT * FROM stagiaires
+    DB-->>M: Liste des stagiaires
+    M-->>C: List〈Stagiaire〉
+    C-->>V: JSON [{ id, nom, prenom, ... }]
+    V->>V: Render DataTable avec les données
+    V-->>U: Affichage du tableau des stagiaires
+```
+
+### 15.5 Flux MVC 2 — Authentification JWT
+
+```mermaid
+sequenceDiagram
+    actor U as Utilisateur
+    participant V as View (Login.jsx)
+    participant C as Controller (AuthController)
+    participant M as Model (AuthService + JwtService)
+    participant DB as MySQL
+
+    U->>V: Saisie email + mot de passe
+    V->>C: POST /api/auth/login {email, password}
+    C->>M: authService.login(email, password)
+    M->>DB: SELECT * FROM utilisateurs WHERE email = ?
+    DB-->>M: Utilisateur trouvé
+    M->>M: Vérification BCrypt du mot de passe
+    M->>M: Génération du token JWT
+    M-->>C: { token: "eyJhbG..." }
+    C-->>V: 200 OK + JWT Token
+    V->>V: Stockage du token (AuthContext + localStorage)
+    V-->>U: Redirection vers le Dashboard
+```
+
+### 15.6 Diagramme de composants MVC 2
+
+```mermaid
+graph TB
+    subgraph "VIEW — React 18"
+        direction TB
+        APP["App.jsx (Router)"]
+        PAGES["Pages : Dashboard, Stagiaires,\nStages, Entreprises, Frais,\nRapports, Users, Statistiques"]
+        COMP["Composants : Layout, Sidebar,\nHeader, DataTable, ProtectedRoute"]
+        SVC["Services Axios : api.js,\nstageService, entrepriseService..."]
+        CTX["AuthContext (JWT)"]
+        APP --> PAGES
+        PAGES --> COMP
+        PAGES --> SVC
+        PAGES --> CTX
+    end
+
+    subgraph "CONTROLLER — Spring Boot"
+        direction TB
+        CTRL["8 Contrôleurs REST\nAuth, Stagiaire, Stage,\nEntreprise, Frais, Rapport,\nUtilisateur, Statistiques"]
+        SEC["Sécurité : JwtFilter,\nJwtService, SecurityConfig,\nCorsConfig, PasswordConfig"]
+    end
+
+    subgraph "MODEL — Logique Métier + Données"
+        direction TB
+        SERVICES["8 Services : AuthService,\nStagiaireService, StageService,\nEntrepriseService, FraisService,\nRapportStageService, UtilisateurService,\nStatistiqueService"]
+        REPOS["6 Repositories JPA"]
+        ENTITIES["7 Entités : Stagiaire, Stage,\nEntreprise, Frais, RapportStage,\nUtilisateur, Ministere"]
+        SERVICES --> REPOS
+        REPOS --> ENTITIES
+    end
+
+    subgraph "Base de Données"
+        DB[("MySQL\ngestion_stages")]
+    end
+
+    SVC -- "REST API\nHTTP + JSON + JWT" --> SEC
+    SEC --> CTRL
+    CTRL --> SERVICES
+    ENTITIES -- "JPA / Hibernate" --> DB
+```
+
+### 15.7 Avantages de l'architecture MVC 2 dans ce projet
+
+| Avantage | Description |
+|----------|-------------|
+| **Séparation des responsabilités** | Chaque couche (View, Controller, Model) a un rôle clair et indépendant |
+| **Maintenabilité** | Modification possible du frontend sans impacter le backend, et inversement |
+| **Réutilisabilité** | Les services et repositories sont réutilisables par plusieurs contrôleurs |
+| **Testabilité** | Chaque couche peut être testée indépendamment (tests unitaires, tests d'intégration) |
+| **Scalabilité** | Le frontend (React) et le backend (Spring Boot) peuvent être déployés séparément |
+| **Flexibilité** | La communication via API REST permet de connecter d'autres clients (mobile, desktop) |
+
+---
+
+> **Document généré le** 19/03/2026 — **Mis à jour le** 11/04/2026
 > **Projet :** Gestion des Stages — PFE
 > **Technologies :** Spring Boot 4.0.2 + React.js + MySQL + JWT
+> **Architecture :** MVC 2 avec Vue découplée (React SPA)

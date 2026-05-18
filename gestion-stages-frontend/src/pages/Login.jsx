@@ -3,7 +3,6 @@ import "../styles/login.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../services/api";
-import bg from "../assets/tunisia-bg.jpg";
 
 export default function Login() {
 
@@ -11,114 +10,122 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoginFailed(false);
 
     try {
-      const res = await loginAPI(email, password);
+      const trimmedEmail = email.trim().toLowerCase();
+      const trimmedPassword = password.trim();
+
+      const res = await loginAPI(trimmedEmail, trimmedPassword);
 
       if (res && res.token) {
-
-        // ✅ save token
         localStorage.setItem("token", res.token);
+        localStorage.setItem("id", res.id);
+        localStorage.setItem("email", res.email);
+        localStorage.setItem("role", res.role);
+        localStorage.setItem("poste", res.poste || "");
+        localStorage.setItem("ministere", res.ministere || "");
 
-        // ✅ decode JWT
-        const decoded = jwtDecode(res.token);
-
-        // 🎯 SAFE extraction
-        const userEmail = decoded?.sub || "";
-        const userRole = decoded?.role || "";
-        const userPoste = decoded?.poste || "—";
-
-        // ✅ save user object
         localStorage.setItem("user", JSON.stringify({
-          name: userEmail,
-          role: userRole,
-          poste: userPoste
+          id: res.id,
+          cin: res.cin || "",
+          nom: res.nom || "",
+          prenom: res.prenom || "",
+          cnrpsCnss: res.cnrpsCnss || "",
+          nationalite: res.nationalite || "",
+          dateNaissance: res.dateNaissance || "",
+          lieuNaissance: res.lieuNaissance || "",
+          rib: res.rib || "",
+          fonction: res.fonction || "",
+          grade: res.grade || "",
+          niveauRetard: res.niveauRetard || "",
+          categorie: res.categorie || "",
+          groupe: res.groupe || "",
+          email: res.email,
+          role: res.role,
+          poste: res.poste || "",
+          etat: res.etat !== undefined ? res.etat : true,
+          ministere: res.ministere || ""
         }));
 
-        // 🔥 optional (quick access)
-        localStorage.setItem("email", userEmail);
-        localStorage.setItem("role", userRole);
-        localStorage.setItem("poste", userPoste);
-
-        // 🔁 redirect
         navigate("/dashboard");
 
       } else {
-        alert("Email ou mot de passe incorrect");
+        setLoginFailed(true);
       }
 
     } catch (error) {
-      console.error(error);
-      alert("Erreur serveur");
+      setLoginFailed(true);
     }
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          background: "rgba(255,255,255,0.95)",
-          padding: "40px",
-          borderRadius: "10px",
-          width: "350px",
-          boxShadow: "0 0 20px rgba(0,0,0,0.3)",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ color: "#c62828", marginBottom: "20px" }}>
-          تسجيل الدخول
+    <div className="login-page">
+      {/* Animated background orbs */}
+      <div className="login-bg-orb login-bg-orb-1"></div>
+      <div className="login-bg-orb login-bg-orb-2"></div>
+      <div className="login-bg-orb login-bg-orb-3"></div>
+      
+      <div className="login-card">
+        <div className="login-logo-wrapper">
+          <div className="login-logo-circle">
+            🔐
+          </div>
+        </div>
+        
+        <h2 className="login-title">
+          تسجيل الدخول / Connexion
         </h2>
+        
+        <p className="login-subtitle">
+          الجمهورية التونسية - منظومة إدارة التربصات
+        </p>
 
         <form onSubmit={handleLogin}>
 
-          <input
-            type="email"
-            placeholder="البريد الإلكتروني"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          />
+          {loginFailed && (
+            <div className="login-error">
+              <strong>❌ فشل تسجيل الدخول.</strong><br/>
+              البريد الإلكتروني أو كلمة المرور غير صحيحة.
+            </div>
+          )}
 
-          <input
-            type="password"
-            placeholder="كلمة المرور"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "20px" }}
-          />
+          <div className="login-input-group">
+            <span className="login-input-icon">📧</span>
+            <input
+              type="email"
+              placeholder="البريد الإلكتروني / Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="login-input"
+            />
+          </div>
+
+          <div className="login-input-group">
+            <span className="login-input-icon">🔒</span>
+            <input
+              type="password"
+              placeholder="كلمة المرور / Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="login-input"
+            />
+          </div>
 
           <button
             type="submit"
-            style={{
-              width: "100%",
-              padding: "10px",
-              background: "#c62828",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
+            className="login-btn"
           >
-            دخول
+            دخول / Se connecter
           </button>
 
         </form>
-
       </div>
     </div>
   );

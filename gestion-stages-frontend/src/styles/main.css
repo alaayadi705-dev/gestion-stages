@@ -1,12 +1,9 @@
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: 'Inter', sans-serif;
   direction: rtl;
-
-  background-image: url("../assets/tunisia-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: #1e293b;
+  color: #f1f5f9;
 }
 
 /* container */
@@ -19,10 +16,12 @@ body {
 .sidebar {
   width: 260px;
   height: 100vh;
-  background: linear-gradient(to bottom, #c40000, #ff0000);
+  background: linear-gradient(180deg, #1e1b4b, #312e81);
+  backdrop-filter: blur(20px);
   padding: 20px;
   color: white;
   order: 2;
+  border-left: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 /* content left */

@@ -1,0 +1,266 @@
+# Complete PFE Memoir - Ready to Copy into Word
+# This file contains the complete formatted text ready to paste into Microsoft Word
+
+"""
+INSTRUCTIONS:
+1. Open Microsoft Word
+2. Create a new blank document
+3. Copy ALL the content below (from the line after this separator)
+4. Paste into Word
+5. Apply styles: Title, Heading 1, Heading 2, etc.
+6. Insert page breaks where indicated
+7. Add images where indicated
+8. Save as .docx
+"""
+
+================================================================================
+PAGE 1 - TITLE PAGE (Center all text on this page)
+================================================================================
+
+[Insert University Logo at top]
+
+République Tunisienne
+Ministère de l'Enseignement Supérieur
+et de la Recherche Scientifique
+
+Université de Kairouan
+Faculté des Sciences et Techniques
+de Sidi Bouzid
+
+
+N° d'ordre : ………
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 2 - TITLE PAGE CONTINUED (Center all text)
+================================================================================
+
+
+MÉMOIRE DE PROJET DE FIN D'ÉTUDES
+
+En vue de l'obtention du
+Diplôme de License en Informatique
+
+
+Présenté par
+Ayadi Ala Eddine
+
+
+Sujet :
+
+Guide de conduite d'un projet informatique
+selon le cadre de développement SCRUM
+
+Application : Système de Gestion des Stages à l'Étranger
+
+
+Soutenu en Juin 2026, devant le jury composé de :
+
+M./Mme ……………………………… Président(e)
+M./Mme ……………………………… Rapporteur
+M./Mme ……………………………… Encadrant(e)
+
+
+A.U. : 2025-2026
+
+
+Lieu de stage : Centre National de l'Informatique (CNI)
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 3 - DÉDICACES
+================================================================================
+
+Heading 1: DÉDICACES
+
+[Right align the following text, italic]
+
+À mes chers parents,
+Pour leurs sacrifices, leur amour et leur soutien inconditionnel.
+
+À ma famille,
+Pour leurs encouragements constants.
+
+À mes amis et collègues,
+Pour leur accompagnement tout au long de ce parcours.
+
+À tous ceux qui croient en la puissance de la technologie
+pour transformer le monde.
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 4 - REMERCIEMENTS
+================================================================================
+
+Heading 1: REMERCIEMENTS
+
+Normal text:
+
+Je tiens tout d'abord à exprimer ma profonde gratitude à Dieu le tout puissant de m'avoir donné la force, la patience et la volonté pour mener à bien ce projet.
+
+Je souhaite adresser mes plus sincères remerciements à l'ensemble du corps enseignant de la Faculté des Sciences et Techniques de Sidi Bouzid, pour la qualité de la formation qu'ils m'ont dispensée tout au long de mon cursus universitaire.
+
+Mes remerciements vont particulièrement à mon encadrant académique, pour ses précieux conseils, sa disponibilité et son accompagnement tout au long de la réalisation de ce projet.
+
+Je tiens également à remercier le Centre National de l'Informatique (CNI) pour m'avoir accueilli en stage et offert un environnement de travail propice à l'apprentissage et à l'innovation.
+
+Je remercie chaleureusement tous les professionnels du CNI qui m'ont fait part de leur expertise et m'ont guidé dans la compréhension des enjeux métier liés à la gestion des stages à l'étranger.
+
+Enfin, je remercie ma famille et mes amis pour leur soutien moral et leurs encouragements constants durant cette période de formation et de réalisation du projet.
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 5 - TABLE DES MATIÈRES
+================================================================================
+
+Heading 1: TABLE DES MATIÈRES
+
+[In Word: Go to References > Table of Contents > Automatic Table 1]
+[This will auto-generate from your headings]
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 6 - LISTE DES FIGURES
+================================================================================
+
+Heading 1: LISTE DES FIGURES
+
+Figure 1 : Processus de développement selon SCRUM .......................... 15
+Figure 2 : Diagramme de classes de l'application ......................... 22
+Figure 3 : Diagramme de séquence - Authentification ...................... 28
+Figure 4 : Architecture de déploiement ................................. 30
+Figure 5 : Page d'authentification ..................................... 45
+Figure 6 : Tableau de bord principal ................................... 47
+Figure 7 : Interface de gestion des stagiaires ......................... 49
+Figure 8 : Formulaire de création d'un stage ......................... 51
+Figure 9 : Gestion des frais de stage ................................ 53
+Figure 10 : Interface de validation des rapports ....................... 55
+Figure 11 : Page des statistiques .................................... 57
+Figure 12 : Exemple de document PDF exporté ............................ 59
+Figure 13 : Graphique de Burndown du Sprint 2 ......................... 61
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 7 - LISTE DES TABLEAUX
+================================================================================
+
+Heading 1: LISTE DES TABLEAUX
+
+Tableau 1 : Critique de l'existant ..................................... 12
+Tableau 2 : Planification générale des sprints ......................... 18
+Tableau 3 : Product Backlog initial du projet .......................... 25
+Tableau 4 : Technologies backend ....................................... 32
+Tableau 5 : Technologies frontend ...................................... 33
+Tableau 6 : Planification détaillée des sprints ........................ 38
+Tableau 7 : Obstacles et solutions mises en place ...................... 43
+Tableau 8 : Mesures de performance de l'application .................... 60
+Tableau 9 : Principaux bugs corrigés ................................... 64
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 8 - GLOSSAIRE
+================================================================================
+
+Heading 1: GLOSSAIRE
+
+[Insert a table with 2 columns]
+
+Terme                 | Définition
+----------------------|--------------------------------------------------------
+SCRUM                 | Framework agile de gestion de projet basé sur des 
+                      | itérations courtes appelées sprints
+Product Backlog       | Liste priorisée des fonctionnalités à développer
+Sprint                | Itération de développement de durée fixe (2-4 semaines)
+User Story            | Description d'une fonctionnalité du point de vue utilisateur
+Daily Scrum           | Réunion quotidienne de 15 minutes pour synchroniser
+Sprint Review         | Présentation de l'incrément aux stakeholders
+Sprint Retrospective  | Réunion d'amélioration continue après chaque sprint
+Product Owner         | Responsable de la vision produit et du backlog
+Scrum Master          | Facilitateur qui aide l'équipe à suivre Scrum
+Incrément             | Résultat concret produit à la fin d'un sprint
+JPA                   | Java Persistence API - Persistance des données Java
+ORM                   | Object-Relational Mapping - Mapping objet-relationnel
+REST                  | Representational State Transfer - Architecture web
+JWT                   | JSON Web Token - Standard d'authentification web
+CRUD                  | Create, Read, Update, Delete - Opérations sur les données
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+PAGE 9 - INTRODUCTION GÉNÉRALE
+================================================================================
+
+Heading 1: INTRODUCTION GÉNÉRALE
+
+[Normal text with justified alignment]
+
+La mobilité internationale des stagiaires représente aujourd'hui un enjeu majeur pour les institutions académiques et gouvernementales tunisiennes. Dans un contexte de mondialisation croissante, les opportunités de stages à l'étranger offrent aux étudiants et professionnels une expérience invaluable pour développer leurs compétences, enrichir leur culture et renforcer leur employabilité sur le marché international.
+
+Cependant, la gestion administrative de ces stages internationaux demeure un processus complexe, impliquant de multiples acteurs : les stagiaires eux-mêmes, les établissements d'enseignement, les entreprises d'accueil à l'étranger, les ministères de tutelle, et les organismes de financement. Chaque étape du processus – de la candidature à la validation du rapport de stage en passant par la gestion des frais et le suivi administratif – génère une documentation importante qui doit être organisée, tracée et archivée de manière rigoureuse.
+
+Avant la mise en place de notre solution, le Centre National de l'Informatique (CNI) gérait ces processus principalement à travers des outils bureautiques classiques (tableurs, documents Word) et des échanges par email. Cette approche présentait plusieurs limitations : dispersion de l'information, difficulté de suivi en temps réel, risques d'erreurs lors de la saisie manuelle, absence de statistiques consolidées, et manque de traçabilité des validations.
+
+Face à ces constats, il est apparu nécessaire de concevoir et développer une application web dédiée à la gestion des stages à l'étranger, permettant de centraliser l'ensemble des informations, d'automatiser les processus métier, et de fournir des outils de pilotage et de décision aux différents acteurs impliqués.
+
+Ce projet s'inscrit dans le cadre de l'obtention du Diplôme de License en Informatique à la Faculté des Sciences et Techniques de Sidi Bouzid. Il a été réalisé au sein du Centre National de l'Informatique (CNI) sur une durée de quatre mois, en suivant le framework de gestion de projets agiles SCRUM.
+
+L'objectif principal de ce mémoire est de documenter l'ensemble du processus de développement de cette application, depuis l'analyse des besoins jusqu'à la réalisation finale, en passant par les choix méthodologiques, architecturaux et techniques.
+
+Ce document est structuré en quatre chapitres principaux :
+
+• Le Chapitre 1 présente le cadre général du projet, incluant l'organisme d'accueil, l'étude de l'existant, la critique de celui-ci, et les choix méthodologiques adoptés, notamment le framework SCRUM et la méthodologie orientée objet.
+
+• Le Chapitre 2 détaille l'analyse préliminaire du projet, avec la présentation des rôles SCRUM, le Product Backlog initial, l'architecture technique de l'application, et l'environnement de travail mis en place.
+
+• Le Chapitre 3 décrit le déroulé des sprints de développement, incluant la planification globale, un exemple détaillé d'un sprint représentatif, et la gestion des obstacles rencontrés.
+
+• Le Chapitre 4 présente les résultats finaux obtenus, les livrables produits, les démonstrations des fonctionnalités implémentées, ainsi que les tests réalisés et les améliorations apportées.
+
+Enfin, nous conclurons ce mémoire par une synthèse générale présentant les apports du projet, les difficultés rencontrées, et les perspectives d'évolution de l'application.
+
+
+[INSERT PAGE BREAK AFTER THIS]
+
+
+================================================================================
+NOTE: The complete document is VERY large (65-70 pages).
+To get the FULL Word document with all chapters already formatted:
+
+OPTION 1 - Use the LaTeX file and convert to Word:
+1. Go to https://www.latex2rtf.com/
+2. Upload memoire_pfe.tex
+3. Download the .doc file
+4. Open in Word
+
+OPTION 2 - Copy this file in parts:
+The LaTeX file (memoire_pfe.tex) contains the complete content.
+I can split it into 5-6 Word-ready parts if you need.
+
+OPTION 3 - I'll create a Python script that generates the FULL .docx file
+with all 4 chapters, conclusion, annexes, and summaries.
+================================================================================
+
+Would you like me to create Option 3 (Python script that generates complete Word document)?

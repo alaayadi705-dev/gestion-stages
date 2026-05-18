@@ -1,0 +1,56 @@
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #858796;
+    --success-color: #1cc88a;
+    --info-color: #36b9cc;
+    --warning-color: #f6c23e;
+    --danger-color: #e74a3b;
+    --dark-color: #5a5c69;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #5a5c69;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff !important;
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff !important;
+    border-radius: 0.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.table thead th {
+    background-color: #f8f9fc;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #b7b9cc;
+    border-bottom: none;
+}

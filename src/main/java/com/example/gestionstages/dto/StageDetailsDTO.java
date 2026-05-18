@@ -18,6 +18,7 @@ public class StageDetailsDTO {
     public String entreprise;
 
     public Double montant;
+    public String typeStage; // ✅ Ajouté
 
     public String fichier;
     public String statutRapport;
@@ -35,6 +36,7 @@ public class StageDetailsDTO {
             String prenom,
             String entreprise,
             Double montant,
+            String typeStage, // ✅ Ajouté
             String fichier,
             String statutRapport
     ) {
@@ -49,6 +51,7 @@ public class StageDetailsDTO {
         this.prenom = prenom;
         this.entreprise = entreprise;
         this.montant = montant;
+        this.typeStage = typeStage; // ✅ Ajouté
         this.fichier = fichier;
         this.statutRapport = statutRapport;
     }

@@ -1,282 +1,186 @@
 import React, { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { FaChartBar, FaFilePdf, FaSearch, FaGlobe, FaUserGraduate, FaMoneyBillWave } from "react-icons/fa";
+import { getStatistiquesAPI, searchStagesAPI } from "../services/api";
+import "../styles/dashboard.css";
 
 export default function Statistiques() {
 
-  // ===== STATS =====
   const [stats, setStats] = useState(null);
-
-  // ===== FILTER =====
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [pays, setPays] = useState("");
-  const [stageId, setStageId] = useState(""); // ✅ ADDED
-
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // ===== FETCH STATS =====
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    pays: "",
+    stageId: ""
+  });
+
   useEffect(() => {
-    fetch("http://localhost:8080/api/statistiques")
-      .then(res => res.json())
-      .then(data => setStats(data));
+    fetchStats();
   }, []);
 
-  // ===== SEARCH =====
-  const handleSearch = async () => {
-    let url = "http://localhost:8080/api/stages/search?";
-
-    if (startDate) url += `start=${startDate}&`;
-    if (endDate) url += `end=${endDate}&`;
-    if (pays) url += `pays=${pays}&`;
-    if (stageId) url += `id=${stageId}&`; // ✅ ADDED
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    setResults(data);
+  const fetchStats = async () => {
+    try {
+      const data = await getStatistiquesAPI();
+      setStats(data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false); // 🔥 Prevent stuck on loading
+    }
   };
 
-  // ===== PDF =====
+  const handleSearch = async () => {
+    const searchFilters = {};
+    if (filters.startDate) searchFilters.start = filters.startDate;
+    if (filters.endDate) searchFilters.end = filters.endDate;
+    if (filters.pays) searchFilters.pays = filters.pays;
+    if (filters.stageId) searchFilters.id = filters.stageId;
+
+    try {
+      const data = await searchStagesAPI(searchFilters);
+      setResults(data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const downloadPDF = () => {
-    const doc = new jsPDF();
-
-    doc.text("Liste des stages", 14, 10);
-
+    const doc = new jsPDF('landscape');
+    doc.text("تقرير التربصات - الجمهورية التونسية", 14, 15);
     autoTable(doc, {
+      startY: 25,
       head: [[
-        "ID","Titre","Date debut","Date fin",
-        "Pays","Statut",
-        "Nom","Prenom","Entreprise",
-        "Montant","Fichier","Rapport"
+        "ID", "Titre", "Date Debut", "Date Fin", "Pays", "Statut", "Stagiaire", "Entreprise", "Coût"
       ]],
       body: results.map(s => [
-        s.id,
-        s.intitule,
-        s.dateDebut,
-        s.dateFin,
-        s.pays,
-        s.statut,
-        s.nom || "---",
-        s.prenom || "---",
-        s.entreprise || "---",
-        s.montant || 0,
-        s.fichier || "---",
-        s.statutRapport || "---"
+        s.id, s.intitule, s.dateDebut, s.dateFin, s.pays, s.statut, 
+        `${s.nom || ""} ${s.prenom || ""}`, s.entreprise || "---", s.montant || 0
       ])
     });
-
-    doc.save("stages.pdf");
+    doc.save("rapport-stages.pdf");
   };
 
-  if (!stats) return <div>جاري التحميل...</div>;
+  if (loading) return <div className="main-content"><h2 style={{color:"#c7d2fe"}}>جاري التحميل...</h2></div>;
+  
+  if (!stats) return <div className="main-content"><h2 style={{color:"#fca5a5"}}>خطأ في تحميل البيانات. يرجى المحاولة لاحقاً.</h2></div>;
 
   return (
-    <div className="stats-page">
-
-      <h2>📊 إحصائيات التربصات</h2>
-
-      {/* ===== FILTER ===== */}
-      <div className="card">
-        <h3>🔍 البحث عن التربصات</h3>
-
-        <input type="date" onChange={(e)=>setStartDate(e.target.value)} />
-        <input type="date" onChange={(e)=>setEndDate(e.target.value)} />
-
-        <input
-          type="text"
-          placeholder="الدولة"
-          onChange={(e)=>setPays(e.target.value)}
-        />
-
-        {/* ✅ ADDED INPUT ID */}
-        <input
-          type="number"
-          placeholder="ID التربص"
-          onChange={(e)=>setStageId(e.target.value)}
-        />
-
-        <button onClick={handleSearch}>
-          Afficher
-        </button>
+    <div className="main-content">
+      <div className="header">
+        <h1>📊 لوحة الإحصائيات والتقارير</h1>
       </div>
 
-      {/* ===== RESULTS ===== */}
-      <div className="card">
-        <h3>📋 نتائج البحث</h3>
-
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>عنوان</th>
-              <th>بداية</th>
-              <th>نهاية</th>
-              <th>المدة</th>
-              <th>البلد</th>
-              <th>الحالة</th>
-
-              <th>الاسم</th>
-              <th>اللقب</th>
-
-              <th>المؤسسة</th>
-              <th>المبلغ</th>
-
-              <th>الملف</th>
-              <th>حالة التقرير</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {results.length === 0 ? (
-              <tr>
-                <td colSpan="13">لا توجد نتائج</td>
-              </tr>
-            ) : (
-              results.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.intitule}</td>
-                  <td>{item.dateDebut}</td>
-                  <td>{item.dateFin}</td>
-                  <td>{item.duree}</td>
-                  <td>{item.pays}</td>
-                  <td>{item.statut}</td>
-
-                  <td>{item.nom || "---"}</td>
-                  <td>{item.prenom || "---"}</td>
-
-                  <td>{item.entreprise || "---"}</td>
-
-                  <td>{item.montant || 0}</td>
-
-                  <td>{item.fichier || "---"}</td>
-                  <td>{item.statutRapport || "---"}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-
-        <button onClick={downloadPDF}>
-          📥 Télécharger PDF
-        </button>
-
+      {/* QUICK STATS CARDS */}
+      <div className="stats" style={{marginTop: "20px", marginBottom: "40px", gap: "20px"}}>
+        <div className="stat-card blue">
+          <FaChartBar className="stat-icon" style={{color: "#a5b4fc"}} />
+          <div className="stat-number" style={{color: "#a5b4fc"}}>{stats.stagesEnCours + stats.stagesClotures}</div>
+          <div className="stat-title">إجمالي التربصات</div>
+        </div>
+        <div className="stat-card green">
+          <FaUserGraduate className="stat-icon" style={{color: "#4ade80"}} />
+          <div className="stat-number" style={{color: "#4ade80"}}>{stats.rapportsValides}</div>
+          <div className="stat-title">تقارير مصادق عليها</div>
+        </div>
+        <div className="stat-card yellow">
+          <FaChartBar className="stat-icon" style={{color: "#fde047"}} />
+          <div className="stat-number" style={{color: "#fde047"}}>{stats.stagesEnCours}</div>
+          <div className="stat-title">تربصات جارية</div>
+        </div>
+        <div className="stat-card red">
+          <FaMoneyBillWave className="stat-icon" style={{color: "#f87171"}} />
+          <div className="stat-number" style={{color: "#f87171"}}>{stats.coutTotal || 0} TND</div>
+          <div className="stat-title">التكلفة الإجمالية</div>
+        </div>
       </div>
 
-      {/* ===== CARDS ===== */}
-      <div className="stats-cards">
-
-        <div className="card-stat">
-          <h3>{stats.stagesEnCours}</h3>
-          <p>تربصات جارية</p>
+      <div className="grid-container" style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "30px"}}>
+        
+        {/* STAGES PAR PAYS */}
+        <div className="card">
+          <div style={{...sectionHeader, borderBottom: "1px solid rgba(99, 102, 241, 0.2)"}}>
+            <FaGlobe style={{color: "#4ade80"}} /> <h3 style={{color: "#f1f5f9"}}>التربصات حسب البلدان</h3>
+          </div>
+          <table className="mini-table">
+            <thead><tr><th>البلد</th><th>العدد</th></tr></thead>
+            <tbody>
+              {stats?.stagesParPays?.length > 0 ? stats.stagesParPays.map((item, i) => (
+                <tr key={i}><td>{item[0]}</td><td><b style={{color: "#a5b4fc"}}>{item[1]}</b></td></tr>
+              )) : <tr><td colSpan="2">لا توجد بيانات</td></tr>}
+            </tbody>
+          </table>
         </div>
 
-        <div className="card-stat">
-          <h3>{stats.stagesClotures}</h3>
-          <p>تربصات منتهية</p>
-        </div>
-
-        <div className="card-stat">
-          <h3>{stats.rapportsDeposes}</h3>
-          <p>تقارير مودعة</p>
-        </div>
-
-        <div className="card-stat">
-          <h3>{stats.rapportsValides}</h3>
-          <p>تقارير مصادق عليها</p>
+        {/* STAGIAIRES PAR PAYS */}
+        <div className="card">
+          <div style={{...sectionHeader, borderBottom: "1px solid rgba(99, 102, 241, 0.2)"}}>
+            <FaUserGraduate style={{color: "#a5b4fc"}} /> <h3 style={{color: "#f1f5f9"}}>المتربصون حسب البلدان</h3>
+          </div>
+          <table className="mini-table">
+            <thead><tr><th>البلد</th><th>العدد</th></tr></thead>
+            <tbody>
+              {stats?.stagiairesParPays?.length > 0 ? stats.stagiairesParPays.map((item, i) => (
+                <tr key={i}><td>{item[0]}</td><td><b style={{color: "#a5b4fc"}}>{item[1]}</b></td></tr>
+              )) : <tr><td colSpan="2">لا توجد بيانات</td></tr>}
+            </tbody>
+          </table>
         </div>
 
       </div>
 
-      
+      {/* ADVANCED SEARCH & EXPORT */}
+      <div className="card" style={{marginBottom: "30px"}}>
+        <div style={{...sectionHeader, borderBottom: "1px solid rgba(99, 102, 241, 0.2)"}}>
+          <FaSearch style={{color: "#fde047"}} /> <h3 style={{color: "#f1f5f9"}}>استخراج التقارير والبحث المتقدم</h3>
+        </div>
+        
+        <div style={{display: "flex", gap: "10px", flexWrap: "wrap", margin: "15px 0"}}>
+          <input type="date" className="custom-input" onChange={(e)=>setFilters({...filters, startDate: e.target.value})} />
+          <input type="date" className="custom-input" onChange={(e)=>setFilters({...filters, endDate: e.target.value})} />
+          <input placeholder="الدولة" className="custom-input" onChange={(e)=>setFilters({...filters, pays: e.target.value})} />
+          <input type="number" placeholder="ID التربص" className="custom-input" onChange={(e)=>setFilters({...filters, stageId: e.target.value})} />
+          <button className="add-btn" style={{margin: 0}} onClick={handleSearch}>بحث</button>
+        </div>
 
-      {/* ===== TABLE ===== */}
-      <div className="card">
-        <h3>📋 المؤشرات العامة</h3>
-
-        <table>
-          <tbody>
-            <tr>
-              <td>تربصات جارية</td>
-              <td>{stats.stagesEnCours}</td>
-            </tr>
-            <tr>
-              <td>تربصات منتهية</td>
-              <td>{stats.stagesClotures}</td>
-            </tr>
-            <tr>
-              <td>تقارير مودعة</td>
-              <td>{stats.rapportsDeposes}</td>
-            </tr>
-            <tr>
-              <td>تقارير مصادق عليها</td>
-              <td>{stats.rapportsValides}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* ===== STAGES PAR PAYS ===== */}
-      <div className="card">
-        <h3>🌍 التربصات حسب البلدان</h3>
-        <table>
-          <tbody>
-            {stats.stagesParPays.map((item, index) => (
-              <tr key={index}>
-                <td>{item[0]}</td>
-                <td>{item[1]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ===== STAGIAIRES PAR PAYS ===== */}
-      <div className="card">
-        <h3>👨‍🎓 المتربصون حسب البلدان</h3>
-        <table>
-          <tbody>
-            {stats.stagiairesParPays.map((item, index) => (
-              <tr key={index}>
-                <td>{item[0]}</td>
-                <td>{item[1]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ===== COST PAR STAGE ===== */}
-      <div className="card">
-        <h3>💰 التكلفة حسب التربص</h3>
-        <table>
-          <tbody>
-            {stats.coutParStage.map((item, index) => (
-              <tr key={index}>
-                <td>{item[0]}</td>
-                <td>{item[1]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ===== COST PAR PAYS ===== */}
-      <div className="card">
-        <h3>💸 التكلفة حسب البلد</h3>
-        <table>
-          <tbody>
-            {stats.coutParPays.map((item, index) => (
-              <tr key={index}>
-                <td>{item[0]}</td>
-                <td>{item[1]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {results.length > 0 && (
+          <>
+            <div className="table-container" style={{maxHeight: "300px", marginTop: "20px"}}>
+              <table style={{minWidth: "1200px"}}>
+                <thead>
+                  <tr>
+                    <th>ID</th><th>العنوان</th><th>البلد</th><th>المتربص</th><th>التكلفة</th><th>الحالة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((item, index) => (
+                    <tr key={index} style={{textAlign:"center"}}>
+                      <td>{item.id}</td><td>{item.intitule}</td><td>{item.pays}</td>
+                      <td>{item.nom} {item.prenom}</td><td>{item.montant || 0}</td><td>{item.statut}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <button className="add-btn" style={{marginTop: "20px", background: "linear-gradient(135deg, #ef4444, #dc2626)"}} onClick={downloadPDF}>
+              <FaFilePdf /> تحميل التقرير PDF
+            </button>
+          </>
+        )}
       </div>
 
     </div>
   );
 }
+
+const sectionHeader = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  marginBottom: "15px",
+  borderBottom: "1px solid rgba(99, 102, 241, 0.2)",
+  paddingBottom: "10px"
+};

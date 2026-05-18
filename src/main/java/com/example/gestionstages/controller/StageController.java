@@ -52,6 +52,12 @@ public class StageController {
         existing.setDateFin(stage.getDateFin());
         existing.setStatut(stage.getStatut());
         existing.setEntreprise(stage.getEntreprise());
+        
+        // ✅ Ajout des champs manquants
+        existing.setPays(stage.getPays());
+        existing.setTypeStage(stage.getTypeStage());
+        existing.setObjectifs(stage.getObjectifs());
+        existing.setBudgetPropose(stage.getBudgetPropose());
 
         return service.save(existing);
     }
@@ -79,6 +85,14 @@ public class StageController {
                 ? LocalDate.parse(end)
                 : null;
 
-        return stageRepository.searchFull(id, startDate, endDate, pays);
+        // ✅ Gérer le cas où pays est une chaîne vide ""
+        String paysParam = (pays != null && !pays.isEmpty()) ? pays : null;
+
+        return service.searchFull(id, startDate, endDate, paysParam);
+    }
+
+    @GetMapping("/available")
+    public List<Stage> getAvailable() {
+        return service.getAvailableStages();
     }
 }

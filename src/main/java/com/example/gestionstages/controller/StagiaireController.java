@@ -30,40 +30,51 @@ public class StagiaireController {
 
     // ✅ CREATE CLEAN
     @PostMapping
-public Stagiaire create(@RequestBody Stagiaire stagiaire) {
-
-    if (stagiaire.getEntreprise() != null 
-        && stagiaire.getEntreprise().getId() != null) {
-
-        Entreprise entreprise = new Entreprise();
-        entreprise.setId(stagiaire.getEntreprise().getId());
-
-        stagiaire.setEntreprise(entreprise);
+    public org.springframework.http.ResponseEntity<?> create(@RequestBody Stagiaire stagiaire) {
+        try {
+            Stagiaire saved = service.save(stagiaire);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(java.util.Map.of("message", "Erreur: " + e.getMessage()));
+        }
     }
-
-    return service.save(stagiaire);
-}
 
     // ✅ UPDATE CLEAN
     @PutMapping("/{id}")
-    public Stagiaire update(@PathVariable Long id, @RequestBody Stagiaire stagiaire) {
+    public org.springframework.http.ResponseEntity<?> update(@PathVariable Long id, @RequestBody Stagiaire stagiaire) {
+        try {
+            Stagiaire existing = service.getById(id)
+                    .orElseThrow(() -> new RuntimeException("Stagiaire non trouvé avec l'id : " + id));
 
-        Stagiaire existing = service.getById(id).orElseThrow();
+            existing.setNom(stagiaire.getNom());
+            existing.setPrenom(stagiaire.getPrenom());
+            existing.setDateNaissance(stagiaire.getDateNaissance());
+            existing.setNationalite(stagiaire.getNationalite());
+            existing.setPaysResidence(stagiaire.getPaysResidence());
+            existing.setUniversite(stagiaire.getUniversite());
+            existing.setSpecialite(stagiaire.getSpecialite());
+            existing.setEmail(stagiaire.getEmail());
+            existing.setTelephone(stagiaire.getTelephone());
+            existing.setGrade(stagiaire.getGrade());
+            existing.setFonction(stagiaire.getFonction());
+            existing.setStatut(stagiaire.getStatut());
+            existing.setNumeroPermission(stagiaire.getNumeroPermission());
 
-        existing.setNom(stagiaire.getNom());
-        existing.setPrenom(stagiaire.getPrenom());
-        existing.setDateNaissance(stagiaire.getDateNaissance());
-        existing.setNationalite(stagiaire.getNationalite());
-        existing.setPaysResidence(stagiaire.getPaysResidence());
-        existing.setUniversite(stagiaire.getUniversite());
-        existing.setSpecialite(stagiaire.getSpecialite());
-        existing.setEmail(stagiaire.getEmail());
-        existing.setTelephone(stagiaire.getTelephone());
-        existing.setGrade(stagiaire.getGrade());
-        existing.setFonction(stagiaire.getFonction());
-        existing.setEntreprise(stagiaire.getEntreprise());
+            // 🔥 Génération automatique de l'ordre de mission si accepté
+            if ("CONFIRME".equals(existing.getStatut()) && (existing.getNumeroPermission() == null || existing.getNumeroPermission().isEmpty())) {
+                existing.generateNumeroPermission();
+            }
+            
+            // 🔥 Mise à jour sécurisée des relations
+            existing.setEntreprise(stagiaire.getEntreprise());
+            existing.setStage(stagiaire.getStage());
+            existing.setUtilisateur(stagiaire.getUtilisateur());
 
-        return service.save(existing);
+            Stagiaire saved = service.save(existing);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(java.util.Map.of("message", "Erreur: " + e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

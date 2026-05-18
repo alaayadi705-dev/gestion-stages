@@ -47,6 +47,7 @@ public class EntrepriseController {
         existing.setAdresse(entreprise.getAdresse());
         existing.setEmail(entreprise.getEmail());
         existing.setTelephone(entreprise.getTelephone());
+        existing.setMinistere(entreprise.getMinistere());
 
         return entrepriseService.save(existing);
     }
